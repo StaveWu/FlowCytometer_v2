@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<HBox prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.StarterController">
+    <children>
+        <ListView fx:id="listView" prefWidth="300"/>
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="10">
+            <children>
+                <ImageView>
+                    <image>
+                        <Image url="@../icons/snowflake.png"></Image>
+                    </image>
+                </ImageView>
+                <Hyperlink text="Create New project" onAction="#createProject"/>
+                <Hyperlink text="Import project" onAction="#importProject"/>
+                <Hyperlink text="Open..." onAction="#openProject"/>
+            </children>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@starter.css"></URL>
+    </stylesheets>
+</HBox>
