@@ -4,7 +4,6 @@ import application.MainAppController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import utils.Resource;
 import utils.UiUtils;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,10 +41,6 @@ public class StarterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        repository.save(new ProjectInfo("text1", "D:\\files\\文档\\test_project_tree"));
-        repository.save(new ProjectInfo("text2", "D:\\files"));
-        repository.save(new ProjectInfo("text3", "D:\\files\\a"));
-
         List<ProjectInfo> list = new ArrayList<>();
         repository.findAll().forEach(list::add);
 
@@ -95,15 +92,31 @@ public class StarterController implements Initializable {
     }
 
     @FXML
-    protected void createProject(ActionEvent event) {
+    protected void createProject() {
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        final File directory = directoryChooser.showDialog(listView.getScene().getWindow());
+        if (directory != null) {
+            String abspath = directory.getAbsolutePath();
+            log.info("project is created on " + abspath);
+            repository.save(new ProjectInfo(
+                    Paths.get(abspath).getFileName().toString(), abspath));
+            openProj(abspath);
+            closeSelf();
+        }
     }
 
     @FXML
-    protected void importProject(ActionEvent event) {
+    protected void importProject() {
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        final File directory = directoryChooser.showDialog(listView.getScene().getWindow());
+        if (directory != null) {
+            String abspath = directory.getAbsolutePath();
+            log.info("project at " + abspath + " is imported.");
+            repository.save(new ProjectInfo(
+                    Paths.get(abspath).getFileName().toString(), abspath));
+            openProj(abspath);
+            closeSelf();
+        }
     }
 
-    @FXML
-    protected void openProject(ActionEvent event) {
-
-    }
 }

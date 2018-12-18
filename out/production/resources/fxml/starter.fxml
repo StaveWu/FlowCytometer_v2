@@ -23,7 +23,6 @@
                 <Pane prefHeight="40"></Pane>
                 <Hyperlink text="Create New project" onAction="#createProject"/>
                 <Hyperlink text="Import project" onAction="#importProject"/>
-                <Hyperlink text="Open..." onAction="#openProject"/>
             </children>
         </VBox>
     </children>
