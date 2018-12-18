@@ -1,0 +1,19 @@
+#linkBtn {
+    -fx-graphic: url("../icons/link.png");
+    -fx-content-display: graphic-only;
+}
+
+#startBtn {
+    -fx-graphic: url("../icons/start.png");
+    -fx-content-display: graphic-only;
+}
+
+#stopBtn {
+    -fx-graphic: url("../icons/stop.png");
+    -fx-content-display: graphic-only;
+}
+
+#resetBtn {
+   -fx-graphic: url("../icons/reset.png");
+   -fx-content-display: graphic-only;
+}

@@ -25,12 +25,12 @@ public class ProjectListCell extends ListCell<ProjectInfo> {
     private Hyperlink closeHyperlink;
 
     private FXMLLoader mloader;
-    private ListView<ProjectInfo> listView;
+    private StarterController controller;
 
     public ProjectListCell() {}
 
-    public ProjectListCell(ListView<ProjectInfo> listView) {
-        this.listView = listView;
+    public ProjectListCell(StarterController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -54,8 +54,7 @@ public class ProjectListCell extends ListCell<ProjectInfo> {
             nameLabel.setText(item.getName());
             pathLabel.setText(item.getAbsolutePath());
             closeHyperlink.setOnMouseClicked(e -> {
-                listView.getItems().remove(item);
-                listView.refresh();
+                controller.removeListItem(item);
             });
 
             setText(null);

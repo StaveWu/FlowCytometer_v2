@@ -1,0 +1,8 @@
+.list-view .list-cell: hover {
+    -fx-background-color: #42b0f4;
+}
+
+#softname {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}

@@ -41,25 +41,26 @@ public class StarterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        reloadListItems();
+    }
+
+    private void reloadListItems() {
+        // reload items from database
+        listView.getItems().clear();
         List<ProjectInfo> list = new ArrayList<>();
         repository.findAll().forEach(list::add);
 
         ObservableList<ProjectInfo> data = FXCollections.observableArrayList(list);
         listView.setItems(data);
-        listView.setCellFactory(view -> new ProjectListCell(listView));
-        listView.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    // open project by path
-                    openProj(observable.getValue().getAbsolutePath());
-                    closeSelf();
-                });
-        listView.getItems().addListener((ListChangeListener<ProjectInfo>) c -> {
-            while (c.next()) {
-                if (c.wasRemoved()) {
-                    repository.delete(c.getRemoved().get(0));
+        listView.setCellFactory(view -> {
+            ProjectListCell cell = new ProjectListCell(this);
+            cell.setOnMouseClicked(event -> {
+                if (cell.getItem() != null) {
+                    openProj(cell.getItem().getAbsolutePath());
+                    StarterController.this.hide();
                 }
-                log.info("repository size: " + repository.count());
-            }
+            });
+            return cell;
         });
     }
 
@@ -69,11 +70,11 @@ public class StarterController implements Initializable {
             Parent root = loader.load();
             MainAppController controller = loader.getController();
             controller.setRootDir(abspath);
+            controller.setParentController(this);
 
-            Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle(getTitle(abspath));
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
             UiUtils.getAlert(Alert.AlertType.ERROR, null,
@@ -86,9 +87,15 @@ public class StarterController implements Initializable {
         return String.format("%s [%s] - Flow Cytometer", p.getFileName(), p.toString());
     }
 
-    private void closeSelf() {
+    public void hide() {
         Stage stage = (Stage) listView.getScene().getWindow();
-        stage.close();
+        stage.hide();
+    }
+
+    public void show() {
+        reloadListItems();
+        Stage stage = (Stage) listView.getScene().getWindow();
+        stage.show();
     }
 
     @FXML
@@ -101,7 +108,7 @@ public class StarterController implements Initializable {
             repository.save(new ProjectInfo(
                     Paths.get(abspath).getFileName().toString(), abspath));
             openProj(abspath);
-            closeSelf();
+            hide();
         }
     }
 
@@ -115,8 +122,17 @@ public class StarterController implements Initializable {
             repository.save(new ProjectInfo(
                     Paths.get(abspath).getFileName().toString(), abspath));
             openProj(abspath);
-            closeSelf();
+            hide();
         }
+    }
+
+    /**
+     * guarantee items and database to be updated together.
+     */
+    public void removeListItem(ProjectInfo item) {
+        repository.delete(item);
+        listView.getItems().remove(item);
+        listView.refresh();
     }
 
 }

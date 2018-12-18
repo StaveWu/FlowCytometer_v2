@@ -21,8 +21,8 @@
                 </ImageView>
                 <Label fx:id="softname" text="FlowCytometer V2.0.0"></Label>
                 <Pane prefHeight="40"></Pane>
-                <Hyperlink text="Create New project" onAction="#createProject"/>
-                <Hyperlink text="Import project" onAction="#importProject"/>
+                <Hyperlink text="Create New Project" onAction="#createProject"/>
+                <Hyperlink text="Import Project" onAction="#importProject"/>
             </children>
         </VBox>
     </children>
