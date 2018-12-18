@@ -3,17 +3,16 @@ package projectTree;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import starter.FCMConfig;
 import utils.Resource;
 import utils.UiUtils;
 
@@ -27,19 +26,37 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ProjectTreeController implements Initializable {
+public class ProjectTree extends VBox implements Initializable {
 
-    private static final Logger log = LoggerFactory.getLogger(ProjectTreeController.class);
+    private static final Logger log = LoggerFactory.getLogger(ProjectTree.class);
 
-    private String rootDir;
+    private StringProperty rootDir;
+    public final StringProperty rootDirProperty() { // define an attribute named "rootDir" for fxml
+        if (rootDir == null) {
+            rootDir = new SimpleStringProperty(this, "rootDir", null);
+        }
+        return rootDir;
+    }
+    public final void setRootDir(String value) {
+        rootDirProperty().setValue(value);
+    }
+    public final String getRootDir() {
+        return rootDirProperty().get();
+    }
 
     @FXML
     private TreeView treeView;
 
-    public ProjectTreeController() {}
+    public ProjectTree() {
+        FXMLLoader loader = new FXMLLoader(Resource.getFXML("project_tree.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
 
-    public void setRootDir(String rootDir) {
-        this.rootDir = rootDir;
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -47,9 +64,10 @@ public class ProjectTreeController implements Initializable {
         Platform.runLater(() -> { // to guarantee rootDir access value before the following executed.
             try {
                 log.info("traverse dir: " + rootDir);
-                treeView.setRoot(traverse(rootDir));
-            } catch (IOException e) {
-                e.printStackTrace();
+                treeView.setRoot(traverse(rootDir.get()));
+            } catch (Exception e) {
+                UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                        "项目树加载失败：" + e.getMessage()).showAndWait();
             }
         });
     }

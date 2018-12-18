@@ -1,5 +1,6 @@
 package starter;
 
+import application.MainAppController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,11 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import projectTree.ProjectTreeController;
 import utils.Resource;
 import utils.UiUtils;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -66,20 +68,25 @@ public class StarterController implements Initializable {
 
     private void openProj(String abspath) {
         try {
-            FXMLLoader loader = new FXMLLoader(Resource.getFXML("project_tree.fxml"));
+            FXMLLoader loader = new FXMLLoader(Resource.getFXML("main_app.fxml"));
             Parent root = loader.load();
-            ProjectTreeController controller = loader.getController();
+            MainAppController controller = loader.getController();
             controller.setRootDir(abspath);
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setTitle("Project Tree");
+            stage.setTitle(getTitle(abspath));
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             UiUtils.getAlert(Alert.AlertType.ERROR, null,
                     "项目打开失败：" + e.getMessage()).showAndWait();
         }
+    }
+
+    private String getTitle(String rootDir) {
+        Path p = Paths.get(rootDir);
+        return String.format("%s [%s] - Flow Cytometer", p.getFileName(), p.toString());
     }
 
     private void closeSelf() {

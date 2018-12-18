@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<VBox fillWidth="true" prefWidth="248" prefHeight="600" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectTree.ProjectTreeController">
+<fx:root type="javafx.scene.layout.VBox" fillWidth="true" prefWidth="248" prefHeight="600" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <FlowPane>
             <Button fx:id="btnNewFile" mnemonicParsing="false" onMouseClicked="#newFile" text="NewFile">
@@ -33,4 +33,4 @@
     <stylesheets>
         <URL value="@project_tree.css"></URL>
     </stylesheets>
-</VBox>
+</fx:root>

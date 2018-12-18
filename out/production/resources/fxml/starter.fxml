@@ -7,6 +7,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
 <HBox prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.StarterController">
     <children>
         <ListView fx:id="listView" prefWidth="300"/>
@@ -17,6 +19,8 @@
                         <Image url="@../icons/snowflake.png"></Image>
                     </image>
                 </ImageView>
+                <Label fx:id="softname" text="FlowCytometer V2.0.0"></Label>
+                <Pane prefHeight="40"></Pane>
                 <Hyperlink text="Create New project" onAction="#createProject"/>
                 <Hyperlink text="Import project" onAction="#importProject"/>
                 <Hyperlink text="Open..." onAction="#openProject"/>
