@@ -9,7 +9,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
-<HBox prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starter.StarterController">
+<HBox prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.starter.StarterController">
     <children>
         <ListView fx:id="listView" prefWidth="300"/>
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="10">

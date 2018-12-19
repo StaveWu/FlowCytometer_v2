@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -14,9 +17,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.VBox">
+<fx:root prefWidth="300.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AreaChart prefHeight="200.0" prefWidth="248.0">
+      <FlowPane alignment="CENTER_RIGHT">
+         <children>
+            <Hyperlink fx:id="closeHyperlink" onAction="#closeChannel" text="Hyperlink" />
+         </children>
+      </FlowPane>
+      <AreaChart prefHeight="200.0" prefWidth="250.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -24,7 +32,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </AreaChart>
-      <GridPane prefWidth="163.0" VBox.vgrow="ALWAYS">
+      <GridPane hgap="10.0" vgap="10.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="71.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="67.0" />
@@ -32,43 +40,42 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="69.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="电压：" />
-            <Label text="轴类型：" GridPane.rowIndex="1" />
-            <TextField fx:id="voltageTextField" GridPane.columnIndex="1" />
-            <Label text="阈值：" GridPane.columnIndex="2">
+            <Label text="电压：" GridPane.rowIndex="1" />
+            <TextField fx:id="voltageTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
-                  <Insets left="12.0" />
+                  <Insets />
+               </GridPane.margin></TextField>
+            <Label text="阈值：" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets />
                </GridPane.margin>
             </Label>
-            <Label text="峰值策略：" GridPane.rowIndex="2" />
-            <TextField fx:id="thresholdTextField" GridPane.columnIndex="3" />
-            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
-               <children>
-                  <ToggleButton mnemonicParsing="false" text="Log">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="axisgroup" />
-                     </toggleGroup>
-                  </ToggleButton>
-                  <ToggleButton mnemonicParsing="false" selected="true" text="Linear" toggleGroup="$axisgroup" />
-               </children>
-            </FlowPane>
+            <Label text="峰策略：" GridPane.rowIndex="2" />
+            <TextField fx:id="thresholdTextField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
                <children>
-                  <ToggleButton mnemonicParsing="false" selected="true" text="Area">
+                  <ToggleButton fx:id="areaToggle" mnemonicParsing="false" text="Area">
                      <toggleGroup>
                         <ToggleGroup fx:id="peakgroup" />
                      </toggleGroup>
                   </ToggleButton>
-                  <ToggleButton mnemonicParsing="false" text="Height" toggleGroup="$peakgroup" />
-                  <ToggleButton mnemonicParsing="false" text="Width" toggleGroup="$peakgroup" />
+                  <ToggleButton fx:id="heightToggle" mnemonicParsing="false" text="Height" toggleGroup="$peakgroup" />
+                  <ToggleButton fx:id="widthToggle" mnemonicParsing="false" text="Width" toggleGroup="$peakgroup" />
                </children>
             </FlowPane>
+            <Label text="通道：" />
+            <Label text="名称：" GridPane.columnIndex="2" />
+            <ComboBox fx:id="channelIdCombo" prefWidth="150.0" GridPane.columnIndex="1" />
+            <TextField fx:id="nameTextField" GridPane.columnIndex="3" />
          </children>
       </GridPane>
    </children>
+    <stylesheets>
+        <URL value="@channel_cell.css" />
+    </stylesheets>
 </fx:root>
