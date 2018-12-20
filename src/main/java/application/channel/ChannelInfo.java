@@ -1,37 +1,13 @@
 package application.channel;
 
-import application.channel.Converter.DoublePropertyConverter;
-import application.channel.Converter.IntegerPropertyConverter;
-import application.channel.Converter.StringPropertyConverter;
 import javafx.beans.property.*;
 
-import javax.persistence.*;
-
-@Entity
 public class ChannelInfo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column
-    @Convert(converter = IntegerPropertyConverter.class)
     private IntegerProperty channelId = new SimpleIntegerProperty(1);
-
-    @Column
-    @Convert(converter = StringPropertyConverter.class)
     private StringProperty channelName = new SimpleStringProperty("");
-
-    @Column
-    @Convert(converter = DoublePropertyConverter.class)
     private DoubleProperty voltage = new SimpleDoubleProperty();
-
-    @Column
-    @Convert(converter = DoublePropertyConverter.class)
     private DoubleProperty threshold = new SimpleDoubleProperty();
-
-    @Column
-    @Convert(converter = StringPropertyConverter.class)
     private StringProperty peakPolicy = new SimpleStringProperty("Area");
 
     public ChannelInfo() {}
@@ -44,7 +20,6 @@ public class ChannelInfo {
         peakPolicy.setValue(cpolicy);
     }
 
-
     public int getChannelId() {
         return channelId.get();
     }
@@ -55,14 +30,14 @@ public class ChannelInfo {
     public double getThreshold() {
         return threshold.get();
     }
-    public void setThreshold(int threshold) {
+    public void setThreshold(double threshold) {
         this.threshold.set(threshold);
     }
 
     public double getVoltage() {
         return voltage.get();
     }
-    public void setVoltage(int voltage) {
+    public void setVoltage(double voltage) {
         this.voltage.set(voltage);
     }
 
@@ -82,8 +57,8 @@ public class ChannelInfo {
 
     @Override
     public String toString() {
-        return String.format("[id=%d, channelId=%d, name=%s, voltage=%f, threshold=%f, peakPolicy=%s]",
-                id, getChannelId(), getChannelName(), getVoltage(), getThreshold(), getPeakPolicy());
+        return String.format("[channelId=%d, name=%s, voltage=%f, threshold=%f, peakPolicy=%s]",
+                getChannelId(), getChannelName(), getVoltage(), getThreshold(), getPeakPolicy());
     }
 
     public IntegerProperty channelIdProperty() {
@@ -102,7 +77,4 @@ public class ChannelInfo {
         return peakPolicy;
     }
 
-    public Long getId() {
-        return id;
-    }
 }

@@ -13,19 +13,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
 public class Channel extends VBox implements Initializable {
 
-    @Autowired
     private ChannelModel model;
 
     @FXML
     private HBox channelsHBox;
 
     public Channel() {
-//        if (model == null) {
-//            model = new ChannelModel();
-//        }
+        model = new ChannelModel();
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("channel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
