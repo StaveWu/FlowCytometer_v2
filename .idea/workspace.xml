@@ -2,23 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/channel/ChannelInfosConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/channel/Converter/DoublePropertyConverter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/channel/Converter/IntegerPropertyConverter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/channel/Converter/StringPropertyConverter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/projectTree/ProjectTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/projectTree/ProjectTree.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/starter/StarterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/starter/StarterController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/ChannelInfosConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/ChannelModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/channel/ChannelModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/Converter/DoublePropertyConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/Converter/IntegerPropertyConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/Converter/StringPropertyConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/mainpage/MainAppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/mainpage/MainAppController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/projectTree/TreeItemInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/projectTree/TreeItemInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/starter/StarterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/starter/StarterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -121,73 +107,29 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelModel.java">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml">
+          <provider editor-type-id="JavaFX-Scene-Builder" />
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
-              <caret line="84" column="11" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/starter/StarterController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1296">
-              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
-              <folding>
-                <element signature="e#4312#4313#0" expanded="true" />
-                <element signature="e#4348#4349#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="94" column="65" lean-forward="true" selection-start-line="94" selection-start-column="65" selection-end-line="94" selection-end-column="65" />
+            <state relative-caret-position="221">
+              <caret line="25" column="17" lean-forward="true" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/test/PathTest.java">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="9" lean-forward="true" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#168#169#0" expanded="true" />
-                <element signature="e#236#237#0" expanded="true" />
-              </folding>
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/Channel.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelApp.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="22" column="30" lean-forward="true" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+              <caret line="11" column="41" lean-forward="true" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -225,21 +167,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/application/MainAppController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/starter/StarterApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/starter/ProjectListCell.java" />
         <option value="$PROJECT_DIR$/src/main/java/starter/StarterController.java" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/new_project.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/starter/FCMConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/starter/NewProjectDialog.java" />
         <option value="$PROJECT_DIR$/src/main/java/dashboard/Dashboard.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/dash_borad.css" />
         <option value="$PROJECT_DIR$/src/main/java/channel/ChannelInfoRepository.java" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/main_app.fxml" />
-        <option value="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/project_list_cell.fxml" />
-        <option value="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/channel/ChannelCell.java" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/channel.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/channel/ChannelInfo.java" />
@@ -276,6 +213,11 @@
         <option value="$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" />
         <option value="$PROJECT_DIR$/src/test/java/test/PathTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/DashBoardApp.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" />
+        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/Dashboard.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml" />
+        <option value="$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css" />
       </list>
     </option>
   </component>
@@ -348,33 +290,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="application" type="462c0819:PsiDirectoryNode" />
-              <item name="mainpage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="application" type="462c0819:PsiDirectoryNode" />
-              <item name="projectTree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="application" type="462c0819:PsiDirectoryNode" />
-              <item name="starter" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -390,20 +305,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="icons" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="fxml" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
@@ -417,7 +319,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545310147652" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545313598182" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -468,6 +370,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DashBoardApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="application.dashboard.DashBoardApp" />
+      <module name="com.stave.flowcytometer.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="application.dashboard.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="StarterApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="application.StarterApp" />
       <module name="com.stave.flowcytometer.main" />
@@ -480,25 +395,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="FlowCytometer_v2 [buildDependents]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="buildDependents" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
     </configuration>
     <configuration name="FlowCytometer_v2 [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -523,12 +419,12 @@
       <module name="com.stave.flowcytometer.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="test.*" />
+          <option name="PATTERN" value="apitest.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="test" />
-      <option name="MAIN_CLASS_NAME" value="test.PathTest" />
+      <option name="PACKAGE_NAME" value="apitest" />
+      <option name="MAIN_CLASS_NAME" value="apitest.PathTest" />
       <option name="METHOD_NAME" value="testPathStartWith" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -538,17 +434,17 @@
     <list>
       <item itemvalue="Application.StarterApp" />
       <item itemvalue="Gradle.FlowCytometer_v2 [dependencies]" />
-      <item itemvalue="Gradle.FlowCytometer_v2 [buildDependents]" />
       <item itemvalue="Application.ChannelApp" />
       <item itemvalue="JUnit.PathTest.testPathStartWith" />
+      <item itemvalue="Application.DashBoardApp" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.StarterApp" />
-        <item itemvalue="JUnit.PathTest.testPathStartWith" />
         <item itemvalue="Application.ChannelApp" />
+        <item itemvalue="Application.DashBoardApp" />
+        <item itemvalue="JUnit.PathTest.testPathStartWith" />
         <item itemvalue="Gradle.FlowCytometer_v2 [dependencies]" />
-        <item itemvalue="Gradle.FlowCytometer_v2 [buildDependents]" />
       </list>
     </recent_temporary>
   </component>
@@ -565,6 +461,17 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 46m 57s.xml">
+      <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 47m 54s.xml">
+      <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 48m 33s.xml">
+      <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
+    </history-entry>
+  </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
@@ -578,7 +485,7 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.45498782" visible="true" weight="0.33812407" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45498782" visible="true" weight="0.33812407" />
       <window_info id="Structure" order="1" sideWeight="0.5450122" side_tool="true" visible="true" weight="0.33812407" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -587,7 +494,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32786885" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3262295" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3262295" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3988764" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -619,37 +526,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="39" lean-forward="true" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/StarterApp.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/UiUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="1" selection-start-line="12" selection-end-line="12" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/Dashboard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="36" column="42" lean-forward="true" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/mainpage/FlowCytometerApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/lang/annotation/Documented.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/lang/annotation/Retention.java" />
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.persistence/javax.persistence-api/2.2/462dff65f6f8bde02ee9d8afe07fe9d50268199c/javax.persistence-api-2.2-sources.jar!/javax/persistence/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -721,14 +597,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="508">
           <caret line="187" column="16" selection-start-line="187" selection-start-column="16" selection-end-line="187" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="63" column="49" lean-forward="true" selection-start-line="63" selection-start-column="49" selection-end-line="63" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -881,13 +749,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="9" column="40" lean-forward="true" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelInfosConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -916,20 +777,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="84" column="11" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/starter/FCMRunTimeConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
@@ -948,17 +795,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/starter/StarterController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1296">
-          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
-          <folding>
-            <element signature="e#4312#4313#0" expanded="true" />
-            <element signature="e#4348#4349#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/TreeItemInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="128">
@@ -969,6 +805,39 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/icons/configfolder.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/src.zip!/java/nio/file/Path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="242" column="37" selection-start-line="242" selection-start-column="33" selection-end-line="242" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/PathTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#168#169#0" expanded="true" />
+            <element signature="e#236#237#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="14" column="24" lean-forward="true" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="69" column="68" lean-forward="true" selection-start-line="69" selection-start-column="68" selection-end-line="69" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/Channel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -976,29 +845,85 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/TreeIconManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/starter/StarterController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="20" column="20" lean-forward="true" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
+        <state relative-caret-position="1296">
+          <caret line="137" selection-start-line="137" selection-end-line="137" />
+          <folding>
+            <element signature="e#4312#4313#0" expanded="true" />
+            <element signature="e#4348#4349#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="94" column="65" lean-forward="true" selection-start-line="94" selection-start-column="65" selection-end-line="94" selection-end-column="65" />
+        <state relative-caret-position="40">
+          <caret line="84" column="11" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/test/PathTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="9" lean-forward="true" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+        <state relative-caret-position="207">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/project_tree.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="26" lean-forward="true" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/DashBoardApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#168#169#0" expanded="true" />
-            <element signature="e#236#237#0" expanded="true" />
+            <element signature="e#442#443#0" expanded="true" />
+            <element signature="e#466#467#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="685">
+          <caret line="86" column="28" lean-forward="true" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/Dashboard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="40" column="50" lean-forward="true" selection-start-line="40" selection-start-column="50" selection-end-line="40" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="25" column="17" lean-forward="true" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="11" column="41" lean-forward="true" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
