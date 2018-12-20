@@ -14,11 +14,12 @@ public class TreeIconManager {
                 return Resource.getIcon("file.png");
             case Folder:
                 return Resource.getIcon("folder.png");
-            case Porject:
+            case Project:
                 return Resource.getIcon("projectfolder.png");
-
-                default:
-                    return null;
+            case ConfigFolder:
+                return Resource.getIcon("configfolder.png");
+            default:
+                return null;
         }
     }
 }

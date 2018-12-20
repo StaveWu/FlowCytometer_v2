@@ -1,5 +1,6 @@
 package application.projectTree;
 
+import application.starter.FCMRunTimeConfig;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
 import javafx.application.Platform;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class ProjectTree extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectTree.class);
+    private static final FCMRunTimeConfig globalConfig = FCMRunTimeConfig.getInstance();
 
     /**
      * define an attribute named "rootDir" for fxml
@@ -36,7 +38,8 @@ public class ProjectTree extends VBox implements Initializable {
     private StringProperty rootDir;
     public final StringProperty rootDirProperty() {
         if (rootDir == null) {
-            rootDir = new SimpleStringProperty(this, "rootDir", null);
+            rootDir = new SimpleStringProperty(this, "rootDir",
+                    globalConfig.getRootDir());
         }
         return rootDir;
     }
@@ -66,8 +69,8 @@ public class ProjectTree extends VBox implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> { // to guarantee rootDir access value before the following executed.
             try {
-                log.info("traverse dir: " + rootDir);
-                treeView.setRoot(traverse(rootDir.get()));
+                log.info("traverse dir: " + getRootDir());
+                treeView.setRoot(traverse(getRootDir()));
             } catch (Exception e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, null,
                         "项目树加载失败：" + e.getMessage()).showAndWait();
@@ -78,7 +81,7 @@ public class ProjectTree extends VBox implements Initializable {
     public TreeItem<TreeItemInfo> traverse(String start) throws IOException {
         Path startPath = Paths.get(start);
         TreeItemInfo itemInfo = new TreeItemInfo(startPath.getFileName().toString(),
-                TreeItemInfo.FileType.Porject);
+                TreeItemInfo.FileType.Project);
         TreeItem<TreeItemInfo> res = new TreeItem<>(itemInfo, TreeIconManager.getTreeItemIcon(itemInfo));
         traverseHelper(startPath, res);
         return res;
@@ -90,9 +93,12 @@ public class ProjectTree extends VBox implements Initializable {
             ) {
                 TreeItemInfo itemInfo = new TreeItemInfo();
                 itemInfo.setName(child.getFileName().toString());
-                itemInfo.setType(Files.isDirectory(child) ?
-                        TreeItemInfo.FileType.Folder : TreeItemInfo.FileType.File);
-
+                if (Files.isDirectory(child) && child.getFileName().toString().startsWith(".")) {
+                    itemInfo.setType(TreeItemInfo.FileType.ConfigFolder);
+                } else {
+                    itemInfo.setType(Files.isDirectory(child) ?
+                            TreeItemInfo.FileType.Folder : TreeItemInfo.FileType.File);
+                }
                 TreeItem<TreeItemInfo> childItem = new TreeItem<>(itemInfo,
                         TreeIconManager.getTreeItemIcon(itemInfo));
                 item.getChildren().add(childItem);

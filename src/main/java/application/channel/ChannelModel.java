@@ -1,10 +1,12 @@
 package application.channel;
 
+import application.starter.FCMRunTimeConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,15 +20,18 @@ import java.util.stream.Collectors;
 public class ChannelModel {
 
     private static final Logger log = LoggerFactory.getLogger(ChannelModel.class);
+    private static final FCMRunTimeConfig globalConfig = FCMRunTimeConfig.getInstance();
 
     private List<ChannelInfo> channelInfos = new ArrayList<>();
 
     private Gson gson;
 
-    private String channelInfospath = "D:\\files\\文档\\test_project_tree\\13.json";
+    private String channelInfospath;
 
     public ChannelModel() {
         gson = new Gson();
+        channelInfospath = globalConfig.getProjectConfigFolder()
+                + File.separator + "channelInfos.json";
         loadInfos();
     }
 
@@ -72,7 +77,7 @@ public class ChannelModel {
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
-            log.error("Failed to load infos: " + e.getMessage());
+            log.error("Failed to load information: " + e.getMessage());
         }
 
     }

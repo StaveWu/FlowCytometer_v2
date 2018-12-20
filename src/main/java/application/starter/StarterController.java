@@ -21,6 +21,7 @@ import utils.UiUtils;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.ResourceBundle;
 public class StarterController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(StarterController.class);
+
+    private static final FCMRunTimeConfig globalConfig = FCMRunTimeConfig.getInstance();
 
     @FXML
     private ListView<ProjectInfo> listView;
@@ -55,7 +58,8 @@ public class StarterController implements Initializable {
             ProjectListCell cell = new ProjectListCell(this);
             cell.setOnMouseClicked(event -> {
                 if (cell.getItem() != null) {
-                    openProj(cell.getItem().getAbsolutePath());
+                    globalConfig.setRootDir(cell.getItem().getAbsolutePath());
+                    openProj();
                     StarterController.this.hide();
                 }
             });
@@ -63,16 +67,15 @@ public class StarterController implements Initializable {
         });
     }
 
-    private void openProj(String abspath) {
+    private void openProj() {
         try {
             FXMLLoader loader = new FXMLLoader(Resource.getFXML("main_app.fxml"));
             Parent root = loader.load();
             MainAppController controller = loader.getController();
-            controller.setRootDir(abspath);
             controller.setParentController(this);
 
             Stage stage = new Stage();
-            stage.setTitle(getTitle(abspath));
+            stage.setTitle(getTitle(globalConfig.getRootDir()));
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -103,12 +106,26 @@ public class StarterController implements Initializable {
         final File directory = directoryChooser.showDialog(listView.getScene().getWindow());
         if (directory != null) {
             String abspath = directory.getAbsolutePath();
+            globalConfig.setRootDir(abspath);
+            // create a config folder for this project
+            try {
+                log.info("creating config folder: " + globalConfig.getProjectConfigFolder());
+                Files.createDirectory(Paths.get(globalConfig.getProjectConfigFolder()));
+            } catch (Exception e) {
+                UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                        "failed to create project: " + e.getMessage());
+                return;
+            }
             log.info("project is created on " + abspath);
             repository.save(new ProjectInfo(
                     Paths.get(abspath).getFileName().toString(), abspath));
-            openProj(abspath);
+            openProj();
             hide();
         }
+    }
+
+    private boolean checkProjectConfigFolder(String folderpath) {
+        return Files.exists(Paths.get(folderpath));
     }
 
     @FXML
@@ -117,10 +134,17 @@ public class StarterController implements Initializable {
         final File directory = directoryChooser.showDialog(listView.getScene().getWindow());
         if (directory != null) {
             String abspath = directory.getAbsolutePath();
+            globalConfig.setRootDir(abspath);
+
+            if (!checkProjectConfigFolder(globalConfig.getProjectConfigFolder())) {
+                UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                        "导入失败：所导入的文件夹不是项目文件夹！");
+                return;
+            }
             log.info("project at " + abspath + " is imported.");
             repository.save(new ProjectInfo(
                     Paths.get(abspath).getFileName().toString(), abspath));
-            openProj(abspath);
+            openProj();
             hide();
         }
     }

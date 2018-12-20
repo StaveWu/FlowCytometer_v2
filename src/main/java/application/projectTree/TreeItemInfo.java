@@ -5,7 +5,8 @@ public class TreeItemInfo {
     public enum FileType {
         File,
         Folder,
-        Porject
+        Project,
+        ConfigFolder
     }
 
     private String name;
