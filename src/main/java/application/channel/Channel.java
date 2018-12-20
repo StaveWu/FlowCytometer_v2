@@ -3,11 +3,13 @@ package application.channel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import utils.Resource;
+import utils.UiUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,7 +46,12 @@ public class Channel extends VBox implements Initializable {
 
     @FXML
     protected void saveChannelInfos() {
-        model.saveInfos();
+        try {
+            model.saveInfos();
+        } catch (Exception e) {
+            UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                    "保存通道参数失败：" + e.getMessage());
+        }
     }
 
     @FXML

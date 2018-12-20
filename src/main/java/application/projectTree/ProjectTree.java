@@ -30,8 +30,11 @@ public class ProjectTree extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectTree.class);
 
+    /**
+     * define an attribute named "rootDir" for fxml
+     */
     private StringProperty rootDir;
-    public final StringProperty rootDirProperty() { // define an attribute named "rootDir" for fxml
+    public final StringProperty rootDirProperty() {
         if (rootDir == null) {
             rootDir = new SimpleStringProperty(this, "rootDir", null);
         }

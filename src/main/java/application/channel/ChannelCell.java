@@ -45,7 +45,7 @@ public class ChannelCell extends VBox implements Initializable {
     private ChannelInfo channelInfo;
     private Channel parentController;
 
-    public ChannelCell(@NonNull  Channel parentController, @NonNull ChannelInfo info) {
+    public ChannelCell(@NonNull Channel parentController, @NonNull ChannelInfo info) {
         this.parentController = parentController;
         this.channelInfo = info;
 
@@ -69,7 +69,7 @@ public class ChannelCell extends VBox implements Initializable {
         // set toggle when first load
         peakgroup.selectToggle(getSelectedToggle(channelInfo.getPeakPolicy()));
 
-        // bing model
+        // bind model
         nameTextField.textProperty().bindBidirectional(channelInfo.channelNameProperty());
         voltageTextField.textProperty().bindBidirectional(channelInfo.voltageProperty(), new NumberStringConverter());
         thresholdTextField.textProperty().bindBidirectional(channelInfo.thresholdProperty(), new NumberStringConverter());
