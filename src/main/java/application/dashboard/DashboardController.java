@@ -100,6 +100,11 @@ public class DashboardController implements Initializable {
         tickService.setOnSucceeded(event -> {
             stopSampling();
         });
+        tickService.setOnCancelled(event -> {
+            stopSampling();
+            progressIndicator.progressProperty().unbind();
+            progressIndicator.setProgress(0);
+        });
         log.info("start sampling");
         tickService.start();
     }
@@ -118,8 +123,6 @@ public class DashboardController implements Initializable {
     protected void stopSampling() {
         if (tickService != null) {
             tickService.cancel();
-            progressIndicator.progressProperty().unbind();
-            progressIndicator.setProgress(0);
         }
         log.info("stop sampling");
     }

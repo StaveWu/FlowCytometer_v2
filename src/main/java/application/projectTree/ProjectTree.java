@@ -160,7 +160,7 @@ public class ProjectTree extends VBox implements Initializable {
         pathList.removeLast(); // remove root since it has been included in rootDir.
         Collections.reverse(pathList);
         String res = String.join(File.separator, pathList);
-        return rootDir + File.separator + res;
+        return getRootDir() + File.separator + res;
     }
 
     private boolean checkFileName(String name) {

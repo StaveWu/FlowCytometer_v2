@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.net.URL?>
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <FlowPane alignment="CENTER_LEFT">
+         <children>
+            <Button fx:id="scatterBtn" mnemonicParsing="false" text="散点图" />
+            <Button fx:id="histBtn" mnemonicParsing="false" text="直方图" />
+            <Button fx:id="heatmapBtn" mnemonicParsing="false" text="密度图" />
+             <Button fx:id="saveBtn" mnemonicParsing="false" text="删除" />
+            <Button fx:id="deleteBtn" mnemonicParsing="false" text="删除" />
+         </children>
+      </FlowPane>
+      <ScrollPane prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2000.0" prefWidth="1500.0" />
+        </content>
+      </ScrollPane>
+   </children>
+    <stylesheets>
+        <URL value="@worksheet.css"></URL>
+    </stylesheets>
+</fx:root>
