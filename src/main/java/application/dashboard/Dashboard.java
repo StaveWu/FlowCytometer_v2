@@ -9,16 +9,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import utils.Resource;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@Component
+@Lazy
 public class Dashboard extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(Dashboard.class);
@@ -108,7 +115,6 @@ public class Dashboard extends VBox implements Initializable {
 
     @FXML
     protected void startSampling() {
-//        checkValid();
         tickService = getTickService();
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(tickService.progressProperty());
@@ -126,12 +132,15 @@ public class Dashboard extends VBox implements Initializable {
                     Integer.valueOf(miniteTextField.getText()),
                     Integer.valueOf(secondTextField.getText())));
         } else {
-            return null;
+            return new CounterTickService(Integer.valueOf(cellTextField.getText()));
         }
     }
 
     @FXML
     protected void stopSampling() {
+        tickService.cancel();
+        progressIndicator.progressProperty().unbind();
+        progressIndicator.setProgress(0);
         log.info("stop sampling");
     }
 
