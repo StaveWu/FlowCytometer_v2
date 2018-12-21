@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -25,12 +26,12 @@
                 </tooltip>
             </Button>
             <ComboBox fx:id="connectionCombo" prefHeight="23.0" prefWidth="124.0" promptText="&lt;connection&gt;" />
-             <Button fx:id="startBtn" mnemonicParsing="false" text="开始">
+             <Button fx:id="startBtn" mnemonicParsing="false" text="开始" onAction="#startSampling">
                  <tooltip>
                      <Tooltip text="开始采集" />
                  </tooltip>
              </Button>
-             <Button fx:id="stopBtn" mnemonicParsing="false" text="停止">
+             <Button fx:id="stopBtn" mnemonicParsing="false" text="停止" onAction="#stopSampling">
                  <tooltip>
                      <Tooltip text="停止采集" />
                  </tooltip>
@@ -58,9 +59,30 @@
                   <Label text="采样模式：" />
                   <ComboBox fx:id="modeCombo" prefWidth="150.0" GridPane.columnIndex="1" />
                   <Label text="时间：" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="细胞个数：" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="cellTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <FlowPane alignment="CENTER_LEFT" hgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="hourTextField" prefWidth="54.0" />
+                        <Label text="h">
+                           <FlowPane.margin>
+                              <Insets right="5.0" />
+                           </FlowPane.margin>
+                        </Label>
+                        <TextField fx:id="miniteTextField" prefWidth="54.0" />
+                        <Label text="m">
+                           <FlowPane.margin>
+                              <Insets right="5.0" />
+                           </FlowPane.margin>
+                        </Label>
+                        <TextField fx:id="secondTextField" prefWidth="54.0" />
+                        <Label text="s">
+                           <FlowPane.margin>
+                              <Insets right="5.0" />
+                           </FlowPane.margin>
+                        </Label>
+                     </children>
+                  </FlowPane>
                </children>
             </GridPane>
          </content>
@@ -79,7 +101,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ProgressIndicator progress="0.0" GridPane.rowSpan="4" />
+                  <ProgressIndicator fx:id="progressIndicator" progress="0.0" GridPane.rowSpan="4" />
                   <Label text="速度：" GridPane.columnIndex="1" />
                   <Label text="999/s" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
@@ -87,7 +109,7 @@
                      </font>
                   </Label>
                   <Label text="剩余：" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="99999" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Label fx:id="leftLabel" text="99999" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font size="17.0" />
                      </font>
