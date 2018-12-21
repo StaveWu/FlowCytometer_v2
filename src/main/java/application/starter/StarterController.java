@@ -1,6 +1,7 @@
 package application.starter;
 
 import application.mainpage.MainAppController;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,9 +13,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import utils.Resource;
 import utils.UiUtils;
@@ -40,6 +43,9 @@ public class StarterController implements Initializable {
 
     @Autowired
     private ProjectInfoRepository repository;
+
+    @Autowired
+    private ConfigurableApplicationContext context;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,6 +76,7 @@ public class StarterController implements Initializable {
     private void openProj() {
         try {
             FXMLLoader loader = new FXMLLoader(Resource.getFXML("main_app.fxml"));
+            loader.setController(context.getBean(MainAppController.class));
             Parent root = loader.load();
             MainAppController controller = loader.getController();
             controller.setParentController(this);
@@ -79,6 +86,7 @@ public class StarterController implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
+            e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, null,
                     "项目打开失败：" + e.getMessage()).showAndWait();
         }

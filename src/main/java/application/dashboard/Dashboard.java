@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import utils.Resource;
@@ -25,7 +26,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-@Lazy
 public class Dashboard extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(Dashboard.class);
@@ -54,6 +54,9 @@ public class Dashboard extends VBox implements Initializable {
 
     private Service<Void> tickService;
 
+    @Autowired
+    private ConfigurableApplicationContext context;
+
     public enum SampleMode {
         TIME("按时间"),
         CELLNUMBER("按细胞个数");
@@ -73,7 +76,7 @@ public class Dashboard extends VBox implements Initializable {
     public Dashboard() {
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("dash_board.fxml"));
         loader.setRoot(this);
-        loader.setController(this);
+        loader.setController(context.getBean(Dashboard.class));
 
         try {
             loader.load();
