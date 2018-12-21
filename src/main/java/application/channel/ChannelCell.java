@@ -43,9 +43,9 @@ public class ChannelCell extends VBox implements Initializable {
     private ToggleGroup peakgroup;
 
     private ChannelInfo channelInfo;
-    private Channel parentController;
+    private ChannelController parentController;
 
-    public ChannelCell(@NonNull Channel parentController, @NonNull ChannelInfo info) {
+    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelInfo info) {
         this.parentController = parentController;
         this.channelInfo = info;
 

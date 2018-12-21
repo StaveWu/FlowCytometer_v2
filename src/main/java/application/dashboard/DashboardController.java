@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-public class DashboardController extends VBox implements Initializable {
+public class DashboardController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(DashboardController.class);
 
@@ -116,9 +116,11 @@ public class DashboardController extends VBox implements Initializable {
 
     @FXML
     protected void stopSampling() {
-        tickService.cancel();
-        progressIndicator.progressProperty().unbind();
-        progressIndicator.setProgress(0);
+        if (tickService != null) {
+            tickService.cancel();
+            progressIndicator.progressProperty().unbind();
+            progressIndicator.setProgress(0);
+        }
         log.info("stop sampling");
     }
 

@@ -36,6 +36,7 @@ configurations {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-aop")
     compile("com.h2database:h2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     // https://mvnrepository.com/artifact/com.google.guava/guava
