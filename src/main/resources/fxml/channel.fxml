@@ -5,10 +5,19 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Tooltip?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
     <FlowPane>
-        <Button fx:id="addBtn" mnemonicParsing="false" text="添加通道" onAction="#newChannelCell"/>
-        <Button fx:id="saveBtn" mnemonicParsing="false" text="保存" onAction="#saveChannelInfos"/>
+        <Button fx:id="addBtn" mnemonicParsing="false" text="添加通道" onAction="#newChannelCell">
+            <tooltip>
+                <Tooltip text="添加通道"></Tooltip>
+            </tooltip>
+        </Button>
+        <Button fx:id="saveBtn" mnemonicParsing="false" text="保存" onAction="#saveChannelInfos">
+            <tooltip>
+                <Tooltip text="保存"></Tooltip>
+            </tooltip>
+        </Button>
     </FlowPane>
     <ScrollPane>
         <HBox fx:id="channelsHBox" spacing="20"></HBox>

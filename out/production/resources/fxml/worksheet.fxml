@@ -7,15 +7,36 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.Tooltip?>
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <FlowPane alignment="CENTER_LEFT">
          <children>
-            <Button fx:id="scatterBtn" mnemonicParsing="false" text="散点图" />
-            <Button fx:id="histBtn" mnemonicParsing="false" text="直方图" />
-            <Button fx:id="heatmapBtn" mnemonicParsing="false" text="密度图" />
-             <Button fx:id="saveBtn" mnemonicParsing="false" text="删除" />
-            <Button fx:id="deleteBtn" mnemonicParsing="false" text="删除" />
+             <Button fx:id="scatterBtn" mnemonicParsing="false" text="散点图">
+                 <tooltip>
+                     <Tooltip text="散点图"></Tooltip>
+                 </tooltip>
+             </Button>
+             <Button fx:id="histBtn" mnemonicParsing="false" text="直方图">
+                 <tooltip>
+                     <Tooltip text="直方图"></Tooltip>
+                 </tooltip>
+             </Button>
+             <Button fx:id="heatmapBtn" mnemonicParsing="false" text="密度图">
+                 <tooltip>
+                     <Tooltip text="热图"></Tooltip>
+                 </tooltip>
+             </Button>
+             <Button fx:id="saveBtn" mnemonicParsing="false" text="保存">
+                 <tooltip>
+                     <Tooltip text="保存"></Tooltip>
+                 </tooltip>
+             </Button>
+             <Button fx:id="deleteBtn" mnemonicParsing="false" text="删除">
+                 <tooltip>
+                     <Tooltip text="删除"></Tooltip>
+                 </tooltip>
+             </Button>
          </children>
       </FlowPane>
       <ScrollPane prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS">

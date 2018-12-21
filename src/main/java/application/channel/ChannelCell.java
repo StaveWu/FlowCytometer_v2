@@ -3,6 +3,8 @@ package application.channel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -41,6 +43,9 @@ public class ChannelCell extends VBox implements Initializable {
 
     @FXML
     private ToggleGroup peakgroup;
+
+    @FXML
+    private AreaChart<Number, Number> channelChart;
 
     private ChannelInfo channelInfo;
     private ChannelController parentController;
@@ -83,6 +88,23 @@ public class ChannelCell extends VBox implements Initializable {
             String policy = observable.getValue();
             peakgroup.selectToggle(getSelectedToggle(policy));
         });
+
+        // init chart
+        XYChart.Series seriesMay = new XYChart.Series();
+        seriesMay.setName("May");
+        seriesMay.getData().add(new XYChart.Data(1, 20));
+        seriesMay.getData().add(new XYChart.Data(3, 15));
+        seriesMay.getData().add(new XYChart.Data(6, 13));
+        seriesMay.getData().add(new XYChart.Data(9, 12));
+        seriesMay.getData().add(new XYChart.Data(12, 14));
+        seriesMay.getData().add(new XYChart.Data(15, 18));
+        seriesMay.getData().add(new XYChart.Data(18, 25));
+        seriesMay.getData().add(new XYChart.Data(21, 25));
+        seriesMay.getData().add(new XYChart.Data(24, 23));
+        seriesMay.getData().add(new XYChart.Data(27, 26));
+        seriesMay.getData().add(new XYChart.Data(31, 26));
+
+        channelChart.getData().add(seriesMay);
     }
 
     private ToggleButton getSelectedToggle(String policy) {
@@ -108,5 +130,9 @@ public class ChannelCell extends VBox implements Initializable {
 
     public ChannelInfo getChannelInfo() {
         return channelInfo;
+    }
+
+    public XYChart<Number, Number> getChart() {
+        return channelChart;
     }
 }

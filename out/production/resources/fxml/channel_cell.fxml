@@ -24,9 +24,9 @@
             <Hyperlink fx:id="closeHyperlink" onAction="#closeChannel" text="Hyperlink" />
          </children>
       </FlowPane>
-      <AreaChart prefHeight="200.0" prefWidth="250.0">
+      <AreaChart fx:id="channelChart" prefHeight="200.0" prefWidth="250.0">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <NumberAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />
