@@ -1,7 +1,7 @@
 package application.projectTree;
 
 import javafx.scene.Node;
-import utils.Resource;
+import application.utils.Resource;
 
 public class TreeIconManager {
 

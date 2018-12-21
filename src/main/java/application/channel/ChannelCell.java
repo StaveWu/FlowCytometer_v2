@@ -10,7 +10,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.NumberStringConverter;
 import org.springframework.lang.NonNull;
-import utils.Resource;
+import application.utils.Resource;
 
 import java.io.IOException;
 import java.net.URL;

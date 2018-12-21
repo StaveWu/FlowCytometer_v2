@@ -14,8 +14,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Resource;
-import utils.UiUtils;
+import application.utils.Resource;
+import application.utils.UiUtils;
 
 import java.io.File;
 import java.io.IOException;

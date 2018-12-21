@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.springframework.stereotype.Component;
-import utils.Resource;
+import application.utils.Resource;
 
 import java.io.IOException;
 

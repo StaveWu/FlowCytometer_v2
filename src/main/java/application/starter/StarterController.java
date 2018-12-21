@@ -1,7 +1,6 @@
 package application.starter;
 
 import application.mainpage.MainAppController;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,14 +12,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import utils.Resource;
-import utils.UiUtils;
+import application.utils.Resource;
+import application.utils.UiUtils;
 
 import java.io.File;
 import java.net.URL;

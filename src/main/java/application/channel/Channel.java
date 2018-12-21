@@ -6,10 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import utils.Resource;
-import utils.UiUtils;
+import application.utils.Resource;
+import application.utils.UiUtils;
 
 import java.io.IOException;
 import java.net.URL;
