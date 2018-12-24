@@ -14,7 +14,7 @@ public class CustomChartApp extends Application {
         final LogarithmicAxis xAxis = new LogarithmicAxis(1, 100);
         final NumberAxis yAxis = new NumberAxis(0, 100, 10);
         final ScatterChart<Number,Number> sc = new
-                ScatterChart<>(xAxis,yAxis);
+                MyScatterChart<>(xAxis,yAxis);
         xAxis.setLabel("Age (years)");
         yAxis.setLabel("Returns to date");
         sc.setTitle("Investment Overview");
