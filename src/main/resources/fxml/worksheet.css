@@ -22,3 +22,13 @@
    -fx-graphic: url("../icons/save.png");
    -fx-content-display: graphic-only;
 }
+
+#rectBtn {
+   -fx-graphic: url("../icons/rectangle.png");
+   -fx-content-display: graphic-only;
+}
+
+#polygonBtn {
+   -fx-graphic: url("../icons/polygon.png");
+   -fx-content-display: graphic-only;
+}

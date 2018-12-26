@@ -6,8 +6,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -18,17 +20,11 @@
 
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <FlowPane alignment="CENTER_RIGHT">
-         <children>
-            <Button fx:id="linkBtn" mnemonicParsing="false" text="连接">
-                <tooltip>
-                    <Tooltip text="连接设备" />
-                </tooltip>
-            </Button>
-            <ComboBox fx:id="connectionCombo" prefHeight="23.0" prefWidth="124.0" promptText="&lt;connection&gt;" />
-             <Button fx:id="startBtn" mnemonicParsing="false" onAction="#startSampling" text="开始">
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT">
+         <items>
+             <Button fx:id="resetBtn" mnemonicParsing="false" text="复位">
                  <tooltip>
-                     <Tooltip text="开始采集" />
+                     <Tooltip text="系统复位" />
                  </tooltip>
              </Button>
              <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopSampling" text="停止">
@@ -36,13 +32,20 @@
                      <Tooltip text="停止采集" />
                  </tooltip>
              </Button>
-             <Button fx:id="resetBtn" mnemonicParsing="false" text="复位">
+             <Button fx:id="startBtn" mnemonicParsing="false" onAction="#startSampling" text="开始">
                  <tooltip>
-                     <Tooltip text="系统复位" />
+                     <Tooltip text="开始采集" />
                  </tooltip>
              </Button>
-         </children>
-      </FlowPane>
+            <Separator orientation="VERTICAL" />
+            <ComboBox fx:id="connectionCombo" prefHeight="23.0" prefWidth="124.0" promptText="&lt;connection&gt;" />
+            <Button fx:id="linkBtn" mnemonicParsing="false" text="连接">
+                <tooltip>
+                    <Tooltip text="连接设备" />
+                </tooltip>
+            </Button>
+         </items>
+      </ToolBar>
       <TitledPane animated="false" text="采样设置">
          <content>
             <GridPane vgap="5.0">
