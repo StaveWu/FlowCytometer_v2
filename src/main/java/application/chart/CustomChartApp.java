@@ -1,5 +1,6 @@
 package application.chart;
 
+import application.chart.axis.LogarithmicAxis;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
@@ -14,7 +15,7 @@ public class CustomChartApp extends Application {
         final LogarithmicAxis xAxis = new LogarithmicAxis(1, 100);
         final NumberAxis yAxis = new NumberAxis(0, 100, 10);
         final ScatterChart<Number,Number> sc = new
-                MyScatterChart<>(xAxis,yAxis);
+                GatedScatterChart<>(xAxis,yAxis);
         xAxis.setLabel("Age (years)");
         yAxis.setLabel("Returns to date");
         sc.setTitle("Investment Overview");

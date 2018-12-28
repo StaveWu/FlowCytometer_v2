@@ -1,4 +1,4 @@
-package application.chart;
+package application.chart.axis;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

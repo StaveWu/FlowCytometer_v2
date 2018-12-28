@@ -2,13 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/resources/fxml/project_tree.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/fxml/project_tree.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/channel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/channel.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/project_tree.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/project_tree.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/worksheet.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/worksheet.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/Gatable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/Gatable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/Gate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/IllegalLogarithmicRangeException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/LogarithmicAxis$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/LogarithmicAxis$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/LogarithmicAxis.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/MyScatterChart.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/Gate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/IllegalLogarithmicRangeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/axis/IllegalLogarithmicRangeException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/LogarithmicAxis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/axis/LogarithmicAxis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/MyScatterChart.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -111,20 +125,69 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/worksheet.css">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="30" column="13" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+            <state relative-caret-position="221">
+              <caret line="97" column="5" lean-forward="true" selection-start-line="97" selection-start-column="5" selection-end-line="97" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#564#565#0" expanded="true" />
+                <element signature="e#635#636#0" expanded="true" />
+                <element signature="e#3308#3309#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="468">
+              <caret line="190" column="9" lean-forward="true" selection-start-line="190" selection-start-column="9" selection-end-line="190" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="33" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml">
-          <provider editor-type-id="JavaFX-Scene-Builder" />
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="38" column="38" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
+            <state relative-caret-position="226">
+              <caret line="28" column="39" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1708#1709#0" expanded="true" />
+                <element signature="e#1751#1752#0" expanded="true" />
+                <element signature="e#1776#1777#0" expanded="true" />
+                <element signature="e#1814#1815#0" expanded="true" />
+                <element signature="e#1838#1839#0" expanded="true" />
+                <element signature="e#1879#1880#0" expanded="true" />
+                <element signature="e#2012#2013#0" expanded="true" />
+                <element signature="e#2042#2043#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -157,10 +220,22 @@
       <find>factory</find>
       <find>major</find>
       <find>logLowerBound</find>
-      <find>plotContent</find>
       <find>plot content</find>
       <find>title</find>
+      <find>rectangle</find>
+      <find>offset</find>
+      <find>itemAdd</find>
+      <find>getDisplayPosition</find>
+      <find>plotContent</find>
+      <find>zero</find>
+      <find>layoutPlotChildren</find>
+      <find>scene</find>
+      <find>localtoScene</find>
+      <find>layou</find>
     </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -168,20 +243,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/tick/IHandlerTask.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/tick/TimerPolicy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/TimerTick.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/TimerTask.java" />
-        <option value="$PROJECT_DIR$/src/test/java/apitest/ProcessbarTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/tick/AbstractTickService.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/TimeTickService.java" />
-        <option value="$PROJECT_DIR$/src/test/java/apitest/FormatSecondTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/controlsfxtest/A.java" />
-        <option value="$PROJECT_DIR$/src/test/java/controlsfxtest/HelloDacorator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/dashboard/DashboardView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/mainpage/MainAppController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/StarterApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/starter/StarterController.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/dashboard/DashBoardApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/dashboard/ApplicationContextUtils.java" />
@@ -210,15 +271,29 @@
         <option value="$PROJECT_DIR$/src/main/java/application/chart/LogarithmicAxis.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/Circlable.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/ContextMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/Gate.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/MyScatterChart.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/worksheet/WorksheetApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/worksheet/WorksheetController.java" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/worksheet.css" />
         <option value="$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/AnnimationTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/IGate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/Gate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/ReadyGate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/GateState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/GateReadyState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/axis/IllegalLogarithmicRangeException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/chart.css" />
+        <option value="$PROJECT_DIR$/out/production/classes/application/chart/chart.css" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/GatableDecorator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/MyScatterChart.java" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/EventA.java" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/DraggablePanelsExample.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" />
       </list>
     </option>
   </component>
@@ -229,8 +304,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1360" />
-    <option name="height" value="710" />
+    <option name="x" value="1" />
+    <option name="y" value="3" />
+    <option name="width" value="1355" />
+    <option name="height" value="705" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -240,12 +317,49 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
               <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="chart" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
@@ -278,27 +392,48 @@
               <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="chart" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
               <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="fxml" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="apitest" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545812033919" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546002199075" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -306,9 +441,6 @@
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources\fxml" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="application.utils" />
       <recent name="application.channel.dao" />
@@ -316,12 +448,17 @@
       <recent name="" />
       <recent name="application" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\files\workspace\idea\flowcytometer\out\production\classes\application\chart" />
+      <recent name="D:\files\workspace\idea\flowcytometer\src\main\java\application\chart" />
+      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources" />
+      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources\icons" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources\icons" />
-      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources\fxml" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -336,13 +473,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.WorksheetApp">
-    <configuration name="ChannelApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="application.channel.ChannelApp" />
-      <module name="com.stave.flowcytometer.main" />
+  <component name="RunManager" selected="Application.CustomChartApp">
+    <configuration name="Animation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="apitest.Animation" />
+      <module name="com.stave.flowcytometer.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="application.channel.*" />
+          <option name="PATTERN" value="apitest.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -355,7 +492,7 @@
       <module name="com.stave.flowcytometer.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="application.chart.*" />
+          <option name="PATTERN" value="application.chart.gate.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -363,12 +500,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DashBoardApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="application.dashboard.DashBoardApp" />
-      <module name="com.stave.flowcytometer.main" />
+    <configuration name="DraggablePanelsExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="apitest.DraggablePanelsExample" />
+      <module name="com.stave.flowcytometer.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="application.utils.*" />
+          <option name="PATTERN" value="apitest.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -404,18 +541,18 @@
     </configuration>
     <list>
       <item itemvalue="Application.StarterApp" />
-      <item itemvalue="Application.DashBoardApp" />
-      <item itemvalue="Application.ChannelApp" />
       <item itemvalue="Application.WorksheetApp" />
       <item itemvalue="Application.CustomChartApp" />
+      <item itemvalue="Application.Animation" />
+      <item itemvalue="Application.DraggablePanelsExample" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.WorksheetApp" />
-        <item itemvalue="Application.StarterApp" />
         <item itemvalue="Application.CustomChartApp" />
-        <item itemvalue="Application.DashBoardApp" />
-        <item itemvalue="Application.ChannelApp" />
+        <item itemvalue="Application.DraggablePanelsExample" />
+        <item itemvalue="Application.StarterApp" />
+        <item itemvalue="Application.Animation" />
+        <item itemvalue="Application.WorksheetApp" />
       </list>
     </recent_temporary>
   </component>
@@ -471,8 +608,8 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4428224" visible="true" weight="0.35930407" />
-      <window_info id="Structure" order="1" sideWeight="0.5571776" side_tool="true" visible="true" weight="0.35930407" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4393204" visible="true" weight="0.3419062" />
+      <window_info id="Structure" order="1" sideWeight="0.5606796" side_tool="true" visible="true" weight="0.3419062" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -480,13 +617,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32786885" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3258427" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3988764" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32459018" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39836067" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32786885" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295082" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3258427" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32459018" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.32786885" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3262295" />
@@ -512,127 +649,9 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/com/sun/glass/ui/View.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-305">
-          <caret line="163" column="5" lean-forward="true" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/DashboardController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="108" column="28" lean-forward="true" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/Channel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="28" column="5" lean-forward="true" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/AreaChart.java" />
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Chart.java" />
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/layout/Region.java" />
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/XYChart.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="94" column="41" selection-start-line="94" selection-start-column="41" selection-end-line="94" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="31" column="36" lean-forward="true" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/animation/KeyValue.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/util/Duration.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/animation/KeyFrame.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/time/Duration.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/NumberAxis.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/LogarithmicNumberAxis.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/IllegalLogarithmicRangeException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/LogAxis.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/text/NumberFormat.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/Parent.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/Axis.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/lang/Double.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/ValueAxis.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/LogarithmicAxis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="32" column="40" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4389#4390#0" expanded="true" />
-            <element signature="e#4483#4484#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/layout/Region.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/Circlable.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/control/ContextMenu.java" />
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/input/ContextMenuEvent.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/Node.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/shape/Rectangle.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/input/MouseEvent.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/Gatable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/Gate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#72#73#0" expanded="true" />
-            <element signature="e#117#118#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/worksheet/WorksheetApp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -644,16 +663,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="73">
           <caret line="15" column="48" selection-start-line="15" selection-start-column="48" selection-end-line="15" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyScatterChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-340">
-          <caret line="13" column="38" lean-forward="true" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -682,16 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/project_tree.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-102">
@@ -709,12 +708,20 @@
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="45" column="21" lean-forward="true" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
         </state>
       </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="55" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/worksheet.css">
       <provider selected="true" editor-type-id="text-editor">
@@ -723,13 +730,289 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/worksheet.fxml">
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/input/MouseEvent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="38" column="38" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
+        <state relative-caret-position="213">
+          <caret line="474" column="6" lean-forward="true" selection-start-line="474" selection-start-column="6" selection-end-line="474" selection-end-column="6" />
+          <folding>
+            <element signature="e#21614#21615#0" expanded="true" />
+            <element signature="e#21638#21639#0" expanded="true" />
+          </folding>
         </state>
       </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/geometry/Point2D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="32" column="23" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Shape.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="88" column="29" selection-start-line="88" selection-start-column="29" selection-end-line="88" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/Animation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1360">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4642#4643#0" expanded="true" />
+            <element signature="e#4682#4683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/IGate.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/ReadyGate.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/GateReadyState.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/GateState.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/axis.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/axis/IllegalLogarithmicRangeException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/Gatable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/src.zip!/java/util/List.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="587" column="75" lean-forward="true" selection-start-line="587" selection-start-column="75" selection-end-line="587" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ValueAxis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="466" column="51" lean-forward="true" selection-start-line="466" selection-start-column="51" selection-end-line="467" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/axis/LogarithmicAxis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/layout/Region.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="1578" lean-forward="true" selection-start-line="1578" selection-end-line="1578" />
+          <folding>
+            <element signature="e#70874#70875#0" expanded="true" />
+            <element signature="e#70933#70934#0" expanded="true" />
+            <element signature="e#71957#71958#0" expanded="true" />
+            <element signature="e#71996#71997#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Axis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="503" column="27" selection-start-line="503" selection-start-column="27" selection-end-line="503" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Parent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="878" column="31" lean-forward="true" selection-start-line="878" selection-start-column="31" selection-end-line="878" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Chart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-782">
+          <caret line="358" column="24" lean-forward="true" selection-start-line="358" selection-start-column="24" selection-end-line="358" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/utils/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/chart.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/chart.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/classes/application/chart/chart.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/XYChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="1205" column="33" lean-forward="true" selection-start-line="1205" selection-start-column="33" selection-end-line="1205" selection-end-column="33" />
+          <folding>
+            <element signature="e#15813#15814#0" expanded="true" />
+            <element signature="e#15861#15862#0" expanded="true" />
+            <element signature="e#69802#69803#0" expanded="true" />
+            <element signature="e#69878#69879#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/collections/FXCollections.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="303" column="40" selection-start-line="303" selection-start-column="40" selection-end-line="303" selection-end-column="40" />
+          <folding>
+            <element signature="e#11614#11615#0" expanded="true" />
+            <element signature="e#11668#11669#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatableDecorator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="127" column="29" lean-forward="true" selection-start-line="127" selection-start-column="29" selection-end-line="127" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="5217" column="41" lean-forward="true" selection-start-line="5217" selection-start-column="41" selection-end-line="5217" selection-end-column="41" />
+          <folding>
+            <element signature="e#134895#134896#0" expanded="true" />
+            <element signature="e#134946#134947#0" expanded="true" />
+            <element signature="e#166736#166737#0" expanded="true" />
+            <element signature="e#166805#166806#0" expanded="true" />
+            <element signature="e#224534#224535#0" expanded="true" />
+            <element signature="e#224581#224582#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/geometry/Bounds.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1708#1709#0" expanded="true" />
+            <element signature="e#1751#1752#0" expanded="true" />
+            <element signature="e#1776#1777#0" expanded="true" />
+            <element signature="e#1814#1815#0" expanded="true" />
+            <element signature="e#1838#1839#0" expanded="true" />
+            <element signature="e#1879#1880#0" expanded="true" />
+            <element signature="e#2012#2013#0" expanded="true" />
+            <element signature="e#2042#2043#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="190" column="9" lean-forward="true" selection-start-line="190" selection-start-column="9" selection-end-line="190" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/DraggablePanelsExample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="136" column="57" lean-forward="true" selection-start-line="136" selection-start-column="57" selection-end-line="136" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#10943#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#4300#4301#0" expanded="true" />
+            <element signature="e#4328#4329#0" expanded="true" />
+            <element signature="e#7228#7236#0" expanded="true" />
+            <element signature="e#8397#8398#0" expanded="true" />
+            <element signature="e#8480#8481#0" expanded="true" />
+            <element signature="e#8712#8713#0" expanded="true" />
+            <element signature="e#8795#8796#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="33" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="97" column="5" lean-forward="true" selection-start-line="97" selection-start-column="5" selection-end-line="97" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#564#565#0" expanded="true" />
+            <element signature="e#635#636#0" expanded="true" />
+            <element signature="e#3308#3309#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="28" column="39" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">

@@ -1,4 +1,4 @@
-package application.chart;
+package application.chart.axis;
 
 /**
  * Exception to be thrown when a bound value isn't supported by the logarithmic axis<br>

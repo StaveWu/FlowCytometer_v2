@@ -1,8 +1,10 @@
 package application.chart;
 
+import application.chart.gate.RectangleGate;
+
 public interface Gatable {
 
-    void setGate(Gate gate);
+    void setGate(RectangleGate gate);
 
-    void setGateActive(boolean active);
+    void removeGate();
 }
