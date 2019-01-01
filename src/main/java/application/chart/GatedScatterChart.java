@@ -9,6 +9,8 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.input.MouseButton;
 
+import java.util.Iterator;
+
 public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatable {
 
     private Gate<X, Y> gate;
@@ -63,31 +65,33 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
         return lookup(".chart-plot-background");
     }
 
-//    public ObservableList<Series<X, Y>> getGatedData() {
-//        if (gate == null) { // return an empty list if gate not ready
-//            return FXCollections.observableArrayList();
-//        }
-//        Node chartArea = lookup(".chart-plot-background");
-//        Bounds bounds = chartArea.sceneToLocal(gate.getLayoutBounds());
-//
-//        ObservableList<Series<X, Y>> gatedData = FXCollections.observableArrayList();
-//        for (int seriesIndex=0; seriesIndex < getData().size(); seriesIndex++) {
-//            Series<X, Y> series = getData().get(seriesIndex);
-//            Series<X, Y> gatedSeries = new Series<>();
-//            gatedSeries.setName(series.getName());
-//            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-//                Data<X, Y> item = it.next();
-//                double x = getXAxis().getDisplayPosition(item.getXValue());
-//                double y = getYAxis().getDisplayPosition(item.getYValue());
-//                if (bounds.contains(x, y)) {
-//                    gatedSeries.getData().add(item);
-//                }
-//            }
-//            gatedData.add(gatedSeries);
-//        }
-//        return gatedData;
-//    }
+    public ObservableList<Series<X, Y>> getGatedData() {
+        if (gate == null) { // return an empty list if gate not ready
+            return FXCollections.observableArrayList();
+        }
 
+        ObservableList<Series<X, Y>> res = FXCollections.observableArrayList();
+        for (int seriesIndex=0; seriesIndex < getData().size(); seriesIndex++) {
+            Series<X, Y> series = getData().get(seriesIndex);
+            Series<X, Y> gatedSeries = new Series<>();
+            gatedSeries.setName(series.getName());
+            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
+                Data<X, Y> item = it.next();
+                double x = getXAxis().getDisplayPosition(item.getXValue());
+                double y = getYAxis().getDisplayPosition(item.getYValue());
+                if (gate.getNode().contains(x, y)) {
+                    gatedSeries.getData().add(item);
+                }
+            }
+            res.add(gatedSeries);
+        }
+        return res;
+    }
+
+    /**
+     * this method is valid on plot area, different with layoutChildren() method, which
+     * belongs to any node class.
+     */
     @Override
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
@@ -104,8 +108,8 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
 
     @Override
     public void removeGate() {
-        if (gate != null && getChildren().contains(gate.getNode())) {
-            getChildren().remove(gate.getNode());
+        if (gate != null && getPlotChildren().contains(gate.getNode())) {
+            getPlotChildren().remove(gate.getNode());
         }
     }
 

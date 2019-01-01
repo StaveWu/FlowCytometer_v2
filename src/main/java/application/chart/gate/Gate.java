@@ -1,6 +1,5 @@
 package application.chart.gate;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
@@ -99,4 +98,5 @@ public class Gate<X, Y> {
             node.setHeight(y1- y0);
         }
     }
+
 }

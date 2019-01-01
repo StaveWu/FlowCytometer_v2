@@ -4,16 +4,18 @@
     <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/Gatable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/Gatable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/GatedScatterChart.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/GatedScatterChart.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$DragContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$DragContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/Gate.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/gate/Gate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$DragContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -115,11 +117,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="830">
+              <caret line="95" column="41" lean-forward="true" selection-start-line="95" selection-start-column="41" selection-end-line="95" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4214#4215#0" expanded="true" />
@@ -130,28 +132,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Parent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="1086" column="30" selection-start-line="1086" selection-start-column="16" selection-end-line="1086" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="97" column="19" selection-start-line="97" selection-start-column="12" selection-end-line="97" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/XYChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="111" column="21" selection-start-line="111" selection-start-column="21" selection-end-line="111" selection-end-column="21" />
+            <state relative-caret-position="-451">
+              <caret line="116" column="58" lean-forward="true" selection-start-line="116" selection-start-column="58" selection-end-line="116" selection-end-column="58" />
               <folding>
                 <element signature="e#15813#15814#0" expanded="true" />
                 <element signature="e#15861#15862#0" expanded="true" />
@@ -162,44 +146,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Chart.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="323" column="47" selection-start-line="323" selection-start-column="28" selection-end-line="323" selection-end-column="47" />
-              <folding>
-                <element signature="e#10519#10520#0" expanded="true" />
-                <element signature="e#10563#10564#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Node.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44166">
-              <caret line="2942" selection-start-line="2942" selection-end-line="2942" />
-              <folding>
-                <element signature="e#134895#134896#0" expanded="true" />
-                <element signature="e#134946#134947#0" expanded="true" />
-                <element signature="e#166736#166737#0" expanded="true" />
-                <element signature="e#166805#166806#0" expanded="true" />
-                <element signature="e#224534#224535#0" expanded="true" />
-                <element signature="e#224581#224582#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="646">
+              <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/LineChart.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="470" column="72" lean-forward="true" selection-start-line="470" selection-start-column="62" selection-end-line="470" selection-end-column="76" />
             </state>
           </provider>
         </entry>
@@ -207,8 +170,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="94" column="40" selection-start-line="94" selection-start-column="40" selection-end-line="94" selection-end-column="40" />
+            <state relative-caret-position="816">
+              <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -217,10 +180,23 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ValueAxis.java">
+        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="67" column="24" selection-start-line="67" selection-start-column="24" selection-end-line="67" selection-end-column="24" />
+            <state relative-caret-position="128">
+              <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Axis.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="69">
+              <caret line="539" column="45" lean-forward="true" selection-start-line="539" selection-start-column="45" selection-end-line="539" selection-end-column="45" />
+              <folding>
+                <element signature="e#15974#15975#0" expanded="true" />
+                <element signature="e#16011#16012#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -238,7 +214,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>repository</find>
       <find>createDirectory</find>
       <find>directory</find>
       <find>factory</find>
@@ -265,9 +240,10 @@
       <find>setauto</find>
       <find>layoutch</find>
       <find>axis</find>
-      <find>layoutChartChildren</find>
       <find>layout</find>
+      <find>layoutChartChildren</find>
       <find>layoutplo</find>
+      <find>layoutplot</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -327,9 +303,9 @@
         <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" />
       </list>
     </option>
   </component>
@@ -395,6 +371,16 @@
               <item name="application" type="462c0819:PsiDirectoryNode" />
               <item name="chart" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="chart" type="462c0819:PsiDirectoryNode" />
+              <item name="gate" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -404,7 +390,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546333326437" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546336053757" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -620,7 +606,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/Chart.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/ScatterChart.java" />
     <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/chart/LineChart.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/application/StarterApp.java">
@@ -811,13 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="93" column="24" lean-forward="true" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/axis/LogarithmicAxis.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="117">
@@ -858,35 +836,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="40" column="50" lean-forward="true" selection-start-line="40" selection-start-column="50" selection-end-line="40" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/NumberAxis.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="62" column="41" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44166">
-          <caret line="2942" selection-start-line="2942" selection-end-line="2942" />
-          <folding>
-            <element signature="e#134895#134896#0" expanded="true" />
-            <element signature="e#134946#134947#0" expanded="true" />
-            <element signature="e#166736#166737#0" expanded="true" />
-            <element signature="e#166805#166806#0" expanded="true" />
-            <element signature="e#224534#224535#0" expanded="true" />
-            <element signature="e#224581#224582#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -904,31 +857,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Axis.java">
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Parent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="450" column="50" selection-start-line="450" selection-start-column="50" selection-end-line="450" selection-end-column="50" />
+        <state relative-caret-position="195">
+          <caret line="1086" column="30" selection-start-line="1086" selection-start-column="16" selection-end-line="1086" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="2942" selection-start-line="2942" selection-end-line="2942" />
           <folding>
-            <element signature="e#15974#15975#0" expanded="true" />
-            <element signature="e#16011#16012#0" expanded="true" />
+            <element signature="e#134895#134896#0" expanded="true" />
+            <element signature="e#134946#134947#0" expanded="true" />
+            <element signature="e#166736#166737#0" expanded="true" />
+            <element signature="e#166805#166806#0" expanded="true" />
+            <element signature="e#224534#224535#0" expanded="true" />
+            <element signature="e#224581#224582#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="95" column="30" lean-forward="true" selection-start-line="95" selection-start-column="30" selection-end-line="95" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="-1114">
+          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/Parent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="1086" column="30" selection-start-line="1086" selection-start-column="16" selection-end-line="1086" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -943,17 +907,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="97" column="19" selection-start-line="97" selection-start-column="12" selection-end-line="97" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/XYChart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="111" column="21" selection-start-line="111" selection-start-column="21" selection-end-line="111" selection-end-column="21" />
+        <state relative-caret-position="-451">
+          <caret line="116" column="58" lean-forward="true" selection-start-line="116" selection-start-column="58" selection-end-line="116" selection-end-column="58" />
           <folding>
             <element signature="e#15813#15814#0" expanded="true" />
             <element signature="e#15861#15862#0" expanded="true" />
@@ -963,10 +920,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/LineChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="470" column="72" lean-forward="true" selection-start-line="470" selection-start-column="62" selection-end-line="470" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Axis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="539" column="45" lean-forward="true" selection-start-line="539" selection-start-column="45" selection-end-line="539" selection-end-column="45" />
+          <folding>
+            <element signature="e#15974#15975#0" expanded="true" />
+            <element signature="e#16011#16012#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="94" column="40" selection-start-line="94" selection-start-column="40" selection-end-line="94" selection-end-column="40" />
+        <state relative-caret-position="816">
+          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -975,12 +957,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="830">
+          <caret line="95" column="41" lean-forward="true" selection-start-line="95" selection-start-column="41" selection-end-line="95" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4214#4215#0" expanded="true" />
             <element signature="e#4246#4247#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

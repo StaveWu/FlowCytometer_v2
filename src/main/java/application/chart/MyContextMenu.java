@@ -1,7 +1,6 @@
 package application.chart;
 
 import application.chart.gate.Gate;
-import application.chart.gate.RectangleGate;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 
