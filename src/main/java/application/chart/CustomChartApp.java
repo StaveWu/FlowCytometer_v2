@@ -2,13 +2,16 @@ package application.chart;
 
 import application.chart.axis.LogarithmicAxis;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class CustomChartApp extends Application {
+    static int delta = 50;
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Scatter Chart Sample");
@@ -29,7 +32,16 @@ public class CustomChartApp extends Application {
         series1.getData().add(new XYChart.Data(100, 26.4));
 
         sc.getData().addAll(series1);
-        Scene scene  = new Scene(sc, 500, 400);
+
+        Group group = new Group();
+        group.getChildren().add(sc);
+        Button changeSizeBtn = new Button("更改尺寸");
+        changeSizeBtn.setOnAction(event -> {
+            sc.setPrefWidth(sc.getWidth() - 50);
+            sc.setPrefHeight(sc.getHeight() - 50);
+        });
+        group.getChildren().add(changeSizeBtn);
+        Scene scene  = new Scene(group, 500, 400);
         stage.setScene(scene);
         stage.show();
     }

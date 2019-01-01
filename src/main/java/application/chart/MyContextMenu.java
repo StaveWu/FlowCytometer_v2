@@ -1,5 +1,6 @@
 package application.chart;
 
+import application.chart.gate.Gate;
 import application.chart.gate.RectangleGate;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -17,7 +18,7 @@ public class MyContextMenu extends ContextMenu {
         MenuItem createGateItem = new MenuItem("创建圈门");
         createGateItem.setOnAction(event -> {
             gatable.removeGate();
-            RectangleGate gate = new RectangleGate();
+            Gate gate = new Gate();
             gate.setActive(true);
             gatable.setGate(gate);
         });

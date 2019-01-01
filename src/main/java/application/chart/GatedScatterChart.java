@@ -1,19 +1,17 @@
 package application.chart;
 
-import application.chart.gate.RectangleGate;
+import application.chart.gate.Gate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.input.MouseButton;
 
-import java.util.Iterator;
-
 public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatable {
 
-    private RectangleGate gate;
+    private Gate<X, Y> gate;
     private MyContextMenu contextMenu;
 
     public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis) {
@@ -39,61 +37,75 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
             if (gate != null && gate.isActive()
                     && event.getButton() == MouseButton.PRIMARY) {
                 if (!gate.isLocaled()) {
-                    getChildren().add(gate.getDelegate());
+                    getPlotChildren().add(gate.getNode());
                 }
-                gate.setLocation(event.getX(), event.getY());
+                gate.addPoints(getDataForDisplay(event.getX(), event.getY()));
             }
         });
         // TODO: handle gate action
         this.setOnMouseMoved(event -> {
             if (gate != null && gate.isActive() && gate.isLocaled()) {
-                gate.setRunningPoint(event.getX(), event.getY());
-                System.out.println(getGatedData().get(0).getData());
+                gate.setRunningPoint(getDataForDisplay(event.getX(), event.getY()));
+                requestChartLayout();
             }
         });
 
     }
 
-    public ObservableList<Series<X, Y>> getGatedData() {
-        if (gate == null) { // return an empty list if gate not ready
-            return FXCollections.observableArrayList();
-        }
-        Node chartArea = lookup(".chart-plot-background");
-        Bounds bounds = chartArea.sceneToLocal(gate.getLayoutBounds());
+    public Data<X, Y> getDataForDisplay(double x, double y) {
+        Point2D local = getPlotArea().sceneToLocal(new Point2D(x, y));
+        X xvalue = getXAxis().getValueForDisplay(local.getX());
+        Y yvalue = getYAxis().getValueForDisplay(local.getY());
+        return new Data<>(xvalue, yvalue);
+    }
 
-        ObservableList<Series<X, Y>> gatedData = FXCollections.observableArrayList();
-        for (int seriesIndex=0; seriesIndex < getData().size(); seriesIndex++) {
-            Series<X, Y> series = getData().get(seriesIndex);
-            Series<X, Y> gatedSeries = new Series<>();
-            gatedSeries.setName(series.getName());
-            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-                Data<X, Y> item = it.next();
-                double x = getXAxis().getDisplayPosition(item.getXValue());
-                double y = getYAxis().getDisplayPosition(item.getYValue());
-                if (bounds.contains(x, y)) {
-                    gatedSeries.getData().add(item);
-                }
-            }
-            gatedData.add(gatedSeries);
+    public Node getPlotArea() {
+        return lookup(".chart-plot-background");
+    }
+
+//    public ObservableList<Series<X, Y>> getGatedData() {
+//        if (gate == null) { // return an empty list if gate not ready
+//            return FXCollections.observableArrayList();
+//        }
+//        Node chartArea = lookup(".chart-plot-background");
+//        Bounds bounds = chartArea.sceneToLocal(gate.getLayoutBounds());
+//
+//        ObservableList<Series<X, Y>> gatedData = FXCollections.observableArrayList();
+//        for (int seriesIndex=0; seriesIndex < getData().size(); seriesIndex++) {
+//            Series<X, Y> series = getData().get(seriesIndex);
+//            Series<X, Y> gatedSeries = new Series<>();
+//            gatedSeries.setName(series.getName());
+//            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
+//                Data<X, Y> item = it.next();
+//                double x = getXAxis().getDisplayPosition(item.getXValue());
+//                double y = getYAxis().getDisplayPosition(item.getYValue());
+//                if (bounds.contains(x, y)) {
+//                    gatedSeries.getData().add(item);
+//                }
+//            }
+//            gatedData.add(gatedSeries);
+//        }
+//        return gatedData;
+//    }
+
+    @Override
+    protected void layoutPlotChildren() {
+        super.layoutPlotChildren();
+        if (gate == null) {
+            return;
         }
-        return gatedData;
+        gate.resizeLocate(getXAxis(), getYAxis());
     }
 
     @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        // update gate position
-    }
-
-    @Override
-    public void setGate(RectangleGate gate) {
+    public void setGate(Gate gate) {
         this.gate = gate;
     }
 
     @Override
     public void removeGate() {
-        if (gate != null && getChildren().contains(gate.getDelegate())) {
-            getChildren().remove(gate.getDelegate());
+        if (gate != null && getChildren().contains(gate.getNode())) {
+            getChildren().remove(gate.getNode());
         }
     }
 

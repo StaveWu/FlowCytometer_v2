@@ -5,16 +5,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 
-public class RectangleGate {
-
-    private boolean isActive = false;
+public class RectangleGate<X, Y> {
 
     private Rectangle delegate;
-
+    private boolean isActive = false;
     private boolean isLocaled = false;
 
     private DragContext dragContext;
-
     private static final class DragContext {
         public double mouseAnchorX;
         public double mouseAnchorY;
@@ -51,7 +48,6 @@ public class RectangleGate {
             }
         });
     }
-
 
     public Node getDelegate() {
         return delegate;
@@ -116,4 +112,7 @@ public class RectangleGate {
     public Bounds getLayoutBounds() {
         return delegate.getLayoutBounds();
     }
+
+
+
 }
