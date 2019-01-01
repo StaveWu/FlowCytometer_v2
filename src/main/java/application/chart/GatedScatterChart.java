@@ -41,17 +41,16 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
                 if (!gate.isLocaled()) {
                     getPlotChildren().add(gate.getNode());
                 }
-                gate.addPoints(getDataForDisplay(event.getX(), event.getY()));
+                gate.addPoints(getDataForDisplay(event.getSceneX(), event.getSceneY()));
             }
         });
         // TODO: handle gate action
         this.setOnMouseMoved(event -> {
             if (gate != null && gate.isActive() && gate.isLocaled()) {
-                gate.setRunningPoint(getDataForDisplay(event.getX(), event.getY()));
+                gate.setRunningPoint(getDataForDisplay(event.getSceneX(), event.getSceneY()));
                 requestChartLayout();
             }
         });
-
     }
 
     public Data<X, Y> getDataForDisplay(double x, double y) {

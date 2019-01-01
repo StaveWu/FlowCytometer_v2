@@ -1,9 +1,10 @@
 package application.worksheet;
 
+import application.chart.GatedScatterChart;
+import application.utils.Resource;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class WorksheetController implements Initializable {
     private SheetStatus sheetStatus = SheetStatus.DEFAULT;
 
     @FXML
-    private AnchorPane canvas;
+    private AnchorPane chartsPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,18 +38,19 @@ public class WorksheetController implements Initializable {
 
     @FXML
     protected void createScatterChart() {
-        ScatterChart<Number, Number> scatter = new ScatterChart<>(new NumberAxis(), new NumberAxis());
+        GatedScatterChart<Number, Number> scatterChart = new GatedScatterChart<>(new NumberAxis(),
+                new NumberAxis());
         int loc = getDelta();
-        scatter.setLayoutX(loc);
-        scatter.setLayoutY(loc);
-        scatter.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY
-                    && sheetStatus == SheetStatus.CREATE_RECTANGLE_GATE) {
-                System.out.println("create rect");
-                setSheetStatus(SheetStatus.DEFAULT);
-            }
-        });
-        canvas.getChildren().add(scatter);
+        scatterChart.setLayoutX(loc);
+        scatterChart.setLayoutY(loc);
+//        scatterChart.setOnMouseClicked(event -> {
+//            if (event.getButton() == MouseButton.PRIMARY
+//                    && sheetStatus == SheetStatus.CREATE_RECTANGLE_GATE) {
+//                System.out.println("create rect");
+//                setSheetStatus(SheetStatus.DEFAULT);
+//            }
+//        });
+        chartsPane.getChildren().add(scatterChart);
     }
 
     @FXML

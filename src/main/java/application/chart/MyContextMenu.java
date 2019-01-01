@@ -25,7 +25,12 @@ public class MyContextMenu extends ContextMenu {
         deleteGateItem.setOnAction(event -> {
             gatable.removeGate();
         });
+        MenuItem settingsItem = new MenuItem("设置");
+        settingsItem.setOnAction(event -> {
+            // pop up settings stage
+        });
         getItems().add(createGateItem);
         getItems().add(deleteGateItem);
+        getItems().add(settingsItem);
 }
 }

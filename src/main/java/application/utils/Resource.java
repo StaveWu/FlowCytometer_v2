@@ -17,4 +17,9 @@ public class Resource {
                 .getResourceAsStream(String.format("../../../resources/icons/%s", name))));
     }
 
+    public static String getStyle(String name) {
+        return Resource.class.getResource(String.format("../../../resources/fxml/%s", name))
+                .toExternalForm();
+    }
+
 }
