@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/CustomChartApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/GatedScatterChart.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/GatedScatterChart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/MyContextMenu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/Gate.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/application/chart/gate/Gate.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate$DragContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/chart/gate/RectangleGate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/Gatable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/chart/gate/RectangleGate.java" beforeDir="false" />
-    </list>
+    <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -120,7 +105,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="830">
+            <state relative-caret-position="1547">
               <caret line="95" column="41" lean-forward="true" selection-start-line="95" selection-start-column="41" selection-end-line="95" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -146,7 +131,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="646">
@@ -167,36 +152,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="816">
-              <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/Axis.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="539" column="45" lean-forward="true" selection-start-line="539" selection-start-column="45" selection-end-line="539" selection-end-column="45" />
-              <folding>
-                <element signature="e#15974#15975#0" expanded="true" />
-                <element signature="e#16011#16012#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="85">
+              <caret line="5" column="36" lean-forward="true" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -371,16 +331,6 @@
               <item name="application" type="462c0819:PsiDirectoryNode" />
               <item name="chart" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="flowcytometer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flowcytometer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="application" type="462c0819:PsiDirectoryNode" />
-              <item name="chart" type="462c0819:PsiDirectoryNode" />
-              <item name="gate" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -390,7 +340,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546336053757" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546351296223" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -563,9 +513,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.43446603" visible="true" weight="0.3517398" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.43446603" visible="true" weight="0.3517398" />
       <window_info id="Structure" order="1" sideWeight="0.565534" side_tool="true" visible="true" weight="0.3517398" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -574,13 +523,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32786885" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32459018" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32459018" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39836067" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32786885" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295082" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32459018" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32459018" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.32786885" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3262295" />
@@ -806,16 +755,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="23" column="11" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.controlsfx/controlsfx/8.40.14/a3b2896b09d8fb1da649f632a30e673a79535e80/controlsfx-8.40.14-sources.jar!/org/controlsfx/control/SegmentedBar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6664">
@@ -938,17 +877,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
+        <state relative-caret-position="646">
+          <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -957,7 +889,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="830">
+        <state relative-caret-position="1547">
           <caret line="95" column="41" lean-forward="true" selection-start-line="95" selection-start-column="41" selection-end-line="95" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -967,13 +899,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
+        <state relative-caret-position="271">
+          <caret line="19" column="35" lean-forward="true" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/shape/Rectangle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="36" lean-forward="true" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
         </state>
       </provider>
     </entry>

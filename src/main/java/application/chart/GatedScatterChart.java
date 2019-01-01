@@ -56,9 +56,9 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
 
     public Data<X, Y> getDataForDisplay(double x, double y) {
         Point2D local = getPlotArea().sceneToLocal(new Point2D(x, y));
-        X xvalue = getXAxis().getValueForDisplay(local.getX());
-        Y yvalue = getYAxis().getValueForDisplay(local.getY());
-        return new Data<>(xvalue, yvalue);
+        X xValue = getXAxis().getValueForDisplay(local.getX());
+        Y yValue = getYAxis().getValueForDisplay(local.getY());
+        return new Data<>(xValue, yValue);
     }
 
     public Node getPlotArea() {

@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class CustomChartApp extends Application {
-    static int delta = 50;
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Scatter Chart Sample");
