@@ -1,6 +1,8 @@
 package application.projectTree;
 
 import application.starter.FCMRunTimeConfig;
+import application.utils.Resource;
+import application.utils.UiUtils;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
 import javafx.application.Platform;
@@ -14,18 +16,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import application.utils.Resource;
-import application.utils.UiUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.*;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 public class ProjectTree extends VBox implements Initializable {
 
@@ -69,8 +70,20 @@ public class ProjectTree extends VBox implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> { // to guarantee rootDir access value before the following executed.
             try {
-                log.info("traverse dir: " + getRootDir());
+                log.info("Traverse dir: " + getRootDir());
                 treeView.setRoot(traverse(getRootDir()));
+
+                // start a daemon thread for watching root directory
+                Thread watchDirThread = new Thread(() -> {
+                    try {
+                        new WatchDir(Paths.get(getRootDir()), true).processEvents();
+                    } catch (IOException e) {
+                        UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                                "项目树监控失败：" + e.getMessage()).showAndWait();
+                    }
+                });
+                watchDirThread.setDaemon(true);
+                watchDirThread.start();
             } catch (Exception e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, null,
                         "项目树加载失败：" + e.getMessage()).showAndWait();
@@ -120,7 +133,6 @@ public class ProjectTree extends VBox implements Initializable {
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), filename);
             try {
                 Files.createFile(target);
-                log.info(target + " is created.");
             } catch (FileAlreadyExistsException e) {
                 Optional<ButtonType> choice = UiUtils.getAlert(Alert.AlertType.WARNING, null,
                         "文件名重复，是否要覆盖已有的文件？").showAndWait();
@@ -129,7 +141,6 @@ public class ProjectTree extends VBox implements Initializable {
                     try {
                         Files.write(target, "".getBytes(), StandardOpenOption.CREATE,
                                 StandardOpenOption.TRUNCATE_EXISTING);
-                        log.info(target + " is overwritten.");
                         return;
                     } catch (IOException e1) {
                         UiUtils.getAlert(Alert.AlertType.ERROR, null,
@@ -144,7 +155,6 @@ public class ProjectTree extends VBox implements Initializable {
                         "创建失败：" + e2.getMessage()).showAndWait();
                 return;
             }
-            appendTreeItem(filename, TreeItemInfo.FileType.File);
         }
     }
 
@@ -176,10 +186,10 @@ public class ProjectTree extends VBox implements Initializable {
         }
     }
 
-    protected void appendTreeItem(String filename, TreeItemInfo.FileType type) {
+    protected void appendTreeItem(TreeItem<TreeItemInfo> parent, String filename, TreeItemInfo.FileType type) {
         TreeItemInfo info = new TreeItemInfo(filename, type);
         TreeItem<TreeItemInfo> newItem = new TreeItem<>(info, TreeIconManager.getTreeItemIcon(info));
-        getSelectedNearestFolder().getChildren().add(newItem);
+        parent.getChildren().add(newItem);
     }
 
     private TreeItem getSelectedNearestFolder() {
@@ -204,13 +214,11 @@ public class ProjectTree extends VBox implements Initializable {
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), foldername);
             try {
                 Files.createDirectory(target);
-                log.info(target + " is created.");
             } catch (IOException e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, null,
                         "创建失败：" + e.getMessage()).showAndWait();
                 return;
             }
-            appendTreeItem(foldername, TreeItemInfo.FileType.Folder);
         }
     }
 
@@ -230,8 +238,6 @@ public class ProjectTree extends VBox implements Initializable {
         }
         try {
             delete(getAbsolutePath(selectedItem));
-            log.info(getAbsolutePath(selectedItem) + " is deleted.");
-            removeTreeItem(selectedItem);
         } catch (IOException e) {
             UiUtils.getAlert(Alert.AlertType.ERROR, null,
                     "删除失败：" + e.getMessage()).showAndWait();
@@ -276,8 +282,6 @@ public class ProjectTree extends VBox implements Initializable {
             Path source = Paths.get(getAbsolutePath(selectedItem));
             try {
                 Files.move(source, source.resolveSibling(newname));
-                log.info("renamed: " + source + " --> " + newname);
-                renameTreeItem(selectedItem, newname);
             } catch (IOException e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, null,
                         "重命名失败：" + e.getMessage()).showAndWait();
@@ -287,8 +291,158 @@ public class ProjectTree extends VBox implements Initializable {
         }
     }
 
-    private void renameTreeItem(TreeItem<TreeItemInfo> item, String newname) {
-        item.getValue().setName(newname);
-        treeView.refresh();
+    private TreeItem<TreeItemInfo> getTreeItemByPath(String pathname) {
+        String pnStr = pathname.replace(getRootDir(), "");
+        Path pn = Paths.get(pnStr);
+        TreeItem<TreeItemInfo> res = treeView.getRoot();
+        for (Path ele:
+                pn) {
+            for (TreeItem<TreeItemInfo> item:
+                    res.getChildren()) {
+                if (ele.toString().equals(item.getValue().getName())) {
+                    res = item;
+                    break;
+                }
+            }
+        }
+        return res;
     }
+
+    /**
+     * An inner class, use to watch any change of specific directory
+     */
+    private class WatchDir {
+
+        private final WatchService watcher;
+        private final Map<WatchKey,Path> keys;
+        private final boolean recursive;
+        private boolean trace = false;
+
+        @SuppressWarnings("unchecked")
+        <T> WatchEvent<T> cast(WatchEvent<?> event) {
+            return (WatchEvent<T>)event;
+        }
+
+        /**
+         * Register the given directory with the WatchService
+         */
+        private void register(Path dir) throws IOException {
+            WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+            if (trace) {
+                Path prev = keys.get(key);
+                if (prev == null) {
+                    System.out.format("register: %s\n", dir);
+                } else {
+                    if (!dir.equals(prev)) {
+                        System.out.format("update: %s -> %s\n", prev, dir);
+                    }
+                }
+            }
+            keys.put(key, dir);
+        }
+
+        /**
+         * Register the given directory, and all its sub-directories, with the
+         * WatchService.
+         */
+        private void registerAll(final Path start) throws IOException {
+            // register directory and sub-directories
+            Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                        throws IOException
+                {
+                    register(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        }
+
+        /**
+         * Creates a WatchService and registers the given directory
+         */
+        WatchDir(Path dir, boolean recursive) throws IOException {
+            this.watcher = FileSystems.getDefault().newWatchService();
+            this.keys = new HashMap<WatchKey,Path>();
+            this.recursive = recursive;
+
+            if (recursive) {
+                log.info(String.format("Scanning %s ...", dir));
+                registerAll(dir);
+                log.info("Scan Done!");
+            } else {
+                register(dir);
+            }
+
+            // enable trace after initial registration
+            this.trace = true;
+        }
+
+        /**
+         * Process all events for keys queued to the watcher
+         */
+        void processEvents() {
+            for (;;) {
+
+                // wait for key to be signalled
+                WatchKey key;
+                try {
+                    key = watcher.take();
+                } catch (InterruptedException x) {
+                    return;
+                }
+
+                Path dir = keys.get(key);
+                if (dir == null) {
+                    System.err.println("WatchKey not recognized!!");
+                    continue;
+                }
+
+                for (WatchEvent<?> event: key.pollEvents()) {
+                    WatchEvent.Kind kind = event.kind();
+
+                    // Context for directory entry event is the file name of entry
+                    WatchEvent<Path> ev = cast(event);
+                    Path name = ev.context();
+                    Path child = dir.resolve(name);
+
+                    // print out event
+                    log.info(String.format("%s: %s", event.kind().name(), child));
+
+                    // update treeView
+                    if (kind == ENTRY_CREATE) {
+                        TreeItem<TreeItemInfo> parentItem = getTreeItemByPath(child.getParent().toString());
+                        appendTreeItem(parentItem, child.getFileName().toString(), Files.isDirectory(child) ?
+                                TreeItemInfo.FileType.Folder : TreeItemInfo.FileType.File);
+                    } else if (kind == ENTRY_DELETE) {
+                        removeTreeItem(getTreeItemByPath(child.toString()));
+                    }
+
+                    // if directory is created, and watching recursively, then
+                    // register it and its sub-directories
+                    if (recursive && (kind == ENTRY_CREATE)) {
+                        try {
+                            if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
+                                registerAll(child);
+                            }
+                        } catch (IOException x) {
+                            // ignore to keep sample readable
+                        }
+                    }
+                }
+
+                // reset key and remove from set if directory no longer accessible
+                boolean valid = key.reset();
+                if (!valid) {
+                    keys.remove(key);
+
+                    // all directories are inaccessible
+                    if (keys.isEmpty()) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
 }

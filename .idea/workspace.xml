@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/apitest/PathTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/apitest/PathTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -109,45 +109,55 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="3" />
-          <entry key="java" value="31" />
+          <entry key="java" value="52" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Groovy" value="3" />
-          <entry key="JAVA" value="31" />
+          <entry key="JAVA" value="52" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="1" />
-          <entry key="java" value="2932" />
+          <entry key="java" value="5515" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="1" />
-          <entry key="JAVA" value="2932" />
+          <entry key="JAVA" value="5515" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpenAction.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="170">
+              <caret line="74" column="68" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#9528#9529#0" expanded="true" />
+                <element signature="e#9587#9588#0" expanded="true" />
+                <element signature="e#12052#12082#1" expanded="true" />
+                <element signature="e#11466#11467#0" expanded="true" />
+                <element signature="e#11509#11510#0" expanded="true" />
+                <element signature="e#13129#13461#0" expanded="true" />
+                <element signature="e#13460#13461#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="44" column="73" selection-start-line="44" selection-start-column="73" selection-end-line="44" selection-end-column="73" />
+            <state relative-caret-position="187">
+              <caret line="14" column="37" lean-forward="true" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -165,12 +175,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>title</find>
-      <find>rectangle</find>
-      <find>offset</find>
-      <find>itemAdd</find>
-      <find>getDisplayPosition</find>
-      <find>plotContent</find>
       <find>zero</find>
       <find>layoutPlotChildren</find>
       <find>scene</find>
@@ -195,6 +199,12 @@
       <find>.fcm</find>
       <find>FCMRunTimeConfig</find>
       <find>globalConfig</find>
+      <find>removeTreeItem</find>
+      <find>getPa</find>
+      <find>TreeIte</find>
+      <find>appendTr</find>
+      <find>appendTreeItem</find>
+      <find>rename</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -396,9 +406,9 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="6182073721267" />
+        <entry key="$PROJECT_DIR$" value="6182083226086" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="465733392" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="760975443" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2696189834" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="1382153248" />
       </map>
@@ -598,11 +608,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/Circlable.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/chart/ContextMenu.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/worksheet/WorksheetApp.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/fxml/worksheet.css" />
-        <option value="$PROJECT_DIR$/src/test/java/apitest/AnnimationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/IGate.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/Gate.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/chart/gate/ReadyGate.java" />
@@ -645,10 +650,15 @@
         <option value="$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpennedEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/event/SpectraPeakCapturedEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/event/SamplingPointCapturedEvent.java" />
-        <option value="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpenningEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpenAction.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/Watc.java" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/WatchDir.java" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/PathTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java" />
+        <option value="$PROJECT_DIR$/src/test/java/apitest/StringTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java" />
       </list>
     </option>
   </component>
@@ -706,6 +716,45 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="application" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="FlowCytometer_v2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlowCytometer_v2" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="event" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlowCytometer_v2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlowCytometer_v2" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="projectTree" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlowCytometer_v2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlowCytometer_v2" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlowCytometer_v2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlowCytometer_v2" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FlowCytometer_v2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FlowCytometer_v2" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="apitest" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -713,7 +762,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546523956994" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546532391353" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -753,39 +802,26 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.StarterApp">
-    <configuration name="ChannelApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="application.channel.ChannelApp" />
-      <module name="com.stave.flowcytometer.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="application.channel.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CustomChartApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="application.chart.CustomChartApp" />
-      <module name="com.stave.flowcytometer.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="application.chart.gate.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.ProjectTreeApp">
     <configuration name="FlowCytometerApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="application.mainpage.FlowCytometerApp" />
       <module name="com.stave.flowcytometer.main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="application.mainpage.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProjectTreeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="application.projectTree.ProjectTreeApp" />
+      <module name="com.stave.flowcytometer.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="application.projectTree.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -806,33 +842,52 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="WorksheetApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="application.worksheet.WorksheetApp" />
-      <module name="com.stave.flowcytometer.main" />
+    <configuration name="PathTest.testPathIterator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="com.stave.flowcytometer.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="application.worksheet.*" />
+          <option name="PATTERN" value="apitest.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="apitest" />
+      <option name="MAIN_CLASS_NAME" value="apitest.PathTest" />
+      <option name="METHOD_NAME" value="testPathIterator" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StringTest.testContains" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="com.stave.flowcytometer.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="apitest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="apitest" />
+      <option name="MAIN_CLASS_NAME" value="apitest.StringTest" />
+      <option name="METHOD_NAME" value="testContains" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.WorksheetApp" />
-      <item itemvalue="Application.CustomChartApp" />
-      <item itemvalue="Application.ChannelApp" />
       <item itemvalue="Application.FlowCytometerApp" />
       <item itemvalue="Application.StarterApp" />
+      <item itemvalue="Application.ProjectTreeApp" />
+      <item itemvalue="JUnit.PathTest.testPathIterator" />
+      <item itemvalue="JUnit.StringTest.testContains" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ProjectTreeApp" />
+        <item itemvalue="JUnit.StringTest.testContains" />
+        <item itemvalue="JUnit.PathTest.testPathIterator" />
         <item itemvalue="Application.StarterApp" />
         <item itemvalue="Application.FlowCytometerApp" />
-        <item itemvalue="Application.ChannelApp" />
-        <item itemvalue="Application.CustomChartApp" />
-        <item itemvalue="Application.WorksheetApp" />
       </list>
     </recent_temporary>
   </component>
@@ -850,12 +905,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 46m 57s.xml">
-      <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 47m 54s.xml">
-      <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="PathTest_testPathStartWith - 2018.12.20 at 20h 48m 33s.xml">
       <configuration name="PathTest.testPathStartWith" configurationId="JUnit" />
     </history-entry>
@@ -874,6 +923,18 @@
     <history-entry file="FormatSecondTest_formatSecond - 2018.12.21 at 12h 17m 06s.xml">
       <configuration name="FormatSecondTest.formatSecond" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="PathTest_testPathIterator - 2019.01.03 at 23h 22m 59s.xml">
+      <configuration name="PathTest.testPathIterator" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PathTest_testPathIterator - 2019.01.03 at 23h 25m 09s.xml">
+      <configuration name="PathTest.testPathIterator" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="StringTest_testContains - 2019.01.03 at 23h 39m 57s.xml">
+      <configuration name="StringTest.testContains" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="StringTest_testContains - 2019.01.03 at 23h 51m 08s.xml">
+      <configuration name="StringTest.testContains" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -888,8 +949,8 @@
     <frame x="-7" y="-7" width="1563" height="845" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.43064183" visible="true" weight="0.35813954" />
-      <window_info id="Structure" order="1" sideWeight="0.56935817" side_tool="true" visible="true" weight="0.35813954" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.43035343" visible="true" weight="0.35813954" />
+      <window_info id="Structure" order="1" sideWeight="0.5696466" side_tool="true" visible="true" weight="0.35813954" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -897,16 +958,16 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32786885" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3244382" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3244382" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39836067" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32786885" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295082" />
-      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32162923" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32162923" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.3272472" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.3262295" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.3258427" />
       <window_info anchor="bottom" id="Problems" order="12" weight="0.3272472" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24983388" />
@@ -929,76 +990,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/ScatterChart.java" />
-    <entry file="jar://D:/softwares/Java/jdk1.8.0_191/javafx-src.zip!/javafx/scene/chart/XYChart.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/chart.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/MyContextMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/gate/Gate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="84" column="35" selection-start-line="84" selection-start-column="35" selection-end-line="84" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/GatedScatterChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="47" column="39" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/TimeTickService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="21" lean-forward="true" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/CounterTickService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="19" column="28" lean-forward="true" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/chart/CustomChartApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="24" column="43" lean-forward="true" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/demo.fxml" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel_cell.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-650">
-          <caret line="23" column="69" selection-start-line="23" selection-start-column="57" selection-end-line="23" selection-end-column="69" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/fxml/channel.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
@@ -1121,13 +1112,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-14">
           <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1265,28 +1249,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="58" column="35" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/event/EventBusFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/channel/ChannelController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1311,17 +1273,143 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpenAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
           <caret line="44" column="73" selection-start-line="44" selection-start-column="73" selection-end-line="44" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/27.0.1-jre/cb5c1119df8d41a428013289b193eba3ccaf5f60/guava-27.0.1-jre-sources.jar!/com/google/common/base/Preconditions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14671">
+          <caret line="879" column="3" lean-forward="true" selection-start-line="879" selection-start-column="3" selection-end-line="879" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/27.0.1-jre/cb5c1119df8d41a428013289b193eba3ccaf5f60/guava-27.0.1-jre-sources.jar!/com/google/common/eventbus/EventBus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="37" column="28" lean-forward="true" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/event/ChannelDataOpenAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="35" lean-forward="true" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/nio/file/WatchKey.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2">
+          <caret line="104" lean-forward="true" selection-start-line="104" selection-end-line="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/util/concurrent/Executors.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-53">
+          <caret line="201" column="69" lean-forward="true" selection-start-line="201" selection-start-column="69" selection-end-line="201" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/event/EventBusFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="30" lean-forward="true" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/WatchDir.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="171" lean-forward="true" selection-start-line="171" selection-end-line="171" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2055#2085#0" expanded="true" />
+            <element signature="e#2141#2142#0" expanded="true" />
+            <element signature="e#2184#2185#0" expanded="true" />
+            <element signature="e#3031#3331#0" expanded="true" />
+            <element signature="e#3330#3331#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/nio/file/WatchEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="68" column="24" lean-forward="true" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/nio/file/StandardWatchEventKinds.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="57" column="58" selection-start-line="57" selection-start-column="46" selection-end-line="57" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/nio/file/FileSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="466" column="33" selection-start-line="466" selection-start-column="33" selection-end-line="466" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/nio/file/Path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="719" column="41" selection-start-line="719" selection-start-column="34" selection-end-line="719" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTreeApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="14" column="37" lean-forward="true" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/PathTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="22" column="9" lean-forward="true" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_171/javafx-src.zip!/javafx/scene/control/TreeItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="434" column="27" selection-start-line="434" selection-start-column="19" selection-end-line="434" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/apitest/StringTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/application/projectTree/ProjectTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="74" column="68" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#9528#9529#0" expanded="true" />
+            <element signature="e#9587#9588#0" expanded="true" />
+            <element signature="e#12052#12082#1" expanded="true" />
+            <element signature="e#11466#11467#0" expanded="true" />
+            <element signature="e#11509#11510#0" expanded="true" />
+            <element signature="e#13129#13461#0" expanded="true" />
+            <element signature="e#13460#13461#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
