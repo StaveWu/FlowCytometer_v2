@@ -17,14 +17,14 @@ public class Gate<X, Y> {
     private List<XYChart.Data<X, Y>> points = new ArrayList<>();
     private Rectangle node;
 
+    private XYChart.Data<X, Y> runningPoint;
+
     public Gate() {
         node = new Rectangle();
         node.setStyle("-fx-fill: transparent; " +
                 "-fx-stroke: black; " +
                 "-fx-stroke-width: 1;");
     }
-
-    private boolean isActive = false;
 
     public Node getNode() {
         return node;
@@ -34,36 +34,23 @@ public class Gate<X, Y> {
         return points;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public boolean isLocaled() {
+    public boolean isLocated() {
         return points.size() > 0;
     }
 
-    private boolean isCompleted() {
+    public boolean isCompleted() {
         return points.size() == 2;
     }
 
-    public void addPoints(XYChart.Data<X, Y> point) {
-        if (!isActive() || isCompleted()) {
+    public void addPoint(XYChart.Data<X, Y> point) {
+        if (isCompleted()) {
             return;
         }
         points.add(point);
-        if (isCompleted()) {
-            setActive(false);
-        }
     }
 
-    private XYChart.Data<X, Y> runningPoint;
-
     public void setRunningPoint(XYChart.Data<X, Y> point) {
-        if (!isActive()) {
+        if (!isLocated() || isCompleted()) {
             return;
         }
         runningPoint = point;
@@ -71,7 +58,7 @@ public class Gate<X, Y> {
 
 
     public void resizeLocate(Axis<X> xAxis, Axis<Y> yAxis) {
-        if (isLocaled() && !isCompleted() && runningPoint != null) {
+        if (isLocated() && !isCompleted() && runningPoint != null) {
             // decide next point action
             System.out.println("decide next point...");
             double x0 = xAxis.getDisplayPosition(points.get(0).getXValue());

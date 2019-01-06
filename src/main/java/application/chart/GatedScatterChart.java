@@ -14,7 +14,6 @@ import java.util.Iterator;
 public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatable {
 
     private Gate<X, Y> gate;
-    private MyContextMenu contextMenu;
 
     public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -22,36 +21,11 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
 
     public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
-        hookContextMenuAndGateAction();
+        GatableEventHooker eventHooker = new GatableEventHooker(this);
+        eventHooker.hookContextMenu();
+        eventHooker.hookGateAction();
     }
 
-    private void hookContextMenuAndGateAction() {
-        this.setOnMouseClicked(event -> {
-            // TODO: handle context menu
-            if (event.isPopupTrigger()) {
-                if (contextMenu == null) {
-                    contextMenu = new MyContextMenu(this);
-                }
-                contextMenu.show(GatedScatterChart.this,
-                        event.getScreenX(), event.getScreenY());
-            }
-            // TODO: handle gate action
-            if (gate != null && gate.isActive()
-                    && event.getButton() == MouseButton.PRIMARY) {
-                if (!gate.isLocaled()) {
-                    getPlotChildren().add(gate.getNode());
-                }
-                gate.addPoints(getDataForDisplay(event.getSceneX(), event.getSceneY()));
-            }
-        });
-        // TODO: handle gate action
-        this.setOnMouseMoved(event -> {
-            if (gate != null && gate.isActive() && gate.isLocaled()) {
-                gate.setRunningPoint(getDataForDisplay(event.getSceneX(), event.getSceneY()));
-                requestChartLayout();
-            }
-        });
-    }
 
     public Data<X, Y> getDataForDisplay(double x, double y) {
         Point2D local = getPlotArea().sceneToLocal(new Point2D(x, y));
@@ -98,6 +72,36 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
             return;
         }
         gate.resizeLocate(getXAxis(), getYAxis());
+    }
+
+    @Override
+    public boolean isActive() {
+        return gate != null && !gate.isCompleted();
+    }
+
+    @Override
+    public boolean isLocated() {
+        return gate != null && gate.isLocated();
+    }
+
+    @Override
+    public void setRunningPoint(double x, double y) {
+        if (gate == null) {
+            return;
+        }
+        gate.setRunningPoint(getDataForDisplay(x, y));
+        requestChartLayout();
+    }
+
+    @Override
+    public void addPoint(double x, double y) {
+        if (gate == null) {
+            return;
+        }
+        if (!getPlotChildren().contains(gate.getNode())) {
+            getPlotChildren().add(gate.getNode());
+        }
+        gate.addPoint(getDataForDisplay(x, y));
     }
 
     @Override

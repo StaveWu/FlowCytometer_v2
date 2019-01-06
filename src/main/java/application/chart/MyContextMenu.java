@@ -18,7 +18,6 @@ public class MyContextMenu extends ContextMenu {
         createGateItem.setOnAction(event -> {
             gatable.removeGate();
             Gate gate = new Gate();
-            gate.setActive(true);
             gatable.setGate(gate);
         });
         MenuItem deleteGateItem = new MenuItem("删除圈门");
