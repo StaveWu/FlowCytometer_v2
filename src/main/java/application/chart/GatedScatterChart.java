@@ -21,9 +21,12 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
 
     public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
-        GatableEventHooker eventHooker = new GatableEventHooker(this);
-        eventHooker.hookContextMenu();
-        eventHooker.hookGateAction();
+        GatableEventHooker gatableEventHooker = new GatableEventHooker(this);
+        gatableEventHooker.hookContextMenu();
+        gatableEventHooker.hookGateAction();
+        ChartEventHooker chartEventHooker = new ChartEventHooker(this);
+        chartEventHooker.hookDraggableEvent();
+        chartEventHooker.hookResizableEvent();
     }
 
 

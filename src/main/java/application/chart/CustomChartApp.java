@@ -41,7 +41,7 @@ public class CustomChartApp extends Application {
         changeSizeBtn.setOnAction(event -> {
             sc.setPrefWidth(sc.getWidth() - 50);
             sc.setPrefHeight(sc.getHeight() - 50);
-            System.out.println(((GatedScatterChart<Number, Number>) sc).getGatedData().get(0).getData());
+//            System.out.println(((GatedScatterChart<Number, Number>) sc).getGatedData().get(0).getData());
         });
         group.getChildren().add(changeSizeBtn);
         Scene scene  = new Scene(group, 500, 400);
