@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,21 +21,13 @@ public class WorksheetController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);
 
-    private static int delta = 0;
-
-    public enum SheetStatus {
-        CREATE_RECTANGLE_GATE,
-        DEFAULT
-    }
-
-    private SheetStatus sheetStatus = SheetStatus.DEFAULT;
+    private int delta = 0;
 
     @FXML
     private AnchorPane chartsPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     @FXML
@@ -45,24 +38,7 @@ public class WorksheetController implements Initializable {
         final int loc = getDelta();
         wrapper.setLayoutX(loc);
         wrapper.setLayoutY(loc);
-//        scatterChart.setOnMouseClicked(event -> {
-//            if (event.getButton() == MouseButton.PRIMARY
-//                    && sheetStatus == SheetStatus.CREATE_RECTANGLE_GATE) {
-//                System.out.println("create rect");
-//                setSheetStatus(SheetStatus.DEFAULT);
-//            }
-//        });
         chartsPane.getChildren().add(wrapper);
-    }
-
-    @FXML
-    protected void createRectGate() {
-        log.info("sheet is on creating rectangle status");
-        setSheetStatus(SheetStatus.CREATE_RECTANGLE_GATE);
-    }
-
-    public void setSheetStatus(SheetStatus sheetStatus) {
-        this.sheetStatus = sheetStatus;
     }
 
     private int getDelta() {

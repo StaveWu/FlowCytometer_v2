@@ -37,8 +37,8 @@ public class ChartWrapper extends VBox {
         setStyle("-fx-background-color: white;"
                 + "-fx-border-color: black;"
                 + "-fx-border-width: 1;");
-        setPrefWidth(400);
-        setPrefHeight(320);
+        setPrefWidth(300);
+        setPrefHeight(220);
 
         hookDraggableEvent();
         hookResizableEvent();

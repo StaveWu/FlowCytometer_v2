@@ -29,7 +29,7 @@
                  </tooltip>
              </Button>
             <Separator orientation="VERTICAL" />
-            <Button fx:id="rectBtn" mnemonicParsing="false" text="矩形圈门" onAction="#createRectGate">
+            <Button fx:id="rectBtn" mnemonicParsing="false" text="矩形圈门">
                 <tooltip>
                     <Tooltip text="矩形圈门" />
                 </tooltip>
