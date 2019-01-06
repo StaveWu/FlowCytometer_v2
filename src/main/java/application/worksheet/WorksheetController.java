@@ -1,5 +1,6 @@
 package application.worksheet;
 
+import application.chart.ChartWrapper;
 import application.chart.GatedScatterChart;
 import application.utils.Resource;
 import javafx.fxml.FXML;
@@ -40,9 +41,10 @@ public class WorksheetController implements Initializable {
     protected void createScatterChart() {
         GatedScatterChart<Number, Number> scatterChart = new GatedScatterChart<>(new NumberAxis(),
                 new NumberAxis());
-        int loc = getDelta();
-        scatterChart.setLayoutX(loc);
-        scatterChart.setLayoutY(loc);
+        ChartWrapper wrapper = new ChartWrapper(scatterChart);
+        final int loc = getDelta();
+        wrapper.setLayoutX(loc);
+        wrapper.setLayoutY(loc);
 //        scatterChart.setOnMouseClicked(event -> {
 //            if (event.getButton() == MouseButton.PRIMARY
 //                    && sheetStatus == SheetStatus.CREATE_RECTANGLE_GATE) {
@@ -50,7 +52,7 @@ public class WorksheetController implements Initializable {
 //                setSheetStatus(SheetStatus.DEFAULT);
 //            }
 //        });
-        chartsPane.getChildren().add(scatterChart);
+        chartsPane.getChildren().add(wrapper);
     }
 
     @FXML
@@ -64,10 +66,10 @@ public class WorksheetController implements Initializable {
     }
 
     private int getDelta() {
-        if (delta > 50) {
+        if (delta > 200) {
             delta = 10;
         } else {
-            delta += 10;
+            delta += 40;
         }
         return delta;
     }

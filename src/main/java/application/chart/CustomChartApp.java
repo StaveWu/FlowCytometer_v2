@@ -9,6 +9,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class CustomChartApp extends Application {
@@ -23,7 +25,7 @@ public class CustomChartApp extends Application {
         xAxis.setLabel("Age (years)");
         yAxis.setLabel("Returns to date");
         sc.setTitle("Investment Overview");
-        sc.setLayoutX(10);
+//        sc.setLayoutX(10);
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Equities");
@@ -34,17 +36,19 @@ public class CustomChartApp extends Application {
         series1.getData().add(new XYChart.Data(100, 26.4));
 
         sc.getData().addAll(series1);
+        ChartWrapper wrapper = new ChartWrapper(sc);
 
-        Group group = new Group();
-        group.getChildren().add(sc);
+        Pane root = new Pane();
+        root.getChildren().add(wrapper);
+
         Button changeSizeBtn = new Button("更改尺寸");
         changeSizeBtn.setOnAction(event -> {
-            sc.setPrefWidth(sc.getWidth() - 50);
-            sc.setPrefHeight(sc.getHeight() - 50);
+            wrapper.setPrefWidth(wrapper.getPrefWidth() - 50);
+            wrapper.setPrefHeight(wrapper.getPrefHeight() - 50);
 //            System.out.println(((GatedScatterChart<Number, Number>) sc).getGatedData().get(0).getData());
         });
-        group.getChildren().add(changeSizeBtn);
-        Scene scene  = new Scene(group, 500, 400);
+        root.getChildren().add(changeSizeBtn);
+        Scene scene  = new Scene(root, 500, 400);
         stage.setScene(scene);
         stage.show();
     }
