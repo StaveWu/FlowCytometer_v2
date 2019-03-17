@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class SamplingPointCapturedEvent {
 
-    private List<Double> samplingPoint;
+    private List<List<Double>> samplingPoint;
 
-    public SamplingPointCapturedEvent(List<Double> samplingPoint) {
+    public SamplingPointCapturedEvent(List<List<Double>> samplingPoint) {
         this.samplingPoint = samplingPoint;
     }
 
-    public List<Double> getSamplingPoint() {
+    public List<List<Double>> getSamplingPoint() {
         return samplingPoint;
     }
 }

@@ -38,8 +38,8 @@
                  </tooltip>
              </Button>
             <Separator orientation="VERTICAL" />
-            <ComboBox fx:id="connectionCombo" prefHeight="23.0" prefWidth="124.0" promptText="&lt;connection&gt;" />
-            <Button fx:id="linkBtn" mnemonicParsing="false" text="连接">
+            <ComboBox fx:id="connectionCombo" promptText="&lt;conn&gt;" />
+            <Button fx:id="linkBtn" mnemonicParsing="false" text="连接" onAction="#connectDevice">
                 <tooltip>
                     <Tooltip text="连接设备" />
                 </tooltip>
