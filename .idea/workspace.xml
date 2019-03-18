@@ -2,25 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47afddf1-421e-4fca-a7ce-c8695bd12a81" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileContent/fileContent.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/dashboard/DashboardController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/dashboard/DashboardController$SampleMode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/application/dashboard/DashboardController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/resources/fxml/dash_board.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/fxml/dash_board.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/channel/ChannelCell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/channel/ChannelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/channel/ChannelController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/dashboard/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/dashboard/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/event/EventBusFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/event/EventBusFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/event/SamplingPointCapturedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/event/SamplingPointCapturedEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/dash_board.fxml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -126,6 +108,7 @@
         <counts>
           <entry key="class" value="3" />
           <entry key="fxml" value="4" />
+          <entry key="gitignore" value="2" />
           <entry key="gradle" value="12" />
           <entry key="java" value="260" />
           <entry key="properties" value="1" />
@@ -136,6 +119,7 @@
           <entry key="CLASS" value="3" />
           <entry key="Groovy" value="12" />
           <entry key="JAVA" value="260" />
+          <entry key="PLAIN_TEXT" value="2" />
           <entry key="Properties" value="1" />
           <entry key="XML" value="4" />
         </counts>
@@ -156,7 +140,7 @@
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="18" />
+          <entry key="project.closed" value="19" />
           <entry key="project.open.time.1" value="6" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="2" />
@@ -177,8 +161,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/DashboardController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="176" column="32" lean-forward="true" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
+            <state relative-caret-position="170">
+              <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
               <folding>
                 <element signature="e#1509#1510#0" expanded="true" />
                 <element signature="e#1550#1551#0" expanded="true" />
@@ -625,7 +609,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1385" />
+    <option name="width" value="1386" />
     <option name="height" value="714" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -747,7 +731,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552832444696" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552874865075" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="last_opened_file_path" value="D:/softwares/SceneBuilder/SceneBuilder.exe" />
@@ -777,6 +761,7 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\idea-workspace\FlowCytometer_v2" />
       <recent name="D:\files\workspace\idea\flowcytometer\out\production\classes\application\chart" />
       <recent name="D:\files\workspace\idea\flowcytometer\src\main\java\application\chart" />
       <recent name="D:\files\workspace\idea\flowcytometer\src\main\resources" />
@@ -947,10 +932,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1563" height="845" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.42203742" visible="true" weight="0.29235882" />
-      <window_info id="Structure" order="1" sideWeight="0.5779626" side_tool="true" visible="true" weight="0.29235882" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4214876" visible="true" weight="0.29235882" />
+      <window_info id="Structure" order="1" sideWeight="0.5785124" side_tool="true" weight="0.29235882" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -958,13 +942,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3272472" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3244382" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3244382" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3974719" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3272472" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286517" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32022473" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32022473" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="10" weight="0.3272472" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3258427" />
@@ -993,13 +977,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.usb4java/usb4java-javax/1.3.0/684ff71e8ca72e5536116390909dd37fcb590690/usb4java-javax-1.3.0-sources.jar!/org/usb4java/javax/ControlIrpQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-98">
-          <caret line="19" column="40" lean-forward="true" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/Java/jdk1.8.0_171/src.zip!/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="83">
@@ -1408,10 +1385,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="7" lean-forward="true" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/application/dashboard/DashboardController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="176" column="32" lean-forward="true" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
+        <state relative-caret-position="170">
+          <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
           <folding>
             <element signature="e#1509#1510#0" expanded="true" />
             <element signature="e#1550#1551#0" expanded="true" />
