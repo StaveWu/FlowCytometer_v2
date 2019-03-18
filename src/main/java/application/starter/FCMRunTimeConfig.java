@@ -20,7 +20,7 @@ public class FCMRunTimeConfig {
     }
 
     public String getProjectConfigFolder() {
-        return rootDir == null ? null : rootDir + File.separator + PROJECT_CONFIG_FOLDER_NAME;
+        return rootDir == null ? null : (rootDir + File.separator + PROJECT_CONFIG_FOLDER_NAME);
     }
 
     public String getRootDir() {

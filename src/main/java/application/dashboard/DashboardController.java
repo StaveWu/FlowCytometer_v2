@@ -4,6 +4,7 @@ import application.dashboard.device.CommDataParser;
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
 import application.dashboard.device.UsbCommDevice;
+import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointCapturedEvent;
 import application.utils.UiUtils;
@@ -17,11 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.usb.UsbIrp;
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -56,6 +55,7 @@ public class DashboardController implements Initializable {
     private Service<Void> tickService;
     private ICommDevice commDevice;
     private boolean isOnSampling = false;
+    private int numChannels = 0;
 
     public enum SampleMode {
         TIME("按时间"),
@@ -88,6 +88,10 @@ public class DashboardController implements Initializable {
         public String toString() {
             return deviceName;
         }
+    }
+
+    public DashboardController() {
+        eventBus.register(this);
     }
 
     @Override
@@ -131,7 +135,7 @@ public class DashboardController implements Initializable {
                             public void dataEventOccurred(UsbPipeDataEvent event) {
                                 // decode data
                                 byte[] data = event.getData();
-                                List<List<Double>> decoded = CommDataParser.decode(data, 2);
+                                List<List<Double>> decoded = CommDataParser.decode(data, numChannels);
                                 System.out.println(decoded);
 
                                 // post data to channel component
@@ -164,6 +168,12 @@ public class DashboardController implements Initializable {
                 }
             }
         });
+    }
+
+    @Subscribe
+    public void listen(ChannelChangedEvent event) {
+        numChannels = event.getNumChannels();
+        log.info(numChannels + " channels open");
     }
 
     @FXML

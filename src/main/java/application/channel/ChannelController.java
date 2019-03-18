@@ -1,25 +1,21 @@
 package application.channel;
 
+import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointCapturedEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import application.utils.Resource;
 import application.utils.UiUtils;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,6 +46,8 @@ public class ChannelController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        channelsHBox.getChildren().addListener((ListChangeListener<Node>) c ->
+                eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size())));
         getModel().getChannelInfos().stream().forEach(info -> addChannelCell(info));
     }
 
