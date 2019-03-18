@@ -1,9 +1,0 @@
-#addBtn {
-   -fx-graphic: url("../icons/channel.png");
-   -fx-content-display: graphic-only;
-}
-
-#saveBtn {
-   -fx-graphic: url("../icons/save.png");
-   -fx-content-display: graphic-only;
-}

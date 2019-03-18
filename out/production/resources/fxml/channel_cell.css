@@ -1,9 +1,0 @@
-#closeHyperlink {
-    -fx-graphic: url("../icons/close.png");
-    -fx-content-display: graphic-only;
-    -fx-opacity: 0.5;
-}
-
-#closeHyperlink:hover {
-    -fx-opacity: 1;
-}
