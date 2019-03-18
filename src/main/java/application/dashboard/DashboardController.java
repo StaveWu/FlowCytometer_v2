@@ -168,12 +168,6 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void connectDevice() {
-//        List<List<Double>> test = new ArrayList<>();
-//        test.add(new ArrayList<>());
-//        test.get(0).add(1.);
-//        test.get(0).add(2.);
-//        test.get(0).add(5.);
-//        eventBus.post(new SamplingPointCapturedEvent(test));
         if(!checkCommDevice()) {
             return;
         }
