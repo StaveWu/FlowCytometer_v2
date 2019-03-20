@@ -3,6 +3,7 @@ package application.channel;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointCapturedEvent;
+import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -13,7 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
-import application.utils.UiUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
@@ -23,6 +25,7 @@ import java.util.ResourceBundle;
 @Component
 public class ChannelController implements Initializable {
 
+    private static final Logger log = LoggerFactory.getLogger(ChannelController.class);
     private ChannelModel model;
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
@@ -79,9 +82,10 @@ public class ChannelController implements Initializable {
 
     @Subscribe
     protected void listen(SamplingPointCapturedEvent event) {
-        List<List<Double>> channels = event.getSamplingPoint();
-
         Platform.runLater(() -> {
+            log.info("on adding sample points to chart");
+            long t1 = System.currentTimeMillis();
+            List<List<Double>> channels = event.getSamplingPoint();
             for (int i = 0; i < channels.size(); i++) {
                 // access channel's data
                 List<Double> data = channels.get(i);
@@ -92,9 +96,15 @@ public class ChannelController implements Initializable {
                 XYChart.Series<Number, Number> series = chart.getData().get(0);
                 int start = series.getData().size();
                 for (Double ele : data) {
+                    // remove first and add last so that chart will perform like a slide window
+                    if (series.getData().size() > 100) {
+                        series.getData().remove(0);
+                    }
                     series.getData().add(new XYChart.Data<>(start++, ele));
                 }
             }
+            long t2 = System.currentTimeMillis();
+            System.out.println("chart画点用时：" + (t2 - t1) + "ms");
         });
     }
 

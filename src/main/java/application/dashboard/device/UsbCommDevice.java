@@ -7,8 +7,8 @@ import java.util.List;
 public class UsbCommDevice implements ICommDevice {
 
     private UsbInterface iface;
-    private UsbPipe outPipe;
-    private UsbPipe inPipe;
+    private UsbPipe sendPipe;
+    private UsbPipe receivedPipe;
     public static final short VENDOR_ID = (short) 0x0483;
     public static final short PRODUCT_ID = (short) 0x5740;
     private UsbPipeListener listener;
@@ -52,25 +52,24 @@ public class UsbCommDevice implements ICommDevice {
             }
         });
 
-        UsbEndpoint outEndpoint = iface.getUsbEndpoint(UsbConst.ENDPOINT_DIRECTION_OUT);
-        if (outEndpoint == null) {
-            throw new UsbException("SendEndpoint is null");
+        UsbEndpoint sendUsbEndpoint, receivedUsbEndpoint;
+        sendUsbEndpoint = (UsbEndpoint)iface.getUsbEndpoints().get(0);
+        if (!sendUsbEndpoint.getUsbEndpointDescriptor().toString().contains("OUT")) {
+            receivedUsbEndpoint = sendUsbEndpoint;
+            sendUsbEndpoint = (UsbEndpoint)iface.getUsbEndpoints().get(1);
+        } else {
+            receivedUsbEndpoint = (UsbEndpoint)iface.getUsbEndpoints().get(1);
         }
-        outPipe = outEndpoint.getUsbPipe();
-        outPipe.addUsbPipeListener(listener);
-        outPipe.open();
-
-        UsbEndpoint inEndpoint = iface.getUsbEndpoint(UsbConst.ENDPOINT_DIRECTION_IN);
-        if (inEndpoint == null) {
-            throw new UsbException("ReceiveEndpoint is null");
-        }
-        inPipe = inEndpoint.getUsbPipe();
-        inPipe.open();
+        sendPipe = sendUsbEndpoint.getUsbPipe();
+        sendPipe.open();
+        receivedPipe = receivedUsbEndpoint.getUsbPipe();
+        receivedPipe.addUsbPipeListener(listener);
+        receivedPipe.open();
     }
 
     @Override
     public boolean isConnected() {
-        return checkUsbInterface() && checkPipe(inPipe) && checkPipe(outPipe);
+        return checkUsbInterface() && checkPipe(receivedPipe) && checkPipe(sendPipe);
     }
 
     private boolean checkUsbInterface() {
@@ -89,31 +88,31 @@ public class UsbCommDevice implements ICommDevice {
     @Override
     public byte[] read() throws Exception {
         if (!isConnected()) {
-            throw new UsbNotOpenException();
+            throw new UsbException("usb is not connected");
         }
 
-        byte[] data = new byte[1024];
-        inPipe.asyncSubmit(data);
+        byte[] data = new byte[15360];
+        receivedPipe.asyncSubmit(data);
         return data;
     }
 
     @Override
     public void write(byte[] data) throws Exception {
         if (!isConnected()) {
-            throw new UsbNotOpenException();
+            throw new UsbException("usb is not connected");
         }
-        outPipe.asyncSubmit(data);
+        sendPipe.asyncSubmit(data);
     }
 
     @Override
     public void disconnect() throws Exception {
-        if (inPipe != null) {
-            inPipe.close();
-            inPipe = null;
+        if (receivedPipe != null) {
+            receivedPipe.close();
+            receivedPipe = null;
         }
-        if (outPipe != null) {
-            outPipe.close();
-            outPipe = null;
+        if (sendPipe != null) {
+            sendPipe.close();
+            sendPipe = null;
         }
         if (iface != null) {
             iface.release();

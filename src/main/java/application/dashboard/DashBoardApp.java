@@ -1,8 +1,10 @@
 package application.dashboard;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class DashBoardApp extends Application {
 

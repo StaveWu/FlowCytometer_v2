@@ -22,7 +22,7 @@
    <children>
       <ToolBar nodeOrientation="RIGHT_TO_LEFT">
          <items>
-             <Button fx:id="resetBtn" mnemonicParsing="false" text="复位">
+             <Button fx:id="resetBtn" mnemonicParsing="false" text="复位" onAction="#resetSystem">
                  <tooltip>
                      <Tooltip text="系统复位" />
                  </tooltip>

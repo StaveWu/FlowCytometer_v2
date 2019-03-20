@@ -10,6 +10,7 @@ import application.event.SamplingPointCapturedEvent;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -134,28 +135,34 @@ public class DashboardController implements Initializable {
                             @Override
                             public void dataEventOccurred(UsbPipeDataEvent event) {
                                 // decode data
+                                log.info("data received");
                                 byte[] data = event.getData();
                                 List<List<Double>> decoded = CommDataParser.decode(data, numChannels);
-                                System.out.println(decoded);
 
                                 // post data to channel component
                                 eventBus.post(new SamplingPointCapturedEvent(decoded));
-
+                                log.info("data posted");
                                 // go to next read cycle if dashboard still on sampling state
                                 if (isOnSampling) {
                                     try {
                                         commDevice.read();
                                     } catch (Exception e) {
-                                        UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                                "读取数据失败：" + e.getMessage()).showAndWait();
+                                        Platform.runLater(() -> {
+                                            e.printStackTrace();
+                                            UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                                                    "读取数据失败：" + e.getMessage()).showAndWait();
+                                        });
                                     }
                                 }
                             }
 
                             @Override
                             public void errorEventOccurred(UsbPipeErrorEvent event) {
-                                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                        "读取数据失败：" + event.getUsbException().getMessage()).showAndWait();
+                                Platform.runLater(() -> {
+                                    event.getUsbException().printStackTrace();
+                                    UiUtils.getAlert(Alert.AlertType.ERROR, null,
+                                            "读取数据失败：" + event.getUsbException().getMessage()).showAndWait();
+                                });
                             }
                         });
                         break;
@@ -188,6 +195,9 @@ public class DashboardController implements Initializable {
             UiUtils.getAlert(Alert.AlertType.ERROR,
                     null, "设备连接失败: " + e.getMessage()).showAndWait();
         }
+        if (commDevice.isConnected()) {
+            log.info("device is connected");
+        }
     }
 
     private boolean checkCommDevice() {
@@ -199,13 +209,17 @@ public class DashboardController implements Initializable {
         return true;
     }
 
-    @FXML
-    protected void startSampling() {
-        if(!checkCommDevice()) {
-            return;
-        }
+    private boolean checkCommConnected() {
         if (!commDevice.isConnected()) {
             UiUtils.getAlert(Alert.AlertType.WARNING, null, "请先连接设备！").showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    protected void startSampling() {
+        if(!checkCommDevice() || !checkCommConnected()) {
             return;
         }
         isOnSampling = true;
@@ -223,6 +237,15 @@ public class DashboardController implements Initializable {
 
         log.info("start sampling");
         tickService.start();
+
+        try {
+            commDevice.write(CommDataParser.encode("SetFrequency:50"));
+            commDevice.write(CommDataParser.encode("Start:CH3"));
+            commDevice.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+            stopSampling();
+        }
     }
 
     private Service<Void> getTickService() {
@@ -237,11 +260,33 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void stopSampling() {
+        if(!checkCommDevice() || !checkCommConnected()) {
+            return;
+        }
+        isOnSampling = false;
         if (tickService != null) {
             tickService.cancel();
         }
-        isOnSampling = false;
         log.info("stop sampling");
+        try {
+            commDevice.write(CommDataParser.encode("Stop:"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void resetSystem() {
+        if(!checkCommDevice() || !checkCommConnected()) {
+            return;
+        }
+        log.info("reset system");
+        try {
+            commDevice.write(CommDataParser.encode("ResetSystem:"));
+            commDevice.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setTimeDisable(boolean disable) {

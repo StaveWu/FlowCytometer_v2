@@ -1,5 +1,8 @@
 package application.event;
 
+/**
+ * channel -> dashboard, ask dashboard to follow channel number changing.
+ */
 public class ChannelChangedEvent {
 
     private int numChannels;
