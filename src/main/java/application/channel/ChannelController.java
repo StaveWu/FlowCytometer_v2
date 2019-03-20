@@ -94,13 +94,20 @@ public class ChannelController implements Initializable {
                 ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
                 XYChart<Number, Number> chart = channelCell.getChart();
                 XYChart.Series<Number, Number> series = chart.getData().get(0);
-                int start = series.getData().size();
+                int start;
+                if (series.getData().size() == 0) {
+                    start = 0;
+                } else {
+                    start = (int) series.getData().get(series.getData().size() - 1).getXValue();
+                }
                 for (Double ele : data) {
-                    // remove first and add last so that chart will perform like a slide window
-                    if (series.getData().size() > 100) {
+                    // remove first and add last so that the chart will
+                    // perform like a slide window
+                    if (series.getData().size() > 3000) {
                         series.getData().remove(0);
                     }
                     series.getData().add(new XYChart.Data<>(start++, ele));
+                    chart.requestLayout();
                 }
             }
             long t2 = System.currentTimeMillis();

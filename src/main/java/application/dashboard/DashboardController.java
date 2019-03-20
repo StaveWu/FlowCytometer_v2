@@ -137,11 +137,17 @@ public class DashboardController implements Initializable {
                                 // decode data
                                 log.info("data received");
                                 byte[] data = event.getData();
-                                List<List<Double>> decoded = CommDataParser.decode(data, numChannels);
+                                List<List<Double>> decoded = CommDataParser.decode(data, 2);
+
+                                System.out.println("接收长度：" + data.length);
+                                for (int i = 0; i < 2; i++) {
+                                    System.out.println("CH" + i + ": " + decoded.get(i));
+                                }
 
                                 // post data to channel component
                                 eventBus.post(new SamplingPointCapturedEvent(decoded));
                                 log.info("data posted");
+
                                 // go to next read cycle if dashboard still on sampling state
                                 if (isOnSampling) {
                                     try {

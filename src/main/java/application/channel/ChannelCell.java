@@ -93,7 +93,7 @@ public class ChannelCell extends VBox implements Initializable {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Data flow");
         channelChart.getData().add(series);
-        channelChart.getXAxis().setAutoRanging(true);
+        channelChart.setAnimated(false);
     }
 
     private ToggleButton getSelectedToggle(String policy) {
