@@ -32,20 +32,26 @@ public class CommDataParser {
 
         for (int i = 0; i < data.length - 2 * numChannels; i += 2 * numChannels) {
             for (int j = 0; j < numChannels; j++) {
-                // assign 2 bytes to hold channel data to transfer short type.
-                byte[] bytes = new byte[2];
-                bytes[0] = data[i + 2 * j];
-                bytes[1] = data[i + 2 * j + 1];
+                // assign 4 bytes to hold channel data to transfer int type.
+                byte[] bytes = new byte[4];
+                bytes[2] = data[i + 2 * j];
+                bytes[3] = data[i + 2 * j + 1];
                 // A method "a << 8 | b" to transfer short is not a good idea
                 // since it would make a mistake in some situation, i.e. a = 60 and b = -128
-                int ch = ByteBuffer.wrap(bytes).getShort();
-                res.get(j).add(toVoltageSignal(ch));
+                int ch = ByteBuffer.wrap(bytes).getInt();
+                res.get(j).add(toVoltageSignal(ch, j));
             }
         }
         return res;
     }
 
-    private static double toVoltageSignal(int d) {
-        return ((double) d) * 4.993 / (0.4138 * 65535.);
+    private static double toVoltageSignal(int d, int channelId) {
+        if (channelId == 1) {
+            return ((double) d) * 4.993 / (0.4138 * 65535.);
+        } else if (channelId == 2) {
+            return ((double) d) * 4.993 / (0.4138 * 65535.); // 通道电压转换公式
+        } else {
+            throw new IllegalArgumentException(String.format("channel id expect 1 or 2 but %d found", channelId));
+        }
     }
 }
