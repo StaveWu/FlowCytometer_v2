@@ -20,23 +20,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxWidth="450" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ToolBar nodeOrientation="RIGHT_TO_LEFT">
+      <ToolBar nodeOrientation="LEFT_TO_RIGHT">
          <items>
              <Button fx:id="resetBtn" mnemonicParsing="false" onAction="#resetSystem" text="复位">
                  <tooltip>
                      <Tooltip text="系统复位" />
                  </tooltip>
              </Button>
-             <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopSampling" text="停止">
-                 <tooltip>
-                     <Tooltip text="停止采集" />
-                 </tooltip>
-             </Button>
              <Button fx:id="startBtn" mnemonicParsing="false" onAction="#startSampling" text="开始">
                  <tooltip>
                      <Tooltip text="开始采集" />
+                 </tooltip>
+             </Button>
+             <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopSampling" text="停止">
+                 <tooltip>
+                     <Tooltip text="停止采集" />
                  </tooltip>
              </Button>
             <Separator orientation="VERTICAL" />
@@ -104,7 +104,7 @@
       </TitledPane>
       <TitledPane animated="false" text="液流系统">
          <content>
-            <ScrollPane fitToWidth="true" prefHeight="180.0">
+            <ScrollPane fitToWidth="true" prefHeight="300.0">
                <content>
                   <GridPane vgap="5.0">
                     <columnConstraints>
