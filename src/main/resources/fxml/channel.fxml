@@ -19,7 +19,7 @@
       </items>
    </ToolBar>
     <ScrollPane>
-        <HBox fx:id="channelsHBox" spacing="20" />
+        <HBox fx:id="channelsHBox" fillHeight="false" prefHeight="800.0" spacing="20" />
     </ScrollPane>
     <stylesheets>
         <URL value="@channel.css" />
