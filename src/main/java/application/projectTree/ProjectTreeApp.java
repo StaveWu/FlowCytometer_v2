@@ -9,7 +9,7 @@ public class ProjectTreeApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FCMRunTimeConfig.getInstance().setRootDir("E:\\01安装包\\eclipse-SDK-4.7.3a-win32-x86_64");
+        FCMRunTimeConfig.getInstance().setRootDir("E:\\04文档\\陈宇欣\\流式细胞仪\\软件项目树测试");
         Scene scene = new Scene(new ProjectTree());
         primaryStage.setTitle("Project Tree");
         primaryStage.setScene(scene);

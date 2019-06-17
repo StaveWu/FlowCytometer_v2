@@ -16,11 +16,6 @@
                    <Tooltip text="添加通道" />
                </tooltip>
            </Button>
-           <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveChannelInfos" text="保存">
-               <tooltip>
-                   <Tooltip text="保存" />
-               </tooltip>
-           </Button>
       </items>
    </ToolBar>
     <ScrollPane>

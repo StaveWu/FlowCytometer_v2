@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChannelModel {
+public class ChannelModel2 {
 
-    private static final Logger log = LoggerFactory.getLogger(ChannelModel.class);
+    private static final Logger log = LoggerFactory.getLogger(ChannelModel2.class);
     private static final FCMRunTimeConfig globalConfig = FCMRunTimeConfig.getInstance();
 
     private List<ChannelInfo> channelInfos = new ArrayList<>();
@@ -28,7 +27,7 @@ public class ChannelModel {
 
     private String channelInfospath;
 
-    public ChannelModel() {
+    public ChannelModel2() {
         gson = new Gson();
         channelInfospath = globalConfig.getProjectConfigFolder()
                 + File.separator + "channelInfos.json";

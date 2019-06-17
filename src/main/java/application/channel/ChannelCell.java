@@ -1,5 +1,6 @@
 package application.channel;
 
+import application.channel.model.ChannelModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,7 +31,7 @@ public class ChannelCell extends VBox implements Initializable {
     private TextField nameTextField;
 
     @FXML
-    private ComboBox<Number> channelIdCombo;
+    private ComboBox<String> channelIdCombo;
 
     @FXML
     private ToggleButton areaToggle;
@@ -47,12 +48,14 @@ public class ChannelCell extends VBox implements Initializable {
     @FXML
     private AreaChart<Number, Number> channelChart;
 
-    private ChannelInfo channelInfo;
+    private ChannelModel channelModel;
     private ChannelController parentController;
 
-    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelInfo info) {
+    private final String[] channelIds = {"PMT1", "PMT2", "PMT3", "PMT4", "APD1", "APD2", "APD3", "APD4"};
+
+    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelModel model) {
         this.parentController = parentController;
-        this.channelInfo = info;
+        this.channelModel = model;
 
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("channel_cell.fxml"));
         loader.setRoot(this);
@@ -68,23 +71,23 @@ public class ChannelCell extends VBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // init comboBox
-        channelIdCombo.getItems().add(1);
-        channelIdCombo.getItems().add(2);
-        channelIdCombo.getItems().add(3);
+        for (String id : channelIds) {
+            channelIdCombo.getItems().add(id);
+        }
         // set toggle when first load
-        peakgroup.selectToggle(getSelectedToggle(channelInfo.getPeakPolicy()));
+        peakgroup.selectToggle(getSelectedToggle(channelModel.getPeakPolicy()));
 
         // bind model
-        nameTextField.textProperty().bindBidirectional(channelInfo.channelNameProperty());
-        voltageTextField.textProperty().bindBidirectional(channelInfo.voltageProperty(), new NumberStringConverter());
-        thresholdTextField.textProperty().bindBidirectional(channelInfo.thresholdProperty(), new NumberStringConverter());
-        channelIdCombo.valueProperty().bindBidirectional(channelInfo.channelIdProperty());
+        nameTextField.textProperty().bindBidirectional(channelModel.nameProperty());
+        voltageTextField.textProperty().bindBidirectional(channelModel.voltageProperty(), new NumberStringConverter());
+        thresholdTextField.textProperty().bindBidirectional(channelModel.thresholdProperty(), new NumberStringConverter());
+        channelIdCombo.valueProperty().bindBidirectional(channelModel.idProperty());
 
         peakgroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             ToggleButton selectedbtn = (ToggleButton) observable.getValue();
-            channelInfo.setPeakPolicy(selectedbtn.getText());
+            channelModel.setPeakPolicy(selectedbtn.getText());
         });
-        channelInfo.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
+        channelModel.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
             String policy = observable.getValue();
             peakgroup.selectToggle(getSelectedToggle(policy));
         });
@@ -117,8 +120,8 @@ public class ChannelCell extends VBox implements Initializable {
         parentController.removeChannelCell(this);
     }
 
-    public ChannelInfo getChannelInfo() {
-        return channelInfo;
+    public ChannelModel getChannelModel() {
+        return channelModel;
     }
 
     public XYChart<Number, Number> getChart() {

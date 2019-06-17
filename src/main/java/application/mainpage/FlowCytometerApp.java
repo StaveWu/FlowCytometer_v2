@@ -11,7 +11,9 @@ public class FlowCytometerApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Resource.getFXML("main_app.fxml"));
+        FXMLLoader loader = new FXMLLoader(Resource.getFXML("main_app.fxml"));
+        loader.setController(new MainAppController());
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setTitle("Flow Cytometer");
         primaryStage.setScene(scene);
