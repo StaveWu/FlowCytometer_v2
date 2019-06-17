@@ -1,5 +1,7 @@
 package application.dashboard;
 
+import application.channel.model.ChannelModel;
+import application.channel.model.ChannelModelRepository;
 import application.dashboard.device.CommDataParser;
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
@@ -17,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.usb.event.UsbPipeDataEvent;
@@ -24,6 +27,7 @@ import javax.usb.event.UsbPipeErrorEvent;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Component
 public class DashboardController implements Initializable {
@@ -55,8 +59,11 @@ public class DashboardController implements Initializable {
 
     private Service<Void> tickService;
     private ICommDevice commDevice;
-    private boolean isOnSampling = false;
-    private int numChannels = 0;
+
+    private CircuitBoard circuitBoard = new CircuitBoard();
+
+    @Autowired
+    private ChannelModelRepository repository;
 
     public enum SampleMode {
         TIME("按时间"),
@@ -124,60 +131,27 @@ public class DashboardController implements Initializable {
             }
         });
 
-        // define communication device creation and handler when data received
+        circuitBoard.setDataReceivedHandler(dataList -> {
+            List<ChannelModel> models = repository.findAll();
+            for (int i = 0; i < dataList.size(); i++) {
+                models.get(i).setData(dataList.get(i));
+            }
+        });
+
+        // define communication device creation
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             CommunicationDevice device = observable.getValue();
             if (device != null) {
                 switch (device) {
                     case USB:
-                        commDevice = new UsbCommDevice();
-                        commDevice.setDataReceivedHandler(new CommDeviceEventAdapter() {
-                            @Override
-                            public void dataEventOccurred(UsbPipeDataEvent event) {
-                                // decode data
-                                log.info("data received");
-                                byte[] data = event.getData();
-                                List<List<Double>> decoded = CommDataParser.decode(data, 2);
-
-                                System.out.println("接收长度：" + data.length);
-                                for (int i = 0; i < 2; i++) {
-                                    System.out.println("CH" + i + ": " + decoded.get(i));
-                                }
-
-                                // post data to channel component
-                                eventBus.post(new SamplingPointCapturedEvent(decoded));
-                                log.info("data posted");
-
-                                // go to next read cycle if dashboard still on sampling state
-                                if (isOnSampling) {
-                                    try {
-                                        commDevice.read();
-                                    } catch (Exception e) {
-                                        Platform.runLater(() -> {
-                                            e.printStackTrace();
-                                            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                                    "读取数据失败：" + e.getMessage()).showAndWait();
-                                        });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void errorEventOccurred(UsbPipeErrorEvent event) {
-                                Platform.runLater(() -> {
-                                    event.getUsbException().printStackTrace();
-                                    UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                            "读取数据失败：" + event.getUsbException().getMessage()).showAndWait();
-                                });
-                            }
-                        });
+                        circuitBoard.setCommDevice(new UsbCommDevice());
                         break;
                     case SERIAL:
                         break;
                     case DEVICE_CONFIG:
                         break;
                     default:
-                        commDevice = new UsbCommDevice();
+                        circuitBoard.setCommDevice(new UsbCommDevice());
                 }
             }
         });
@@ -185,8 +159,7 @@ public class DashboardController implements Initializable {
 
     @Subscribe
     public void listen(ChannelChangedEvent event) {
-        numChannels = event.getNumChannels();
-        log.info(numChannels + " channels open");
+        log.info(event.getNumChannels() + " channels open");
     }
 
     @FXML
@@ -194,14 +167,15 @@ public class DashboardController implements Initializable {
         if(!checkCommDevice()) {
             return;
         }
-        log.info("try connecting device " + commDevice.getClass().getName());
+        log.info("try connecting device...");
         try {
-            commDevice.connect();
+            circuitBoard.connect();
         } catch (Exception e) {
+            e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR,
                     null, "设备连接失败: " + e.getMessage()).showAndWait();
         }
-        if (commDevice.isConnected()) {
+        if (circuitBoard.isConnected()) {
             log.info("device is connected");
         }
     }
@@ -216,7 +190,7 @@ public class DashboardController implements Initializable {
     }
 
     private boolean checkCommConnected() {
-        if (!commDevice.isConnected()) {
+        if (!circuitBoard.isConnected()) {
             UiUtils.getAlert(Alert.AlertType.WARNING, null, "请先连接设备！").showAndWait();
             return false;
         }
@@ -228,7 +202,6 @@ public class DashboardController implements Initializable {
         if(!checkCommDevice() || !checkCommConnected()) {
             return;
         }
-        isOnSampling = true;
         tickService = getTickService();
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(tickService.progressProperty());
@@ -241,18 +214,30 @@ public class DashboardController implements Initializable {
             progressIndicator.setProgress(0);
         });
 
-        log.info("start sampling");
-        tickService.start();
-
         try {
-            commDevice.write(CommDataParser.encode("SetFrequency:50"));
-            commDevice.write(CommDataParser.encode("Start:CH3"));
-            commDevice.read();
+            log.info("initialize circuit board");
+            initializeBoard();
+            log.info("start sampling");
+            tickService.start();
+            circuitBoard.startSampling(repository.findAll().stream()
+                    .map(ChannelModel::getId)
+                    .collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
             stopSampling();
         }
     }
+
+    private void initializeBoard() throws Exception {
+        for (ChannelModel model :
+                repository.findAll()) {
+            circuitBoard.setVoltage(model.getId(), model.getVoltage());
+        }
+        circuitBoard.setFrequency();
+        circuitBoard.setValve();
+        circuitBoard.setSupValve();
+    }
+
 
     private Service<Void> getTickService() {
         if (modeCombo.getSelectionModel().getSelectedItem() == SampleMode.TIME) {
@@ -269,13 +254,12 @@ public class DashboardController implements Initializable {
         if(!checkCommDevice() || !checkCommConnected()) {
             return;
         }
-        isOnSampling = false;
         if (tickService != null) {
             tickService.cancel();
         }
         log.info("stop sampling");
         try {
-            commDevice.write(CommDataParser.encode("Stop:"));
+            circuitBoard.stopSampling();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -288,8 +272,7 @@ public class DashboardController implements Initializable {
         }
         log.info("reset system");
         try {
-            commDevice.write(CommDataParser.encode("ResetSystem:"));
-            commDevice.read();
+            circuitBoard.resetSystem();
         } catch (Exception e) {
             e.printStackTrace();
         }

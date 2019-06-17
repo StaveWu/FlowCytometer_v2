@@ -1,9 +1,12 @@
 package application.channel.model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ChannelModel {
 
@@ -12,6 +15,7 @@ public class ChannelModel {
     private DoubleProperty voltage;
     private DoubleProperty threshold;
     private StringProperty peakPolicy;
+    private ListProperty<Double> dataProperty;
 
     public final StringProperty idProperty() {
         if (id == null) {
@@ -46,6 +50,13 @@ public class ChannelModel {
             peakPolicy = new SimpleStringProperty("Area");
         }
         return peakPolicy;
+    }
+
+    public final ListProperty<Double> dataProperty() {
+        if (dataProperty == null) {
+            dataProperty = new SimpleListProperty<>();
+        }
+        return dataProperty;
     }
 
     public String getId() {
@@ -83,19 +94,28 @@ public class ChannelModel {
         peakPolicyProperty().set(peakPolicy);
     }
 
+    public List<Double> getData() {
+        return new ArrayList<>(dataProperty.get());
+    }
+    public void setData(List<Double> data) {
+        dataProperty.set(FXCollections.observableArrayList(data));
+    }
+
     public class JsonObject {
         public final String id;
         public final String name;
         public final double voltage;
         public final double threshold;
         public final String peakPolicy;
+        public final List<Double> data;
 
-        public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy) {
+        public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy, List<Double> data) {
             this.id = id;
             this.name = name;
             this.voltage = voltage;
             this.threshold = threshold;
             this.peakPolicy = peakPolicy;
+            this.data = data;
         }
     }
 
@@ -104,7 +124,8 @@ public class ChannelModel {
                 nameProperty().get(),
                 voltageProperty().get(),
                 thresholdProperty().get(),
-                peakPolicyProperty().get());
+                peakPolicyProperty().get(),
+                dataProperty().get());
     }
 
     public static ChannelModel fromJsonObject(JsonObject json) {
@@ -114,6 +135,7 @@ public class ChannelModel {
         model.setPeakPolicy(json.peakPolicy);
         model.setThreshold(json.threshold);
         model.setVoltage(json.voltage);
+        model.setData(json.data);
         return model;
     }
 

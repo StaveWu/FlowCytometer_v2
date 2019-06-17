@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 public class ChannelModelRepository {
 
     private Gson gson = new Gson();
-    private String location = FCMRunTimeConfig.getInstance()
-            .getProjectConfigFolder() + File.separator + "channels.json";
+    private String location;
 
     private static final Logger log = LoggerFactory.getLogger(ChannelModel.class);
 
