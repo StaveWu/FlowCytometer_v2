@@ -5,6 +5,7 @@ import application.channel.model.ChannelModelRepository;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointCapturedEvent;
+import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -18,19 +19,22 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 @Component
 public class ChannelController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ChannelController.class);
     private final EventBus eventBus = EventBusFactory.getEventBus();
+
+    @Autowired
     private ChannelModelRepository repository;
 
     @FXML
@@ -40,22 +44,14 @@ public class ChannelController implements Initializable {
         eventBus.register(this);
     }
 
-    /**
-     * Lazy load repository to make sure it's path can be right assigned.
-     * @return repository
-     */
-    private ChannelModelRepository channelModelRepository() {
-        if (repository == null) {
-            repository = ChannelModelRepository.getInstance();
-        }
-        return repository;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         channelsHBox.getChildren().addListener((ListChangeListener<Node>) c ->
                 eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size())));
-        channelModelRepository().findAll().forEach(this::addChannelCell);
+
+        repository.setLocation(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "channels.json");
+        repository.findAll().forEach(this::addChannelCell);
     }
 
     private void addChannelCell(ChannelModel model) {
@@ -65,10 +61,12 @@ public class ChannelController implements Initializable {
     @FXML
     protected void newChannelCell() {
         ChannelModel model = new ChannelModel();
+        repository.addModel(model);
         addChannelCell(model);
     }
 
     public void removeChannelCell(ChannelCell cell) {
+        repository.removeModel(cell.getChannelModel());
         channelsHBox.getChildren().remove(cell);
     }
 
@@ -76,11 +74,8 @@ public class ChannelController implements Initializable {
         if (repository == null) {
             return;
         }
-        List<ChannelModel> models = channelsHBox.getChildren().stream()
-                .map(child -> ((ChannelCell) child).getChannelModel())
-                .collect(Collectors.toList());
         try {
-            repository.saveAll(models);
+            repository.saveAll();
         } catch (IOException e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "保存通道数据失败",

@@ -84,8 +84,8 @@ public class ChannelCell extends VBox implements Initializable {
         channelIdCombo.valueProperty().bindBidirectional(channelModel.idProperty());
 
         peakgroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            ToggleButton selectedbtn = (ToggleButton) observable.getValue();
-            channelModel.setPeakPolicy(selectedbtn.getText());
+            ToggleButton selectedBtn = (ToggleButton) observable.getValue();
+            channelModel.setPeakPolicy(selectedBtn.getText());
         });
         channelModel.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
             String policy = observable.getValue();
