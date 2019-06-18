@@ -1,5 +1,7 @@
 package application.dashboard;
 
+import application.channel.model.ChannelData;
+import application.channel.model.ChannelDataRepository;
 import application.channel.model.ChannelModel;
 import application.channel.model.ChannelModelRepository;
 import application.dashboard.device.UsbCommDevice;
@@ -8,7 +10,6 @@ import application.event.EventBusFactory;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -81,7 +82,9 @@ public class DashboardController implements Initializable {
     private CircuitBoard circuitBoard = new CircuitBoard();
 
     @Autowired
-    private ChannelModelRepository repository;
+    private ChannelModelRepository channelModelRepository;
+    @Autowired
+    private ChannelDataRepository channelDataRepository;
 
     public enum SampleMode {
         TIME("按时间"),
@@ -148,10 +151,10 @@ public class DashboardController implements Initializable {
         });
 
         // perform action when data received
-        circuitBoard.setDataReceivedHandler(dataList -> {
-            List<ChannelModel> models = repository.findAll();
-            for (int i = 0; i < dataList.size(); i++) {
-                models.get(i).setData(dataList.get(i));
+        circuitBoard.setDataReceivedHandler(receivedList -> {
+            List<ChannelData> channelDataList = channelDataRepository.findAll();
+            for (int i = 0; i < receivedList.size(); i++) {
+                channelDataList.get(i).addAll(receivedList.get(i));
             }
         });
 
@@ -234,7 +237,7 @@ public class DashboardController implements Initializable {
             initializeBoard();
             log.info("start sampling");
             tickService.start();
-            circuitBoard.startSampling(repository.findAll().stream()
+            circuitBoard.startSampling(channelModelRepository.findAll().stream()
                     .map(ChannelModel::getId)
                     .collect(Collectors.toList()));
         } catch (Exception e) {
@@ -248,7 +251,7 @@ public class DashboardController implements Initializable {
     private void initializeBoard() throws Exception {
         // set voltage
         for (ChannelModel model :
-                repository.findAll()) {
+                channelModelRepository.findAll()) {
             circuitBoard.setVoltage(model.getId(), model.getVoltage());
         }
         // set sampling frequency
