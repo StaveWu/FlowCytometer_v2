@@ -2,17 +2,13 @@ package application.dashboard;
 
 import application.channel.model.ChannelModel;
 import application.channel.model.ChannelModelRepository;
-import application.dashboard.device.CommDataParser;
-import application.dashboard.device.CommDeviceEventAdapter;
-import application.dashboard.device.ICommDevice;
 import application.dashboard.device.UsbCommDevice;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
-import application.event.SamplingPointCapturedEvent;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.usb.event.UsbPipeDataEvent;
-import javax.usb.event.UsbPipeErrorEvent;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -37,28 +31,52 @@ public class DashboardController implements Initializable {
 
     @FXML
     private ComboBox<SampleMode> modeCombo;
-
     @FXML
     private ComboBox<CommunicationDevice> connectionCombo;
 
+    /**
+     * 采样设置
+     */
+    @FXML
+    private TextField frequencyTextField;
     @FXML
     private TextField hourTextField;
     @FXML
     private TextField miniteTextField;
     @FXML
     private TextField secondTextField;
-
     @FXML
     private TextField cellTextField;
 
+    /**
+     * 进度监视
+     */
     @FXML
-    private Label leftLabel;
-
+    private Label timeRemainLabel;
     @FXML
     private ProgressIndicator progressIndicator;
 
+    /**
+     * 液流系统
+     */
+    @FXML
+    private CheckBox valveCheckBox1;
+    @FXML
+    private CheckBox valveCheckBox2;
+    @FXML
+    private CheckBox valveCheckBox3;
+    @FXML
+    private CheckBox valveCheckBox4;
+    @FXML
+    private CheckBox valveCheckBox5;
+    @FXML
+    private CheckBox valveCheckBox6;
+    @FXML
+    private TextField supValveTextField1;
+    @FXML
+    private TextField supValveTextField2;
+
     private Service<Void> tickService;
-    private ICommDevice commDevice;
 
     private CircuitBoard circuitBoard = new CircuitBoard();
 
@@ -83,8 +101,7 @@ public class DashboardController implements Initializable {
 
     public enum CommunicationDevice {
         SERIAL("串口"),
-        USB("USB"),
-        DEVICE_CONFIG("通讯配置...");
+        USB("USB");
 
         private String deviceName;
 
@@ -109,7 +126,6 @@ public class DashboardController implements Initializable {
 
         connectionCombo.getItems().add(CommunicationDevice.SERIAL);
         connectionCombo.getItems().add(CommunicationDevice.USB);
-        connectionCombo.getItems().add(CommunicationDevice.DEVICE_CONFIG);
 
         // define ui constraint
         modeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -131,6 +147,7 @@ public class DashboardController implements Initializable {
             }
         });
 
+        // perform action when data received
         circuitBoard.setDataReceivedHandler(dataList -> {
             List<ChannelModel> models = repository.findAll();
             for (int i = 0; i < dataList.size(); i++) {
@@ -138,7 +155,7 @@ public class DashboardController implements Initializable {
             }
         });
 
-        // define communication device creation
+        // choose communication device
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             CommunicationDevice device = observable.getValue();
             if (device != null) {
@@ -147,8 +164,6 @@ public class DashboardController implements Initializable {
                         circuitBoard.setCommDevice(new UsbCommDevice());
                         break;
                     case SERIAL:
-                        break;
-                    case DEVICE_CONFIG:
                         break;
                     default:
                         circuitBoard.setCommDevice(new UsbCommDevice());
@@ -173,7 +188,7 @@ public class DashboardController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR,
-                    null, "设备连接失败: " + e.getMessage()).showAndWait();
+                    "设备连接失败", e.getMessage()).showAndWait();
         }
         if (circuitBoard.isConnected()) {
             log.info("device is connected");
@@ -181,9 +196,9 @@ public class DashboardController implements Initializable {
     }
 
     private boolean checkCommDevice() {
-        if (commDevice == null) {
+        if (connectionCombo.getSelectionModel().isEmpty()) {
             UiUtils.getAlert(Alert.AlertType.WARNING,
-                    null, "请先选择端口类型！").showAndWait();
+                    "设备连接失败", "请先选择端口类型！").showAndWait();
             return false;
         }
         return true;
@@ -191,7 +206,7 @@ public class DashboardController implements Initializable {
 
     private boolean checkCommConnected() {
         if (!circuitBoard.isConnected()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, null, "请先连接设备！").showAndWait();
+            UiUtils.getAlert(Alert.AlertType.WARNING, "设备连接失败", "请先连接设备！").showAndWait();
             return false;
         }
         return true;
@@ -205,7 +220,7 @@ public class DashboardController implements Initializable {
         tickService = getTickService();
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(tickService.progressProperty());
-        leftLabel.textProperty().bind(tickService.messageProperty());
+        timeRemainLabel.textProperty().bind(tickService.messageProperty());
         tickService.setOnSucceeded(event -> {
             stopSampling();
         });
@@ -223,19 +238,30 @@ public class DashboardController implements Initializable {
                     .map(ChannelModel::getId)
                     .collect(Collectors.toList()));
         } catch (Exception e) {
-            e.printStackTrace();
             stopSampling();
+            e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "命令发送失败",
+                    e.getMessage()).showAndWait();
         }
     }
 
     private void initializeBoard() throws Exception {
+        // set voltage
         for (ChannelModel model :
                 repository.findAll()) {
             circuitBoard.setVoltage(model.getId(), model.getVoltage());
         }
-        circuitBoard.setFrequency();
-        circuitBoard.setValve();
-        circuitBoard.setSupValve();
+        // set sampling frequency
+        circuitBoard.setFrequency(Long.parseLong(frequencyTextField.getText()));
+        // set valve
+        circuitBoard.setValve("V1", valveCheckBox1.isSelected());
+        circuitBoard.setValve("V2", valveCheckBox2.isSelected());
+        circuitBoard.setValve("V3", valveCheckBox3.isSelected());
+        circuitBoard.setValve("V4", valveCheckBox4.isSelected());
+        circuitBoard.setValve("V5", valveCheckBox5.isSelected());
+        circuitBoard.setValve("V6", valveCheckBox6.isSelected());
+        circuitBoard.setSupValve("SV1", Float.parseFloat(supValveTextField1.getText()));
+        circuitBoard.setSupValve("SV2", Float.parseFloat(supValveTextField2.getText()));
     }
 
 
@@ -262,6 +288,8 @@ public class DashboardController implements Initializable {
             circuitBoard.stopSampling();
         } catch (Exception e) {
             e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "命令发送失败",
+                    e.getMessage()).showAndWait();
         }
     }
 
@@ -275,6 +303,8 @@ public class DashboardController implements Initializable {
             circuitBoard.resetSystem();
         } catch (Exception e) {
             e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "命令发送失败",
+                    e.getMessage()).showAndWait();
         }
     }
 

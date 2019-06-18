@@ -58,12 +58,12 @@ public class CircuitBoard {
         commDevice.write(getCommandMessage("SetFrequency", frequency).getBytes());
     }
 
-    public void setValve(boolean enabled) throws Exception {
+    public void setValve(String valveId, boolean enabled) throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("SetValve", enabled ? 1 : 0).getBytes());
+        commDevice.write(getCommandMessage("SetValve", valveId, enabled ? 1 : 0).getBytes());
     }
 
-    public void setSupValve(int supValveId, double rate) throws Exception {
+    public void setSupValve(String supValveId, double rate) throws Exception {
         checkCommDevice();
         commDevice.write(getCommandMessage("SetSupValve", supValveId, rate).getBytes());
     }
@@ -96,12 +96,13 @@ public class CircuitBoard {
         this.handler = handler;
     }
 
-    private static String getCommandMessage(String cmd) {
+    public static String getCommandMessage(String cmd) {
         return cmd + ":";
     }
 
-    private static String getCommandMessage(String cmd, Object...args) {
+    public static String getCommandMessage(String cmd, Object...args) {
         StringBuilder res = new StringBuilder(cmd);
+        res.append(":");
         for (Object arg :
                 args) {
             res.append(arg);

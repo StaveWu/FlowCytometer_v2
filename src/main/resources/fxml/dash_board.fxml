@@ -92,7 +92,7 @@
                            </children>
                         </FlowPane>
                         <Label text="采样频率:" />
-                        <TextField GridPane.columnIndex="1" />
+                        <TextField fx:id="frequencyTextField" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </content>
@@ -124,20 +124,20 @@
                      <children>
                         <Label text="电磁阀 1:" />
                         <Label text="电磁阀 2:" GridPane.rowIndex="1" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="valveCheckBox1" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="valveCheckBox2" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <CheckBox fx:id="valveCheckBox3" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="电磁阀 3:" GridPane.rowIndex="2" />
                         <Label text="电磁阀 4:" GridPane.rowIndex="3" />
                         <Label text="电磁阀 5:" GridPane.rowIndex="4" />
                         <Label text="电磁阀 6:" GridPane.rowIndex="5" />
                         <Label text="可调阀 1:" GridPane.rowIndex="6" />
                         <Label text="可调阀 2:" GridPane.rowIndex="7" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <CheckBox fx:id="valveCheckBox4" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <CheckBox fx:id="valveCheckBox5" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="valveCheckBox6" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="supValveTextField1" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField fx:id="supValveTextField2" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                      </children>
                   </GridPane>
                </content>
@@ -171,7 +171,7 @@
                            </font>
                         </Label>
                         <Label text="剩余：" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label fx:id="leftLabel" text="99999" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label fx:id="timeRemainLabel" text="99999" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font size="17.0" />
                            </font>
