@@ -5,6 +5,7 @@ import application.channel.model.ChannelDataRepository;
 import application.channel.model.ChannelModel;
 import application.channel.model.ChannelModelRepository;
 import application.dashboard.device.UsbCommDevice;
+import application.dashboard.model.TimeLimit;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.utils.UiUtils;
@@ -270,9 +271,9 @@ public class DashboardController implements Initializable {
 
     private Service<Void> getTickService() {
         if (modeCombo.getSelectionModel().getSelectedItem() == SampleMode.TIME) {
-            return new TimeTickService(convertToSecond(Integer.valueOf(hourTextField.getText()),
+            return new TimeTickService(new TimeLimit(Integer.valueOf(hourTextField.getText()),
                     Integer.valueOf(miniteTextField.getText()),
-                    Integer.valueOf(secondTextField.getText())));
+                    Integer.valueOf(secondTextField.getText())).totalSeconds());
         } else {
             return new CounterTickService(Integer.valueOf(cellTextField.getText()));
         }
@@ -315,10 +316,6 @@ public class DashboardController implements Initializable {
         hourTextField.setDisable(disable);
         miniteTextField.setDisable(disable);
         secondTextField.setDisable(disable);
-    }
-
-    private int convertToSecond(int h, int m, int s) {
-        return 60 * h + 60 * m + s;
     }
 
     private void setCellDisable(boolean b) {
