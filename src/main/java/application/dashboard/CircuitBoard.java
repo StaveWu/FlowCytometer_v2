@@ -6,6 +6,7 @@ import application.dashboard.device.ICommDevice;
 
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CircuitBoard {
@@ -74,7 +75,7 @@ public class CircuitBoard {
             @Override
             public void dataEventOccurred(UsbPipeDataEvent event) {
                 byte[] data = event.getData();
-                List<List<Double>> decoded = CommDataParser.decode(data, numChannels);
+                List<List<Double>> decoded = decode(data, numChannels);
                 handler.onDataReceived(decoded);
                 if (isOnSampling) {
                     try {
@@ -110,6 +111,10 @@ public class CircuitBoard {
         }
         res.delete(res.length() - 1, res.length());
         return res.toString();
+    }
+
+    private static List<List<Double>> decode(byte[] bytes, int numChannels) {
+        return new ArrayList<>();
     }
 
 }

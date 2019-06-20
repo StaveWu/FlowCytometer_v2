@@ -82,7 +82,6 @@ public class StarterController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle(getTitle(globalConfig.getRootDir()));
             stage.setScene(new Scene(root));
-            stage.setOnHiding(e -> controller.saveProjectInformation());
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

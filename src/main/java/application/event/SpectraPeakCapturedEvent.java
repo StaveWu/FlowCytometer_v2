@@ -6,13 +6,13 @@ import java.util.List;
  * channel -> worksheet, ask worksheet to add a new cell feature
  */
 public class SpectraPeakCapturedEvent {
-    private List<Double> cellFeature;
+    private List<Double> cellFeatures;
 
-    public SpectraPeakCapturedEvent(List<Double> cellFeature) {
-        this.cellFeature = cellFeature;
+    public SpectraPeakCapturedEvent(List<Double> cellFeatures) {
+        this.cellFeatures = cellFeatures;
     }
 
-    public List<Double> getCellFeature() {
-        return cellFeature;
+    public List<Double> getCellFeatures() {
+        return cellFeatures;
     }
 }

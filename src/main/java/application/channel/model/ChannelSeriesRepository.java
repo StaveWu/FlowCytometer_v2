@@ -10,34 +10,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class ChannelDataRepository {
+public class ChannelSeriesRepository {
 
     private String location;
-    private List<ChannelData> channelDataList = new ArrayList<>();
+    private List<ChannelSeries> channelSeriesList = new ArrayList<>();
 
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public List<ChannelData> findAll() {
-        if (!channelDataList.isEmpty()) {
-            return channelDataList;
+    public void appendSeries(List<ChannelSeries> seriesList) {
+
+    }
+
+    public List<ChannelSeries> headSeries() {
+        return null;
+    }
+
+    public List<ChannelSeries> findAll() {
+        if (!channelSeriesList.isEmpty()) {
+            return channelSeriesList;
         }
         try {
             DataFrame df = DataFrame.load(location);
             for (String header :
                     df.getHeaders()) {
-                channelDataList.add(ChannelData.fromSeries(df.of(header)));
+                channelSeriesList.add(ChannelSeries.fromSeries(df.of(header)));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return channelDataList;
+        return channelSeriesList;
     }
 
     public void saveAll() {
-        List<DataSeries> seriesList = channelDataList.stream()
-                .map(ChannelData::toSeries)
+        List<DataSeries> seriesList = channelSeriesList.stream()
+                .map(ChannelSeries::toSeries)
                 .collect(Collectors.toList());
         DataFrame df = new DataFrame(seriesList);
         try {

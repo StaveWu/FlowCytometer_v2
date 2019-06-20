@@ -1,6 +1,8 @@
 package application.channel;
 
 import application.channel.model.ChannelModel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +19,8 @@ import application.utils.Resource;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChannelCell extends VBox implements Initializable {
@@ -50,6 +54,7 @@ public class ChannelCell extends VBox implements Initializable {
 
     private ChannelModel channelModel;
     private ChannelController parentController;
+    private List<PropertyChangeHandler> handlers = new ArrayList<>();
 
     private final String[] channelIds = {"PMT1", "PMT2", "PMT3", "PMT4", "APD1", "APD2", "APD3", "APD4"};
 
@@ -77,15 +82,28 @@ public class ChannelCell extends VBox implements Initializable {
         // set toggle when first load
         peakgroup.selectToggle(getSelectedToggle(channelModel.getPeakPolicy()));
 
-        // bind model
+        // bind model and hook property change handler
         nameTextField.textProperty().bindBidirectional(channelModel.nameProperty());
+        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
         voltageTextField.textProperty().bindBidirectional(channelModel.voltageProperty(), new NumberStringConverter());
+        voltageTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
         thresholdTextField.textProperty().bindBidirectional(channelModel.thresholdProperty(), new NumberStringConverter());
+        thresholdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
         channelIdCombo.valueProperty().bindBidirectional(channelModel.idProperty());
+        channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
 
         peakgroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             ToggleButton selectedBtn = (ToggleButton) observable.getValue();
             channelModel.setPeakPolicy(selectedBtn.getText());
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
         channelModel.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
             String policy = observable.getValue();
@@ -126,5 +144,9 @@ public class ChannelCell extends VBox implements Initializable {
 
     public XYChart<Number, Number> getChart() {
         return channelChart;
+    }
+
+    public void addPropertyChangeHandler(PropertyChangeHandler handler) {
+        handlers.add(handler);
     }
 }

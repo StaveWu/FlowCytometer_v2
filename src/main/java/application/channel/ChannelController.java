@@ -1,10 +1,9 @@
 package application.channel;
 
-import application.channel.model.ChannelModel;
-import application.channel.model.ChannelModelRepository;
+import application.channel.model.*;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
-import application.event.SamplingPointCapturedEvent;
+import application.event.SamplingPointsCapturedEvent;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
@@ -27,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Component
 public class ChannelController implements Initializable {
@@ -35,7 +36,11 @@ public class ChannelController implements Initializable {
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
     @Autowired
-    private ChannelModelRepository repository;
+    private ChannelModelRepository channelModelRepository;
+    @Autowired
+    private ChannelSeriesRepository channelSeriesRepository;
+
+    private SamplingDataCache samplingDataCache;
 
     @FXML
     private HBox channelsHBox;
@@ -46,36 +51,83 @@ public class ChannelController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        channelsHBox.getChildren().addListener((ListChangeListener<Node>) c ->
-                eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size())));
+        channelsHBox.getChildren().addListener((ListChangeListener<Node>) c -> {
+            saveChannelInformation();
+            eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size()));
+        });
 
-        repository.setLocation(FCMRunTimeConfig.getInstance()
+        channelModelRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "channels.json");
-        repository.findAll().forEach(this::addChannelCell);
+        channelModelRepository.findAll().forEach(this::addChannelCell);
+
+//        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
+//                .getRootDir() + File.separator + "SamplingData.txt");
+//        samplingDataCache = new SamplingDataCache(channelSeriesRepository.findAll());
+//        samplingDataCache.registerRowDataAddedHandler(() -> {
+//            if (samplingDataCache.canSave()) {
+//                CompletableFuture.runAsync(() -> {
+//                    channelSeriesRepository.appendSeries(samplingDataCache.getSeriesList());
+//                    samplingDataCache.clear();
+//                });
+//            }
+//        });
+
+        // start a thread to monitor channel series
+//        Thread channelseriesMonitor = new Thread(() -> {
+//            while(true) {
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                List<ChannelSeries> headSeriesList = channelSeriesRepository.headSeries();
+//                Platform.runLater(() -> {
+//                    for (int i = 0; i < headSeriesList.size(); i++) {
+//                        ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
+//                        XYChart<Number, Number> chart = channelCell.getChart();
+//                        XYChart.Series<Number, Number> series = chart.getData().get(0);
+//                        int start;
+//                        if (series.getData().size() == 0) {
+//                            start = 0;
+//                        } else {
+//                            start = (int) series.getData().get(series.getData().size() - 1).getXValue();
+//                        }
+//                        series.getData().clear();
+//                        for (Double ele : headSeriesList.get(i).getData()) {
+//                            series.getData().add(new XYChart.Data<>(start++, ele));
+//                            chart.requestLayout();
+//                        }
+//                    }
+//                });
+//            }
+//        });
+//        channelseriesMonitor.setDaemon(true);
+//        channelseriesMonitor.start();
     }
 
     private void addChannelCell(ChannelModel model) {
-        channelsHBox.getChildren().add(new ChannelCell(this, model));
+        ChannelCell channelCell = new ChannelCell(this, model);
+        channelCell.addPropertyChangeHandler(this::saveChannelInformation);
+        channelsHBox.getChildren().add(channelCell);
     }
 
     @FXML
     protected void newChannelCell() {
         ChannelModel model = new ChannelModel();
-        repository.addModel(model);
+        channelModelRepository.addModel(model);
         addChannelCell(model);
     }
 
     public void removeChannelCell(ChannelCell cell) {
-        repository.removeModel(cell.getChannelModel());
+        channelModelRepository.removeModel(cell.getChannelModel());
         channelsHBox.getChildren().remove(cell);
     }
 
-    public void saveChannelInformation() {
-        if (repository == null) {
-            return;
-        }
+    private void saveChannelInformation() {
         try {
-            repository.saveAll();
+            channelModelRepository.saveAll(channelsHBox.getChildren().stream()
+                    .map(e -> ((ChannelCell)e).getChannelModel())
+                    .collect(Collectors.toList()));
         } catch (IOException e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "保存通道数据失败",
@@ -84,38 +136,9 @@ public class ChannelController implements Initializable {
     }
 
     @Subscribe
-    protected void listen(SamplingPointCapturedEvent event) {
-        Platform.runLater(() -> {
-            log.info("on adding sample points to chart");
-            long t1 = System.currentTimeMillis();
-            List<List<Double>> channels = event.getSamplingPoint();
-            for (int i = 0; i < channels.size(); i++) {
-                // access channel's data
-                List<Double> data = channels.get(i);
-
-                // append data into existing series
-                ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
-                XYChart<Number, Number> chart = channelCell.getChart();
-                XYChart.Series<Number, Number> series = chart.getData().get(0);
-                int start;
-                if (series.getData().size() == 0) {
-                    start = 0;
-                } else {
-                    start = (int) series.getData().get(series.getData().size() - 1).getXValue();
-                }
-                for (Double ele : data) {
-                    // remove first and add last so that the chart will
-                    // perform like a slide window
-                    if (series.getData().size() > 3000) {
-                        series.getData().remove(0);
-                    }
-                    series.getData().add(new XYChart.Data<>(start++, ele));
-                    chart.requestLayout();
-                }
-            }
-            long t2 = System.currentTimeMillis();
-            System.out.println("chart画点用时：" + (t2 - t1) + "ms");
-        });
+    protected void listen(SamplingPointsCapturedEvent event) {
+        // append sampling points
+        event.getSamplingPoints().forEach(samplingDataCache::add);
     }
 
 }

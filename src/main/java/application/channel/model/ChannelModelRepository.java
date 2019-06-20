@@ -73,7 +73,7 @@ public class ChannelModelRepository {
      * to this method again.
      * @throws IOException
      */
-    public void saveAll() throws IOException {
+    public void saveAll(List<ChannelModel> models) throws IOException {
         checkLocation();
         List<ChannelModel.JsonObject> json_models = models.stream()
                 .map(ChannelModel::toJsonObject)

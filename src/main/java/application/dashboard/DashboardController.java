@@ -1,13 +1,11 @@
 package application.dashboard;
 
-import application.channel.model.ChannelData;
-import application.channel.model.ChannelDataRepository;
-import application.channel.model.ChannelModel;
-import application.channel.model.ChannelModelRepository;
+import application.channel.model.*;
 import application.dashboard.device.UsbCommDevice;
 import application.dashboard.model.TimeLimit;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
+import application.event.SamplingPointsCapturedEvent;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Component
@@ -84,8 +83,6 @@ public class DashboardController implements Initializable {
 
     @Autowired
     private ChannelModelRepository channelModelRepository;
-    @Autowired
-    private ChannelDataRepository channelDataRepository;
 
     public enum SampleMode {
         TIME("按时间"),
@@ -152,12 +149,8 @@ public class DashboardController implements Initializable {
         });
 
         // perform action when data received
-        circuitBoard.setDataReceivedHandler(receivedList -> {
-            List<ChannelData> channelDataList = channelDataRepository.findAll();
-            for (int i = 0; i < receivedList.size(); i++) {
-                channelDataList.get(i).addAll(receivedList.get(i));
-            }
-        });
+        circuitBoard.setDataReceivedHandler(samplingPoints ->
+                eventBus.post(new SamplingPointsCapturedEvent(samplingPoints)));
 
         // choose communication device
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -183,7 +176,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void connectDevice() {
-        if(!checkCommDevice()) {
+        if(!checkCommDeviceSelected()) {
             return;
         }
         log.info("try connecting device...");
@@ -199,7 +192,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private boolean checkCommDevice() {
+    private boolean checkCommDeviceSelected() {
         if (connectionCombo.getSelectionModel().isEmpty()) {
             UiUtils.getAlert(Alert.AlertType.WARNING,
                     "设备连接失败", "请先选择端口类型！").showAndWait();
@@ -210,7 +203,8 @@ public class DashboardController implements Initializable {
 
     private boolean checkCommConnected() {
         if (!circuitBoard.isConnected()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, "设备连接失败", "请先连接设备！").showAndWait();
+            UiUtils.getAlert(Alert.AlertType.WARNING, "设备连接失败",
+                    "请先连接设备！").showAndWait();
             return false;
         }
         return true;
@@ -218,7 +212,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void startSampling() {
-        if(!checkCommDevice() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommConnected()) {
             return;
         }
         tickService = getTickService();
@@ -281,7 +275,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void stopSampling() {
-        if(!checkCommDevice() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommConnected()) {
             return;
         }
         if (tickService != null) {
@@ -299,7 +293,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void resetSystem() {
-        if(!checkCommDevice() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommConnected()) {
             return;
         }
         log.info("reset system");
