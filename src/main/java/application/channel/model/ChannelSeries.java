@@ -10,9 +10,6 @@ public class ChannelSeries {
     private String id;
     private List<Double> data;
 
-    private boolean isOnAscenting;
-    private boolean isOnDescenting;
-
     public ChannelSeries(String id) {
         this(id, new ArrayList<>());
     }
@@ -36,22 +33,5 @@ public class ChannelSeries {
 
     public List<Double> getData() {
         return data;
-    }
-
-    public boolean isOnAscenting() {
-        return isOnAscenting;
-    }
-
-    public boolean isOnDescenting() {
-        return isOnDescenting;
-    }
-
-    public void add(Double element) {
-        data.add(element);
-        // check ascenting or descenting
-    }
-
-    public void clear() {
-        data.clear();
     }
 }

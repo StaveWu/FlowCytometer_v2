@@ -1,126 +1,42 @@
 package application.channel.model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelModel {
+    private ChannelMeta meta;
+    private List<Double> data = new ArrayList<>();
 
-    private StringProperty id;
-    private StringProperty name;
-    private DoubleProperty voltage;
-    private DoubleProperty threshold;
-    private StringProperty peakPolicy;
+    private boolean isOnAscenting;
+    private boolean isOnDescenting;
 
-    public final StringProperty idProperty() {
-        if (id == null) {
-            id = new SimpleStringProperty("PMT1");
-        }
-        return id;
+    public ChannelModel(ChannelMeta meta) {
+        this.meta = meta;
     }
-
-    public final StringProperty nameProperty() {
-        if (name == null) {
-            name = new SimpleStringProperty("");
-        }
-        return name;
-    }
-
-    public final DoubleProperty voltageProperty() {
-        if (voltage == null) {
-            voltage = new SimpleDoubleProperty();
-        }
-        return voltage;
-    }
-
-    public final DoubleProperty thresholdProperty() {
-        if (threshold == null) {
-            threshold = new SimpleDoubleProperty();
-        }
-        return threshold;
-    }
-
-    public final StringProperty peakPolicyProperty() {
-        if (peakPolicy == null) {
-            peakPolicy = new SimpleStringProperty("Area");
-        }
-        return peakPolicy;
-    }
-
 
     public String getId() {
-        return idProperty().get();
-    }
-    public void setId(String id) {
-        idProperty().set(id);
+        return meta.getId();
     }
 
-    public double getThreshold() {
-        return thresholdProperty().get();
-    }
-    public void setThreshold(double threshold) {
-        thresholdProperty().set(threshold);
+    public boolean isOnAscenting() {
+        return isOnAscenting;
     }
 
-    public double getVoltage() {
-        return voltageProperty().get();
-    }
-    public void setVoltage(double voltage) {
-        voltageProperty().set(voltage);
+    public boolean isOnDescenting() {
+        return isOnDescenting;
     }
 
-    public String getName() {
-        return nameProperty().get();
-    }
-    public void setName(String name) {
-        nameProperty().set(name);
+    public List<Double> getData() {
+        return data;
     }
 
-    public String getPeakPolicy() {
-        return peakPolicyProperty().get();
-    }
-    public void setPeakPolicy(String peakPolicy) {
-        peakPolicyProperty().set(peakPolicy);
+    public void setData(List<Double> data) {
+        this.data = data;
     }
 
-    public class JsonObject {
-        public final String id;
-        public final String name;
-        public final double voltage;
-        public final double threshold;
-        public final String peakPolicy;
-
-        public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy) {
-            this.id = id;
-            this.name = name;
-            this.voltage = voltage;
-            this.threshold = threshold;
-            this.peakPolicy = peakPolicy;
-        }
-    }
-
-    public JsonObject toJsonObject() {
-        return new JsonObject(idProperty().get(),
-                nameProperty().get(),
-                voltageProperty().get(),
-                thresholdProperty().get(),
-                peakPolicyProperty().get());
-    }
-
-    public static ChannelModel fromJsonObject(JsonObject json) {
-        ChannelModel model = new ChannelModel();
-        model.setId(json.id);
-        model.setName(json.name);
-        model.setPeakPolicy(json.peakPolicy);
-        model.setThreshold(json.threshold);
-        model.setVoltage(json.voltage);
+    public static ChannelModel of(ChannelMeta meta, ChannelSeries series) {
+        ChannelModel model = new ChannelModel(meta);
+        model.setData(series.getData());
         return model;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("{id: %s, name: %s, voltage: %f, threshold: %f, peakPolicy: %s}",
-                getId(), getName(), getVoltage(), getThreshold(), getPeakPolicy());
     }
 }

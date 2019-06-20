@@ -1,13 +1,11 @@
 package application.channel.model;
 
-import application.starter.FCMRunTimeConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -18,14 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class ChannelModelRepository {
+public class ChannelMetaRepository {
 
     private Gson gson = new Gson();
     private String location;
 
-    private static final Logger log = LoggerFactory.getLogger(ChannelModel.class);
+    private static final Logger log = LoggerFactory.getLogger(ChannelMeta.class);
 
-    public ChannelModelRepository() {}
+    public ChannelMetaRepository() {}
 
     public void setLocation(String location) {
         this.location = location;
@@ -41,13 +39,13 @@ public class ChannelModelRepository {
      * to care repository update, it will update automatically.
      * @return
      */
-    public List<ChannelModel> findAll() {
+    public List<ChannelMeta> findAll() {
         checkLocation();
-        List<ChannelModel> models = new ArrayList<>();
+        List<ChannelMeta> models = new ArrayList<>();
         try (Reader reader = new FileReader(location)) {
-            List<ChannelModel.JsonObject> jsonModels = gson.fromJson(reader,
-                    new TypeToken<List<ChannelModel.JsonObject>>(){}.getType());
-            jsonModels.stream().map(ChannelModel::fromJsonObject).forEach(models::add);
+            List<ChannelMeta.JsonObject> jsonModels = gson.fromJson(reader,
+                    new TypeToken<List<ChannelMeta.JsonObject>>(){}.getType());
+            jsonModels.stream().map(ChannelMeta::fromJsonObject).forEach(models::add);
         } catch (IOException e) {
             log.info("Channel models loading failed: " + e.getMessage());
         }
@@ -61,10 +59,10 @@ public class ChannelModelRepository {
      * to this method again.
      * @throws IOException
      */
-    public void saveAll(List<ChannelModel> models) throws IOException {
+    public void saveAll(List<ChannelMeta> models) throws IOException {
         checkLocation();
-        List<ChannelModel.JsonObject> json_models = models.stream()
-                .map(ChannelModel::toJsonObject)
+        List<ChannelMeta.JsonObject> json_models = models.stream()
+                .map(ChannelMeta::toJsonObject)
                 .collect(Collectors.toList());
         Files.write(Paths.get(location), gson.toJson(json_models).getBytes());
     }

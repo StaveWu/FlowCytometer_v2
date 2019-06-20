@@ -4,22 +4,23 @@ import application.channel.RowDataAddedHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SamplingDataCache {
 
-    private List<ChannelSeries> seriesList;
+    private List<ChannelModel> models;
 
     private static final int MAX_ALLOWABLE_CACHE = 10;
     private static final int MIN_TRIGGERED_SAVE_CACHE = 5;
 
     private List<RowDataAddedHandler> handlers = new ArrayList<>();
 
-    public SamplingDataCache(List<ChannelSeries> seriesList) {
-        this.seriesList = seriesList;
+    public SamplingDataCache(List<ChannelModel> models) {
+        this.models = models;
     }
 
     public int size() {
-        return seriesList.size();
+        return models.get(0).getData().size();
     }
 
     public boolean canSave() {
@@ -30,9 +31,9 @@ public class SamplingDataCache {
             return true;
         }
         boolean canSave = true;
-        for (ChannelSeries series:
-                seriesList) {
-            if (series.isOnAscenting() || series.isOnDescenting()) {
+        for (ChannelModel model:
+                models) {
+            if (model.isOnAscenting() || model.isOnDescenting()) {
                 canSave = false;
             }
         }
@@ -40,13 +41,11 @@ public class SamplingDataCache {
     }
 
     public void add(List<Double> rowData) {
-        for (int i = 0; i < seriesList.size(); i++) {
-            seriesList.get(i).add(rowData.get(i));
+        for (int i = 0; i < models.size(); i++) {
+            models.get(i).getData().add(rowData.get(i));
         }
         // fire event
         handlers.forEach(RowDataAddedHandler::rowDataAdded);
-
-
     }
 
     public void registerRowDataAddedHandler(RowDataAddedHandler handler) {
@@ -54,10 +53,18 @@ public class SamplingDataCache {
     }
 
     public void clear() {
-        seriesList.forEach(ChannelSeries::clear);
+        models.forEach(e -> e.getData().clear());
     }
 
     public List<ChannelSeries> getSeriesList() {
-        return seriesList;
+        return models.stream()
+                .map(e -> new ChannelSeries(e.getId(), e.getData()))
+                .collect(Collectors.toList());
+    }
+
+    public static SamplingDataCache of(List<ChannelMeta> metas) {
+        return new SamplingDataCache(metas.stream()
+                .map(ChannelModel::new)
+                .collect(Collectors.toList()));
     }
 }

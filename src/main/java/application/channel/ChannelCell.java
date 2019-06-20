@@ -1,8 +1,6 @@
 package application.channel;
 
-import application.channel.model.ChannelModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import application.channel.model.ChannelMeta;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,15 +50,15 @@ public class ChannelCell extends VBox implements Initializable {
     @FXML
     private AreaChart<Number, Number> channelChart;
 
-    private ChannelModel channelModel;
+    private ChannelMeta channelMeta;
     private ChannelController parentController;
     private List<PropertyChangeHandler> handlers = new ArrayList<>();
 
     private final String[] channelIds = {"PMT1", "PMT2", "PMT3", "PMT4", "APD1", "APD2", "APD3", "APD4"};
 
-    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelModel model) {
+    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelMeta channelMeta) {
         this.parentController = parentController;
-        this.channelModel = model;
+        this.channelMeta = channelMeta;
 
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("channel_cell.fxml"));
         loader.setRoot(this);
@@ -80,32 +78,32 @@ public class ChannelCell extends VBox implements Initializable {
             channelIdCombo.getItems().add(id);
         }
         // set toggle when first load
-        peakgroup.selectToggle(getSelectedToggle(channelModel.getPeakPolicy()));
+        peakgroup.selectToggle(getSelectedToggle(channelMeta.getPeakPolicy()));
 
         // bind model and hook property change handler
-        nameTextField.textProperty().bindBidirectional(channelModel.nameProperty());
+        nameTextField.textProperty().bindBidirectional(channelMeta.nameProperty());
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
-        voltageTextField.textProperty().bindBidirectional(channelModel.voltageProperty(), new NumberStringConverter());
+        voltageTextField.textProperty().bindBidirectional(channelMeta.voltageProperty(), new NumberStringConverter());
         voltageTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
-        thresholdTextField.textProperty().bindBidirectional(channelModel.thresholdProperty(), new NumberStringConverter());
+        thresholdTextField.textProperty().bindBidirectional(channelMeta.thresholdProperty(), new NumberStringConverter());
         thresholdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
-        channelIdCombo.valueProperty().bindBidirectional(channelModel.idProperty());
+        channelIdCombo.valueProperty().bindBidirectional(channelMeta.idProperty());
         channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
 
         peakgroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             ToggleButton selectedBtn = (ToggleButton) observable.getValue();
-            channelModel.setPeakPolicy(selectedBtn.getText());
+            channelMeta.setPeakPolicy(selectedBtn.getText());
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
-        channelModel.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
+        channelMeta.peakPolicyProperty().addListener((observable, oldValue, newValue) -> {
             String policy = observable.getValue();
             peakgroup.selectToggle(getSelectedToggle(policy));
         });
@@ -138,8 +136,8 @@ public class ChannelCell extends VBox implements Initializable {
         parentController.removeChannelCell(this);
     }
 
-    public ChannelModel getChannelModel() {
-        return channelModel;
+    public ChannelMeta getChannelMeta() {
+        return channelMeta;
     }
 
     public XYChart<Number, Number> getChart() {

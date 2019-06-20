@@ -8,12 +8,10 @@ import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -36,7 +33,7 @@ public class ChannelController implements Initializable {
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
     @Autowired
-    private ChannelModelRepository channelModelRepository;
+    private ChannelMetaRepository channelMetaRepository;
     @Autowired
     private ChannelSeriesRepository channelSeriesRepository;
 
@@ -56,21 +53,21 @@ public class ChannelController implements Initializable {
             eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size()));
         });
 
-        channelModelRepository.setLocation(FCMRunTimeConfig.getInstance()
+        channelMetaRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "channels.json");
-        channelModelRepository.findAll().forEach(this::addChannelCell);
+        channelMetaRepository.findAll().forEach(this::addChannelCell);
 
-//        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
-//                .getRootDir() + File.separator + "SamplingData.txt");
-//        samplingDataCache = new SamplingDataCache(channelSeriesRepository.findAll());
-//        samplingDataCache.registerRowDataAddedHandler(() -> {
-//            if (samplingDataCache.canSave()) {
-//                CompletableFuture.runAsync(() -> {
-//                    channelSeriesRepository.appendSeries(samplingDataCache.getSeriesList());
-//                    samplingDataCache.clear();
-//                });
-//            }
-//        });
+        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
+                .getRootDir() + File.separator + "SamplingData.txt");
+        samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
+        samplingDataCache.registerRowDataAddedHandler(() -> {
+            if (samplingDataCache.canSave()) {
+                CompletableFuture.runAsync(() -> {
+                    channelSeriesRepository.appendSeries(samplingDataCache.getSeriesList());
+                    samplingDataCache.clear();
+                });
+            }
+        });
 
         // start a thread to monitor channel series
 //        Thread channelseriesMonitor = new Thread(() -> {
@@ -105,7 +102,7 @@ public class ChannelController implements Initializable {
 //        channelseriesMonitor.start();
     }
 
-    private void addChannelCell(ChannelModel model) {
+    private void addChannelCell(ChannelMeta model) {
         ChannelCell channelCell = new ChannelCell(this, model);
         channelCell.addPropertyChangeHandler(this::saveChannelInformation);
         channelsHBox.getChildren().add(channelCell);
@@ -113,7 +110,7 @@ public class ChannelController implements Initializable {
 
     @FXML
     protected void newChannelCell() {
-        addChannelCell(new ChannelModel());
+        addChannelCell(new ChannelMeta());
     }
 
     public void removeChannelCell(ChannelCell cell) {
@@ -122,8 +119,8 @@ public class ChannelController implements Initializable {
 
     private void saveChannelInformation() {
         try {
-            channelModelRepository.saveAll(channelsHBox.getChildren().stream()
-                    .map(e -> ((ChannelCell)e).getChannelModel())
+            channelMetaRepository.saveAll(channelsHBox.getChildren().stream()
+                    .map(e -> ((ChannelCell)e).getChannelMeta())
                     .collect(Collectors.toList()));
         } catch (IOException e) {
             e.printStackTrace();

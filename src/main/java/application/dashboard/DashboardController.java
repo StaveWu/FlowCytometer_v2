@@ -19,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Component
@@ -82,7 +80,7 @@ public class DashboardController implements Initializable {
     private CircuitBoard circuitBoard = new CircuitBoard();
 
     @Autowired
-    private ChannelModelRepository channelModelRepository;
+    private ChannelMetaRepository channelMetaRepository;
 
     public enum SampleMode {
         TIME("按时间"),
@@ -232,8 +230,8 @@ public class DashboardController implements Initializable {
             initializeBoard();
             log.info("start sampling");
             tickService.start();
-            circuitBoard.startSampling(channelModelRepository.findAll().stream()
-                    .map(ChannelModel::getId)
+            circuitBoard.startSampling(channelMetaRepository.findAll().stream()
+                    .map(ChannelMeta::getId)
                     .collect(Collectors.toList()));
         } catch (Exception e) {
             stopSampling();
@@ -245,8 +243,8 @@ public class DashboardController implements Initializable {
 
     private void initializeBoard() throws Exception {
         // set voltage
-        for (ChannelModel model :
-                channelModelRepository.findAll()) {
+        for (ChannelMeta model :
+                channelMetaRepository.findAll()) {
             circuitBoard.setVoltage(model.getId(), model.getVoltage());
         }
         // set sampling frequency
