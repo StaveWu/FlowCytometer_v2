@@ -113,13 +113,10 @@ public class ChannelController implements Initializable {
 
     @FXML
     protected void newChannelCell() {
-        ChannelModel model = new ChannelModel();
-        channelModelRepository.addModel(model);
-        addChannelCell(model);
+        addChannelCell(new ChannelModel());
     }
 
     public void removeChannelCell(ChannelCell cell) {
-        channelModelRepository.removeModel(cell.getChannelModel());
         channelsHBox.getChildren().remove(cell);
     }
 

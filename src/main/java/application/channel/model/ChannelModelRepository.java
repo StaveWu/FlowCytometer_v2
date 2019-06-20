@@ -25,9 +25,6 @@ public class ChannelModelRepository {
 
     private static final Logger log = LoggerFactory.getLogger(ChannelModel.class);
 
-    // channel models cache
-    private List<ChannelModel> models = new ArrayList<>();
-
     public ChannelModelRepository() {}
 
     public void setLocation(String location) {
@@ -46,6 +43,7 @@ public class ChannelModelRepository {
      */
     public List<ChannelModel> findAll() {
         checkLocation();
+        List<ChannelModel> models = new ArrayList<>();
         try (Reader reader = new FileReader(location)) {
             List<ChannelModel.JsonObject> jsonModels = gson.fromJson(reader,
                     new TypeToken<List<ChannelModel.JsonObject>>(){}.getType());
@@ -54,16 +52,6 @@ public class ChannelModelRepository {
             log.info("Channel models loading failed: " + e.getMessage());
         }
         return models;
-    }
-
-    public void addModel(ChannelModel model) {
-        checkLocation();
-        models.add(model);
-    }
-
-    public void removeModel(ChannelModel model) {
-        checkLocation();
-        models.remove(model);
     }
 
     /**
