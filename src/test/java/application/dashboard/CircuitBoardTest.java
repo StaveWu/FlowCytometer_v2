@@ -19,4 +19,10 @@ public class CircuitBoardTest {
                 CircuitBoard.getCommandMessage("SetFrequency", 100000));
     }
 
+    @Test
+    public void testDecode() {
+        byte[] data = new byte[]{0, 0, 32, 65, 0, 0, 32, 65, 0, 0, 32, 65, 0, 0, 32, 65};
+        System.out.println(CircuitBoard.decode(data, 1));
+    }
+
 }

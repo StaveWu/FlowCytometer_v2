@@ -10,6 +10,7 @@ import javax.usb.event.UsbPipeErrorEvent;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CircuitBoard {
@@ -19,7 +20,7 @@ public class CircuitBoard {
     private ICommDevice commDevice;
     private DataReceivedHandler handler;
     private int numChannels = 0;
-    private boolean isOnSampling = false;
+    private boolean isOnSampling = true;
 
     private void checkCommDevice() {
         if (commDevice == null) {
@@ -94,7 +95,9 @@ public class CircuitBoard {
             @Override
             public void dataEventOccurred(UsbPipeDataEvent event) {
                 byte[] data = event.getData();
+                System.out.println(Arrays.toString(data));
                 List<List<Double>> decoded = decode(data, numChannels);
+                System.out.println(decoded.size());
                 System.out.println(decoded);
                 handler.onDataReceived(decoded);
                 if (isOnSampling) {
@@ -134,16 +137,15 @@ public class CircuitBoard {
     }
 
     private static final int BYTES_PER_CHANNEL = 4;
-    private static List<List<Double>> decode(byte[] data, int numChannels) {
+    public static List<List<Double>> decode(byte[] data, int numChannels) {
         List<List<Double>> res = new ArrayList<>();
-        for (int i = 0; i < data.length - BYTES_PER_CHANNEL * numChannels;
-             i += BYTES_PER_CHANNEL * numChannels) {
+        for (int i = 0; i < data.length / (BYTES_PER_CHANNEL * numChannels); i++) {
             List<Double> rows = new ArrayList<>();
             for (int j = 0; j < numChannels; j++) {
                 // assign 4 bytes to hold channel data to transfer short type.
                 byte[] bytes = new byte[BYTES_PER_CHANNEL];
                 for (int k = 0; k < BYTES_PER_CHANNEL; k++) {
-                    bytes[k] = data[i + BYTES_PER_CHANNEL * j + k];
+                    bytes[k] = data[i * numChannels * BYTES_PER_CHANNEL + BYTES_PER_CHANNEL * j + k];
                 }
                 // A method "a << 8 | b" to transfer short is not a good idea
                 // since it would make a mistake in some situation, i.e. a = 60 and b = -128

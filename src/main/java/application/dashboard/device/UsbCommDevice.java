@@ -35,6 +35,7 @@ public class UsbCommDevice implements ICommDevice {
 
     @Override
     public void connect() throws Exception {
+        disconnect();
         UsbDevice device = findDevice(UsbHostManager.getUsbServices().getRootUsbHub(), VENDOR_ID, PRODUCT_ID);
         if (device == null) {
             throw new NullPointerException("device is not find");
@@ -44,9 +45,6 @@ public class UsbCommDevice implements ICommDevice {
             throw new UsbException("UsbConfiguration is null");
         }
 
-        if (iface != null) { // release iface before re-obtain it.
-            iface.release();
-        }
         iface = configuration.getUsbInterface((byte) 1);
         iface.claim(new UsbInterfacePolicy() {
             @Override
@@ -94,7 +92,7 @@ public class UsbCommDevice implements ICommDevice {
             throw new UsbException("usb is not connected");
         }
 
-        byte[] data = new byte[128];
+        byte[] data = new byte[16000];
         receivedPipe.asyncSubmit(data);
         return data;
     }

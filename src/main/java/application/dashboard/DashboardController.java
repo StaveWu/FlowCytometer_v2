@@ -6,6 +6,7 @@ import application.dashboard.model.TimeLimit;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointsCapturedEvent;
+import application.event.StartSamplingEvent;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -228,6 +229,7 @@ public class DashboardController implements Initializable {
         try {
             log.info("initialize circuit board");
             initializeBoard();
+            eventBus.post(new StartSamplingEvent());
             log.info("start sampling");
             tickService.start();
             circuitBoard.startSampling(channelMetaRepository.findAll().stream()

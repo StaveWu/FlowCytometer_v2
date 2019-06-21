@@ -4,6 +4,7 @@ import application.channel.model.*;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointsCapturedEvent;
+import application.event.StartSamplingEvent;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
@@ -25,7 +26,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,10 +39,10 @@ public class ChannelController implements Initializable {
     @Autowired
     private ChannelSeriesRepository channelSeriesRepository;
 
-    private SamplingDataCache samplingDataCache;
-
     @FXML
     private HBox channelsHBox;
+
+    private SamplingDataCache samplingDataCache;
 
     public ChannelController() {
         eventBus.register(this);
@@ -59,21 +59,6 @@ public class ChannelController implements Initializable {
                 .getProjectConfigFolder() + File.separator + "channels.json");
         channelMetaRepository.findAll().forEach(this::addChannelCell);
 
-        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
-                .getRootDir() + File.separator + "SamplingData.txt");
-
-        samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
-        samplingDataCache.registerBeforeClearHandler(() -> {
-            // async save
-            List<ChannelSeries> seriesList = samplingDataCache.getSeriesList();
-            CompletableFuture.runAsync(() -> {
-                try {
-                    channelSeriesRepository.appendSeries(seriesList);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        });
 
         // start a thread to monitor channel series
 //        Thread channelseriesMonitor = new Thread(() -> {
@@ -136,8 +121,29 @@ public class ChannelController implements Initializable {
     }
 
     @Subscribe
+    public void listen(StartSamplingEvent event) {
+        // create a samping data cache
+        String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
+        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
+                .getRootDir() + File.separator + channelDataFileName);
+
+        samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
+        samplingDataCache.registerBeforeClearHandler(() -> {
+            // async save
+            List<ChannelSeries> seriesList = samplingDataCache.getSeriesList();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    channelSeriesRepository.appendSeries(seriesList);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+    }
+
+    @Subscribe
     protected void listen(SamplingPointsCapturedEvent event) {
-        // append sampling points
+        // append sampling points to cache
         event.getSamplingPoints().forEach(samplingDataCache::add);
     }
 
