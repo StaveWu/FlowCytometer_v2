@@ -2,6 +2,8 @@ package application.dashboard;
 
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CircuitBoard {
+
+    private static final Logger log = LoggerFactory.getLogger(CircuitBoard.class);
 
     private ICommDevice commDevice;
     private DataReceivedHandler handler;
@@ -33,41 +37,55 @@ public class CircuitBoard {
 
     public void resetSystem() throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("ResetSystem").getBytes());
+        String msg = getCommandMessage("ResetSystem");
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
     public void startSampling(List<String> channelIds) throws Exception {
         checkCommDevice();
+        String msg = getCommandMessage("StartSampling", channelIds.toArray());
         isOnSampling = true;
         numChannels = channelIds.size();
-        commDevice.write(getCommandMessage("StartSampling", channelIds).getBytes());
+        commDevice.write(msg.getBytes());
+        log.info(msg);
+        commDevice.read();
     }
 
     public void stopSampling() throws Exception {
         checkCommDevice();
+        String msg = getCommandMessage("StopSampling");
         isOnSampling = false;
-        commDevice.write(getCommandMessage("StopSampling").getBytes());
-        commDevice.read();
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
-    public void setVoltage(String channelId, double voltage) throws Exception {
+    public void setVoltage(String channelId, String voltage) throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("SetVoltage", channelId, voltage).getBytes());
+        String msg = getCommandMessage("SetVoltage", channelId, voltage);
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
-    public void setFrequency(long frequency) throws Exception {
+    public void setFrequency(String frequency) throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("SetFrequency", frequency).getBytes());
+        String msg = getCommandMessage("SetFrequency", frequency);
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
     public void setValve(String valveId, boolean enabled) throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("SetValve", valveId, enabled ? 1 : 0).getBytes());
+        String msg = getCommandMessage("SetValve", valveId, enabled ? 0 : 1);
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
-    public void setSupValve(String supValveId, double rate) throws Exception {
+    public void setSupValve(String supValveId, String rate) throws Exception {
         checkCommDevice();
-        commDevice.write(getCommandMessage("SetSupValve", supValveId, rate).getBytes());
+        String msg = getCommandMessage("SetSupValve", supValveId, rate);
+        commDevice.write(msg.getBytes());
+        log.info(msg);
     }
 
     public void setCommDevice(ICommDevice device) {
@@ -77,6 +95,7 @@ public class CircuitBoard {
             public void dataEventOccurred(UsbPipeDataEvent event) {
                 byte[] data = event.getData();
                 List<List<Double>> decoded = decode(data, numChannels);
+                System.out.println(decoded);
                 handler.onDataReceived(decoded);
                 if (isOnSampling) {
                     try {

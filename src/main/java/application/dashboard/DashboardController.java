@@ -242,13 +242,13 @@ public class DashboardController implements Initializable {
     }
 
     private void initializeBoard() throws Exception {
-        // set voltage
+        // set channel
         for (ChannelMeta model :
                 channelMetaRepository.findAll()) {
-            circuitBoard.setVoltage(model.getId(), model.getVoltage());
+            circuitBoard.setVoltage(model.getId(), "" + model.getVoltage());
         }
         // set sampling frequency
-        circuitBoard.setFrequency(Long.parseLong(frequencyTextField.getText()));
+        circuitBoard.setFrequency(frequencyTextField.getText());
         // set valve
         circuitBoard.setValve("V1", valveCheckBox1.isSelected());
         circuitBoard.setValve("V2", valveCheckBox2.isSelected());
@@ -256,8 +256,8 @@ public class DashboardController implements Initializable {
         circuitBoard.setValve("V4", valveCheckBox4.isSelected());
         circuitBoard.setValve("V5", valveCheckBox5.isSelected());
         circuitBoard.setValve("V6", valveCheckBox6.isSelected());
-        circuitBoard.setSupValve("SV1", Float.parseFloat(supValveTextField1.getText()));
-        circuitBoard.setSupValve("SV2", Float.parseFloat(supValveTextField2.getText()));
+        circuitBoard.setVoltage("SV1", supValveTextField1.getText());
+        circuitBoard.setVoltage("SV2", supValveTextField2.getText());
     }
 
 
