@@ -1,6 +1,6 @@
 package application.channel.model;
 
-import application.channel.RowDataAddedHandler;
+import application.channel.BeforeCacheClearedHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class SamplingDataCache {
     private static final int MAX_ALLOWABLE_CACHE = 10;
     private static final int MIN_TRIGGERED_SAVE_CACHE = 5;
 
-    private List<RowDataAddedHandler> handlers = new ArrayList<>();
+    private List<BeforeCacheClearedHandler> handlers = new ArrayList<>();
 
     public SamplingDataCache(List<ChannelModel> models) {
         this.models = models;
@@ -45,10 +45,14 @@ public class SamplingDataCache {
             models.get(i).getData().add(rowData.get(i));
         }
         // fire event
-        handlers.forEach(RowDataAddedHandler::rowDataAdded);
+        if (canSave()) {
+            handlers.forEach(BeforeCacheClearedHandler::beforeClear);
+            clear();
+        }
+
     }
 
-    public void registerRowDataAddedHandler(RowDataAddedHandler handler) {
+    public void registerBeforeClearHandler(BeforeCacheClearedHandler handler) {
         handlers.add(handler);
     }
 
@@ -58,7 +62,7 @@ public class SamplingDataCache {
 
     public List<ChannelSeries> getSeriesList() {
         return models.stream()
-                .map(e -> new ChannelSeries(e.getId(), e.getData()))
+                .map(e -> new ChannelSeries(e.getId(), new ArrayList<>(e.getData())))
                 .collect(Collectors.toList());
     }
 

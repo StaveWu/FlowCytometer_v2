@@ -36,6 +36,9 @@ public class UsbCommDevice implements ICommDevice {
     @Override
     public void connect() throws Exception {
         UsbDevice device = findDevice(UsbHostManager.getUsbServices().getRootUsbHub(), VENDOR_ID, PRODUCT_ID);
+        if (device == null) {
+            throw new NullPointerException("device is not find");
+        }
         UsbConfiguration configuration = device.getActiveUsbConfiguration();
         if (configuration == null) {
             throw new UsbException("UsbConfiguration is null");

@@ -22,8 +22,10 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -59,14 +61,18 @@ public class ChannelController implements Initializable {
 
         channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + "SamplingData.txt");
+
         samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
-        samplingDataCache.registerRowDataAddedHandler(() -> {
-            if (samplingDataCache.canSave()) {
-                CompletableFuture.runAsync(() -> {
-                    channelSeriesRepository.appendSeries(samplingDataCache.getSeriesList());
-                    samplingDataCache.clear();
-                });
-            }
+        samplingDataCache.registerBeforeClearHandler(() -> {
+            // async save
+            List<ChannelSeries> seriesList = samplingDataCache.getSeriesList();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    channelSeriesRepository.appendSeries(seriesList);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         });
 
         // start a thread to monitor channel series

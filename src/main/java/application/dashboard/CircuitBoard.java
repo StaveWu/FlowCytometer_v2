@@ -1,11 +1,12 @@
 package application.dashboard;
 
-import application.dashboard.device.CommDataParser;
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
 
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,8 +114,26 @@ public class CircuitBoard {
         return res.toString();
     }
 
-    private static List<List<Double>> decode(byte[] bytes, int numChannels) {
-        return new ArrayList<>();
+    private static final int BYTES_PER_CHANNEL = 4;
+    private static List<List<Double>> decode(byte[] data, int numChannels) {
+        List<List<Double>> res = new ArrayList<>();
+        for (int i = 0; i < data.length - BYTES_PER_CHANNEL * numChannels;
+             i += BYTES_PER_CHANNEL * numChannels) {
+            List<Double> rows = new ArrayList<>();
+            for (int j = 0; j < numChannels; j++) {
+                // assign 4 bytes to hold channel data to transfer short type.
+                byte[] bytes = new byte[BYTES_PER_CHANNEL];
+                for (int k = 0; k < BYTES_PER_CHANNEL; k++) {
+                    bytes[k] = data[i + BYTES_PER_CHANNEL * j + k];
+                }
+                // A method "a << 8 | b" to transfer short is not a good idea
+                // since it would make a mistake in some situation, i.e. a = 60 and b = -128
+                float ch = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+                rows.add((double) ch);
+            }
+            res.add(rows);
+        }
+        return res;
     }
 
 }
