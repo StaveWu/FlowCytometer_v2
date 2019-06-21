@@ -9,10 +9,12 @@ import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
@@ -45,6 +47,7 @@ public class ChannelController implements Initializable {
     private SamplingDataCache samplingDataCache;
     private BlockingDeque<List<ChannelSeries>> queue = new LinkedBlockingDeque<>();
     private ExecutorService dataSaveExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService histgramUpdater = Executors.newSingleThreadExecutor();
 
     public ChannelController() {
         eventBus.register(this);
@@ -74,36 +77,34 @@ public class ChannelController implements Initializable {
         });
 
         // start a thread to monitor channel series
-//        Thread channelseriesMonitor = new Thread(() -> {
-//            while(true) {
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                List<ChannelSeries> headSeriesList = channelSeriesRepository.headSeries();
-//                Platform.runLater(() -> {
-//                    for (int i = 0; i < headSeriesList.size(); i++) {
-//                        ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
-//                        XYChart<Number, Number> chart = channelCell.getChart();
-//                        XYChart.Series<Number, Number> series = chart.getData().get(0);
-//                        int start;
-//                        if (series.getData().size() == 0) {
-//                            start = 0;
-//                        } else {
-//                            start = (int) series.getData().get(series.getData().size() - 1).getXValue();
-//                        }
-//                        series.getData().clear();
-//                        for (Double ele : headSeriesList.get(i).getData()) {
-//                            series.getData().add(new XYChart.Data<>(start++, ele));
-//                            chart.requestLayout();
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//        channelseriesMonitor.setDaemon(true);
-//        channelseriesMonitor.start();
+        histgramUpdater.submit(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                List<ChannelSeries> headSeriesList = channelSeriesRepository.headSeries();
+                Platform.runLater(() -> {
+                    for (int i = 0; i < headSeriesList.size(); i++) {
+                        ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
+                        XYChart<Number, Number> chart = channelCell.getChart();
+                        XYChart.Series<Number, Number> series = chart.getData().get(0);
+                        int start;
+                        if (series.getData().size() == 0) {
+                            start = 0;
+                        } else {
+                            start = (int) series.getData().get(series.getData().size() - 1).getXValue();
+                        }
+                        series.getData().clear();
+                        for (Double ele : headSeriesList.get(i).getData()) {
+                            series.getData().add(new XYChart.Data<>(start++, ele));
+                            chart.requestLayout();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void addChannelCell(ChannelMeta model) {
