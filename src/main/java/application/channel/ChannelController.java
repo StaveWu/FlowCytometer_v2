@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -43,6 +43,8 @@ public class ChannelController implements Initializable {
     private HBox channelsHBox;
 
     private SamplingDataCache samplingDataCache;
+    private BlockingDeque<List<ChannelSeries>> queue = new LinkedBlockingDeque<>();
+    private ExecutorService dataSaveExecutor = Executors.newSingleThreadExecutor();
 
     public ChannelController() {
         eventBus.register(this);
@@ -59,6 +61,17 @@ public class ChannelController implements Initializable {
                 .getProjectConfigFolder() + File.separator + "channels.json");
         channelMetaRepository.findAll().forEach(this::addChannelCell);
 
+        // define a thread to save channel data
+        dataSaveExecutor.submit(() -> {
+            while (true) {
+                try {
+                    List<ChannelSeries> seriesList = queue.take();
+                    channelSeriesRepository.appendSeries(seriesList);
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // start a thread to monitor channel series
 //        Thread channelseriesMonitor = new Thread(() -> {
@@ -130,14 +143,18 @@ public class ChannelController implements Initializable {
         samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
         samplingDataCache.registerBeforeClearHandler(() -> {
             // async save
-            List<ChannelSeries> seriesList = samplingDataCache.getSeriesList();
-            CompletableFuture.runAsync(() -> {
-                try {
-                    channelSeriesRepository.appendSeries(seriesList);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            try {
+                queue.put(samplingDataCache.getSeriesList());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            CompletableFuture.runAsync(() -> {
+//                try {
+//                    channelSeriesRepository.appendSeries(seriesList);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
         });
     }
 
