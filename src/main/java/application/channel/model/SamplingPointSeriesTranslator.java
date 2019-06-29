@@ -11,6 +11,9 @@ public class SamplingPointSeriesTranslator {
 
     public List<XYChart.Series<Number, Number>> toSeries(List<SamplingPoint> points) {
         List<XYChart.Series<Number, Number>> res = new ArrayList<>();
+        if (points.isEmpty()) {
+            return res;
+        }
         for (String channelId :
                 points.get(0).getChannelIds()) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();

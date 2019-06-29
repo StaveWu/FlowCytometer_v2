@@ -7,7 +7,7 @@ import javax.usb.event.UsbPipeListener;
 /**
  * this class aims to perform an adapter for comm, usb...'s event handler.
  */
-public class CommDeviceEventAdapter implements UsbPipeListener {
+public class CommDeviceEventAdapter implements UsbPipeListener, SerialListener {
 
     @Override
     public void errorEventOccurred(UsbPipeErrorEvent event) {
@@ -16,6 +16,11 @@ public class CommDeviceEventAdapter implements UsbPipeListener {
 
     @Override
     public void dataEventOccurred(UsbPipeDataEvent event) {
+
+    }
+
+    @Override
+    public void dataReceived() {
 
     }
 }

@@ -83,13 +83,6 @@ public class CircuitBoard {
         log.info(msg);
     }
 
-    public void setSupValve(String supValveId, String rate) throws Exception {
-        checkCommDevice();
-        String msg = getCommandMessage("SetSupValve", supValveId, rate);
-        commDevice.write(msg.getBytes());
-        log.info(msg);
-    }
-
     public void setCommDevice(ICommDevice device) {
         commDevice = device;
         commDevice.setDataReceivedHandler(new CommDeviceEventAdapter() {
@@ -113,6 +106,20 @@ public class CircuitBoard {
             @Override
             public void errorEventOccurred(UsbPipeErrorEvent event) {
                 event.getUsbException().printStackTrace();
+            }
+
+            @Override
+            public void dataReceived() {
+                List<SamplingPoint> samplingPoints = new ArrayList<>();
+                for (int i = 0; i < 50; i++) {
+                    List<Float> coords = new ArrayList<>();
+                    for (int j = 0; j < channelIds.size(); j++) {
+                        coords.add((float) Math.random());
+                    }
+                    samplingPoints.add(new SamplingPoint(channelIds, coords));
+                }
+                System.out.println(samplingPoints);
+                handler.onDataReceived(samplingPoints);
             }
         });
     }

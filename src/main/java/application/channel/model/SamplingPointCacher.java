@@ -15,17 +15,12 @@ public class SamplingPointCacher {
     }
 
     public void cache(@NonNull List<SamplingPoint> points) {
-        LinkedList<SamplingPoint> pointsCopy = new LinkedList<>(points);
-        if (pointsCopy.size() >= maxAllowedCache) {
-            for (int i = 0; i < pointsCopy.size() - maxAllowedCache; i++) {
-                pointsCopy.removeFirst();
-            }
-            cachedPoints = pointsCopy;
-        } else {
-            for (int i = 0; i < maxAllowedCache - pointsCopy.size(); i++) {
+        cachedPoints.addAll(points);
+        // Remove elements that exceed the maximum cache limit
+        if (cachedPoints.size() > maxAllowedCache) {
+            for (int i = 0; i < cachedPoints.size() - maxAllowedCache; i++) {
                 cachedPoints.removeFirst();
             }
-            cachedPoints.addAll(pointsCopy);
         }
     }
 

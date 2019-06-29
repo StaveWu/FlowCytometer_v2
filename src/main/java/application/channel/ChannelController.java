@@ -66,14 +66,14 @@ public class ChannelController implements Initializable {
         Thread histgramUpdater = new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 List<SamplingPoint> points = samplingPointRepository.getRecentPoints();
                 List<XYChart.Series<Number, Number>> seriesList = samplingPointSeriesTranslator.toSeries(points);
                 Platform.runLater(() -> {
-                    for (int i = 0; i < channelsHBox.getChildren().size(); i++) {
+                    for (int i = 0; i < seriesList.size(); i++) {
                         ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
                         XYChart<Number, Number> chart = channelCell.getChart();
                         chart.getData().clear();
@@ -116,7 +116,6 @@ public class ChannelController implements Initializable {
 
     @Subscribe
     public void listen(StartSamplingEvent event) {
-        // create a samping data cache
         String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
         samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);

@@ -1,6 +1,7 @@
 package application.dashboard;
 
 import application.channel.model.*;
+import application.dashboard.device.SerialCommDevice;
 import application.dashboard.device.UsbCommDevice;
 import application.dashboard.model.TimeLimit;
 import application.event.ChannelChangedEvent;
@@ -160,6 +161,7 @@ public class DashboardController implements Initializable {
                         circuitBoard.setCommDevice(new UsbCommDevice());
                         break;
                     case SERIAL:
+                        circuitBoard.setCommDevice(new SerialCommDevice());
                         break;
                     default:
                         circuitBoard.setCommDevice(new UsbCommDevice());

@@ -44,4 +44,9 @@ public class SamplingPoint {
         }
         return new SamplingPoint(channelIds, coords);
     }
+
+    @Override
+    public String toString() {
+        return String.format("SamplingPoint[channelIds=%s, coords=%s]", channelIds, coords);
+    }
 }
