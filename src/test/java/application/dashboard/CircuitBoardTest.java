@@ -2,6 +2,9 @@ package application.dashboard;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class CircuitBoardTest {
@@ -22,7 +25,7 @@ public class CircuitBoardTest {
     @Test
     public void testDecode() {
         byte[] data = new byte[]{0, 0, 32, 65, 0, 0, 32, 65, 0, 0, 32, 65, 0, 0, 32, 65};
-        System.out.println(CircuitBoard.decode(data, 1));
+        System.out.println(CircuitBoard.decode(data, Arrays.asList("PMT")));
     }
 
 }

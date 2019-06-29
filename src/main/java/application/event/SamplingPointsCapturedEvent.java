@@ -1,5 +1,7 @@
 package application.event;
 
+import application.channel.model.SamplingPoint;
+
 import java.util.List;
 
 /**
@@ -7,13 +9,13 @@ import java.util.List;
  */
 public class SamplingPointsCapturedEvent {
 
-    private List<List<Double>> samplingPoints;
+    private List<SamplingPoint> samplingPoints;
 
-    public SamplingPointsCapturedEvent(List<List<Double>> samplingPoints) {
+    public SamplingPointsCapturedEvent(List<SamplingPoint> samplingPoints) {
         this.samplingPoints = samplingPoints;
     }
 
-    public List<List<Double>> getSamplingPoints() {
+    public List<SamplingPoint> getSamplingPoints() {
         return samplingPoints;
     }
 }

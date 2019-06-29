@@ -20,17 +20,16 @@ import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-@Component
+@Controller
 public class ChannelController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ChannelController.class);
@@ -38,16 +37,15 @@ public class ChannelController implements Initializable {
 
     @Autowired
     private ChannelMetaRepository channelMetaRepository;
+
     @Autowired
-    private ChannelSeriesRepository channelSeriesRepository;
+    private SamplingPointRepository samplingPointRepository;
+
+    @Autowired
+    private SamplingPointSeriesTranslator samplingPointSeriesTranslator;
 
     @FXML
     private HBox channelsHBox;
-
-    private SamplingDataCache samplingDataCache;
-    private BlockingDeque<List<ChannelSeries>> queue = new LinkedBlockingDeque<>();
-    private ExecutorService dataSaveExecutor = Executors.newSingleThreadExecutor();
-    private ExecutorService histgramUpdater = Executors.newSingleThreadExecutor();
 
     public ChannelController() {
         eventBus.register(this);
@@ -64,47 +62,29 @@ public class ChannelController implements Initializable {
                 .getProjectConfigFolder() + File.separator + "channels.json");
         channelMetaRepository.findAll().forEach(this::addChannelCell);
 
-        // define a thread to save channel data
-        dataSaveExecutor.submit(() -> {
-            while (true) {
-                try {
-                    List<ChannelSeries> seriesList = queue.take();
-                    channelSeriesRepository.appendSeries(seriesList);
-                } catch (InterruptedException | IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
         // start a thread to monitor channel series
-        histgramUpdater.submit(() -> {
+        Thread histgramUpdater = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                List<ChannelSeries> headSeriesList = channelSeriesRepository.headSeries();
+                List<SamplingPoint> points = samplingPointRepository.getRecentPoints();
+                List<XYChart.Series<Number, Number>> seriesList = samplingPointSeriesTranslator.toSeries(points);
                 Platform.runLater(() -> {
-                    for (int i = 0; i < headSeriesList.size(); i++) {
+                    for (int i = 0; i < channelsHBox.getChildren().size(); i++) {
                         ChannelCell channelCell = (ChannelCell) channelsHBox.getChildren().get(i);
                         XYChart<Number, Number> chart = channelCell.getChart();
-                        XYChart.Series<Number, Number> series = chart.getData().get(0);
-                        int start;
-                        if (series.getData().size() == 0) {
-                            start = 0;
-                        } else {
-                            start = (int) series.getData().get(series.getData().size() - 1).getXValue();
-                        }
-                        series.getData().clear();
-                        for (Double ele : headSeriesList.get(i).getData()) {
-                            series.getData().add(new XYChart.Data<>(start++, ele));
-                            chart.requestLayout();
-                        }
+                        chart.getData().clear();
+                        chart.getData().add(seriesList.get(i));
+                        chart.requestLayout();
                     }
                 });
             }
         });
+        histgramUpdater.setDaemon(true);
+        histgramUpdater.start();
     }
 
     private void addChannelCell(ChannelMeta model) {
@@ -138,31 +118,13 @@ public class ChannelController implements Initializable {
     public void listen(StartSamplingEvent event) {
         // create a samping data cache
         String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
-        channelSeriesRepository.setLocation(FCMRunTimeConfig.getInstance()
+        samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);
-
-        samplingDataCache = SamplingDataCache.of(channelMetaRepository.findAll());
-        samplingDataCache.registerBeforeClearHandler(() -> {
-            // async save
-            try {
-                queue.put(samplingDataCache.getSeriesList());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            CompletableFuture.runAsync(() -> {
-//                try {
-//                    channelSeriesRepository.appendSeries(seriesList);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-        });
     }
 
     @Subscribe
     protected void listen(SamplingPointsCapturedEvent event) {
-        // append sampling points to cache
-        event.getSamplingPoints().forEach(samplingDataCache::add);
+        samplingPointRepository.savePoints(event.getSamplingPoints());
     }
 
 }

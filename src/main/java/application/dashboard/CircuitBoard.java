@@ -1,5 +1,6 @@
 package application.dashboard;
 
+import application.channel.model.SamplingPoint;
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
 import org.slf4j.Logger;
@@ -19,8 +20,8 @@ public class CircuitBoard {
 
     private ICommDevice commDevice;
     private DataReceivedHandler handler;
-    private int numChannels = 0;
     private boolean isOnSampling = true;
+    private List<String> channelIds;
 
     private void checkCommDevice() {
         if (commDevice == null) {
@@ -47,7 +48,7 @@ public class CircuitBoard {
         checkCommDevice();
         String msg = getCommandMessage("StartSampling", channelIds.toArray());
         isOnSampling = true;
-        numChannels = channelIds.size();
+        this.channelIds = channelIds;
         commDevice.write(msg.getBytes());
         log.info(msg);
         commDevice.read();
@@ -96,7 +97,7 @@ public class CircuitBoard {
             public void dataEventOccurred(UsbPipeDataEvent event) {
                 byte[] data = event.getData();
                 System.out.println(Arrays.toString(data));
-                List<List<Double>> decoded = decode(data, numChannels);
+                List<SamplingPoint> decoded = decode(data, channelIds);
                 System.out.println(decoded.size());
                 System.out.println(decoded);
                 handler.onDataReceived(decoded);
@@ -136,23 +137,15 @@ public class CircuitBoard {
         return res.toString();
     }
 
-    private static final int BYTES_PER_CHANNEL = 4;
-    public static List<List<Double>> decode(byte[] data, int numChannels) {
-        List<List<Double>> res = new ArrayList<>();
-        for (int i = 0; i < data.length / (BYTES_PER_CHANNEL * numChannels); i++) {
-            List<Double> rows = new ArrayList<>();
-            for (int j = 0; j < numChannels; j++) {
-                // assign 4 bytes to hold channel data to transfer short type.
-                byte[] bytes = new byte[BYTES_PER_CHANNEL];
-                for (int k = 0; k < BYTES_PER_CHANNEL; k++) {
-                    bytes[k] = data[i * numChannels * BYTES_PER_CHANNEL + BYTES_PER_CHANNEL * j + k];
-                }
-                // A method "a << 8 | b" to transfer short is not a good idea
-                // since it would make a mistake in some situation, i.e. a = 60 and b = -128
-                float ch = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-                rows.add((double) ch);
+    public static List<SamplingPoint> decode(byte[] data, List<String> channelIds) {
+        List<SamplingPoint> res = new ArrayList<>();
+        final int numChannels = channelIds.size();
+        for (int i = 0; i < data.length / (SamplingPoint.COORD_BYTES_LEN * numChannels); i++) {
+            byte[] bytes = new byte[SamplingPoint.COORD_BYTES_LEN * numChannels];
+            for (int j = 0; j < bytes.length; j++) {
+                bytes[j] = data[SamplingPoint.COORD_BYTES_LEN * numChannels * i + j];
             }
-            res.add(rows);
+            res.add(SamplingPoint.fromBytes(channelIds, bytes));
         }
         return res;
     }
