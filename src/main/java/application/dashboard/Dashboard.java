@@ -22,7 +22,8 @@ public class Dashboard extends VBox {
             loader.setController(ControlUtils.getController(DashboardController.class));
             loader.load();
         } catch (Exception e) {
-            log.error(Arrays.toString(e.getStackTrace()));
+//            log.error(Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, null,
                     "Dashboard加载失败：" + e.getMessage()).showAndWait();
         }

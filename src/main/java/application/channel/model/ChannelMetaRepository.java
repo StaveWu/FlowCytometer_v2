@@ -21,8 +21,6 @@ public class ChannelMetaRepository {
     private Gson gson = new Gson();
     private String location;
 
-    private static final Logger log = LoggerFactory.getLogger(ChannelMeta.class);
-
     public ChannelMetaRepository() {}
 
     public void setLocation(String location) {
@@ -47,7 +45,7 @@ public class ChannelMetaRepository {
                     new TypeToken<List<ChannelMeta.JsonObject>>(){}.getType());
             jsonModels.stream().map(ChannelMeta::fromJsonObject).forEach(models::add);
         } catch (IOException e) {
-            log.info("Channel models loading failed: " + e.getMessage());
+            // do nothing
         }
         return models;
     }
@@ -61,10 +59,10 @@ public class ChannelMetaRepository {
      */
     public void saveAll(List<ChannelMeta> models) throws IOException {
         checkLocation();
-        List<ChannelMeta.JsonObject> json_models = models.stream()
+        List<ChannelMeta.JsonObject> jsonModels = models.stream()
                 .map(ChannelMeta::toJsonObject)
                 .collect(Collectors.toList());
-        Files.write(Paths.get(location), gson.toJson(json_models).getBytes());
+        Files.write(Paths.get(location), gson.toJson(jsonModels).getBytes());
     }
 
 }

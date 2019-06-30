@@ -3,11 +3,15 @@ package application.dashboard;
 import application.channel.model.*;
 import application.dashboard.device.SerialCommDevice;
 import application.dashboard.device.UsbCommDevice;
+import application.dashboard.model.CommunicationDevice;
+import application.dashboard.model.DashboardSetting;
+import application.dashboard.model.SampleMode;
 import application.dashboard.model.TimeLimit;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointsCapturedEvent;
 import application.event.StartSamplingEvent;
+import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -15,11 +19,14 @@ import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -84,49 +91,45 @@ public class DashboardController implements Initializable {
     @Autowired
     private ChannelMetaRepository channelMetaRepository;
 
-    public enum SampleMode {
-        TIME("按时间"),
-        CELL_NUMBER("按细胞个数");
-
-        private String modeName;
-
-        SampleMode(String name) {
-            modeName = name;
-        }
-
-        @Override
-        public String toString() {
-            return modeName;
-        }
-    }
-
-    public enum CommunicationDevice {
-        SERIAL("串口"),
-        USB("USB");
-
-        private String deviceName;
-
-        CommunicationDevice(String name) {
-            deviceName = name;
-        }
-
-        @Override
-        public String toString() {
-            return deviceName;
-        }
-    }
-
     public DashboardController() {
         eventBus.register(this);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // init comboBox
         modeCombo.getItems().add(SampleMode.TIME);
         modeCombo.getItems().add(SampleMode.CELL_NUMBER);
-
         connectionCombo.getItems().add(CommunicationDevice.SERIAL);
         connectionCombo.getItems().add(CommunicationDevice.USB);
+
+        // bind model
+        log.info("loading settings");
+        DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "dashboard.json");
+        System.out.println(dashboardSetting);
+        connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());
+        frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
+                new NumberStringConverter());
+        modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
+        cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
+                new NumberStringConverter());
+        hourTextField.textProperty().bindBidirectional(dashboardSetting.hourProperty(),
+                new NumberStringConverter());
+        miniteTextField.textProperty().bindBidirectional(dashboardSetting.minuteProperty(),
+                new NumberStringConverter());
+        secondTextField.textProperty().bindBidirectional(dashboardSetting.secondProperty(),
+                new NumberStringConverter());
+        valveCheckBox1.selectedProperty().bindBidirectional(dashboardSetting.valve1Property());
+        valveCheckBox2.selectedProperty().bindBidirectional(dashboardSetting.valve2Property());
+        valveCheckBox3.selectedProperty().bindBidirectional(dashboardSetting.valve3Property());
+        valveCheckBox4.selectedProperty().bindBidirectional(dashboardSetting.valve4Property());
+        valveCheckBox5.selectedProperty().bindBidirectional(dashboardSetting.valve5Property());
+        valveCheckBox6.selectedProperty().bindBidirectional(dashboardSetting.valve6Property());
+        supValveTextField1.textProperty().bindBidirectional(dashboardSetting.supValve1Property(),
+                new NumberStringConverter());
+        supValveTextField2.textProperty().bindBidirectional(dashboardSetting.supValve2Property(),
+                new NumberStringConverter());
 
         // define ui constraint
         modeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
