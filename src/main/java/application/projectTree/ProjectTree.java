@@ -53,6 +53,7 @@ public class ProjectTree extends VBox implements Initializable {
         try {
             log.info("Traverse dir: " + rootDir);
             treeView.setRoot(traverse(rootDir));
+            treeView.getRoot().setExpanded(true);
 
             // start a daemon thread for watching root directory
             Thread watchDirThread = new Thread(() -> {
@@ -214,14 +215,22 @@ public class ProjectTree extends VBox implements Initializable {
                     "根目录不允许删除！").showAndWait();
             return;
         }
-        try {
-            delete(getAbsolutePath(selectedItem));
-        } catch (IOException e) {
-            UiUtils.getAlert(Alert.AlertType.ERROR, "删除失败",
-                    e.getMessage()).showAndWait();
+        if (selectedItem.getValue().toString().equals(".fcm")) {
+            UiUtils.getAlert(Alert.AlertType.WARNING, "删除失败",
+                    "配置文件不允许删除！").showAndWait();
             return;
         }
-
+        Optional<ButtonType> res = UiUtils.getAlert(Alert.AlertType.CONFIRMATION, "删除确认",
+                String.format("确定要删除%s吗？", selectedItem.getValue())).showAndWait();
+        if (res.isPresent() && res.get() == ButtonType.OK) {
+            try {
+                delete(getAbsolutePath(selectedItem));
+            } catch (IOException e) {
+                UiUtils.getAlert(Alert.AlertType.ERROR, "删除失败",
+                        e.getMessage()).showAndWait();
+                return;
+            }
+        }
     }
 
     private void delete(String filename) throws IOException {
