@@ -31,28 +31,10 @@ import static java.nio.file.StandardWatchEventKinds.*;
 public class ProjectTree extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectTree.class);
-    private static final FCMRunTimeConfig globalConfig = FCMRunTimeConfig.getInstance();
-
-    /**
-     * define an attribute named "rootDir" for fxml
-     */
-    private StringProperty rootDir;
-    public final StringProperty rootDirProperty() {
-        if (rootDir == null) {
-            rootDir = new SimpleStringProperty(this, "rootDir",
-                    globalConfig.getRootDir());
-        }
-        return rootDir;
-    }
-    public final void setRootDir(String value) {
-        rootDirProperty().setValue(value);
-    }
-    public final String getRootDir() {
-        return rootDirProperty().get();
-    }
+    private String rootDir = FCMRunTimeConfig.getInstance().getRootDir();
 
     @FXML
-    private TreeView treeView;
+    private TreeView<TreeItemInfo> treeView;
 
     public ProjectTree() {
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("project_tree.fxml"));
@@ -68,30 +50,28 @@ public class ProjectTree extends VBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Platform.runLater(() -> { // to guarantee rootDir access value before the following executed.
-            try {
-                log.info("Traverse dir: " + getRootDir());
-                treeView.setRoot(traverse(getRootDir()));
+        try {
+            log.info("Traverse dir: " + rootDir);
+            treeView.setRoot(traverse(rootDir));
 
-                // start a daemon thread for watching root directory
-                Thread watchDirThread = new Thread(() -> {
-                    try {
-                        new WatchDir(Paths.get(getRootDir()), true).processEvents();
-                    } catch (IOException e) {
-                        UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                "项目树监控失败：" + e.getMessage()).showAndWait();
-                    }
-                });
-                watchDirThread.setDaemon(true);
-                watchDirThread.start();
-            } catch (Exception e) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "项目树加载失败：" + e.getMessage()).showAndWait();
-            }
-        });
+            // start a daemon thread for watching root directory
+            Thread watchDirThread = new Thread(() -> {
+                try {
+                    new WatchDir(Paths.get(rootDir), true).processEvents();
+                } catch (IOException e) {
+                    UiUtils.getAlert(Alert.AlertType.ERROR, "项目树监控失败",
+                             e.getMessage()).showAndWait();
+                }
+            });
+            watchDirThread.setDaemon(true);
+            watchDirThread.start();
+        } catch (Exception e) {
+            UiUtils.getAlert(Alert.AlertType.ERROR, "项目树加载失败",
+                     e.getMessage()).showAndWait();
+        }
     }
 
-    public TreeItem<TreeItemInfo> traverse(String start) throws IOException {
+    private TreeItem<TreeItemInfo> traverse(String start) throws IOException {
         Path startPath = Paths.get(start);
         TreeItemInfo itemInfo = new TreeItemInfo(startPath.getFileName().toString(),
                 TreeItemInfo.FileType.Project);
@@ -99,7 +79,6 @@ public class ProjectTree extends VBox implements Initializable {
         traverseHelper(startPath, res);
         return res;
     }
-
     private void traverseHelper(Path path, TreeItem<TreeItemInfo> item) throws IOException {
         if (Files.isDirectory(path)) {
             for (Path child: Files.list(path).collect(Collectors.toList())
@@ -121,13 +100,13 @@ public class ProjectTree extends VBox implements Initializable {
     }
 
     @FXML
-    protected void newFile(MouseEvent event) {
+    protected void newFile() {
         Optional<String> res = new TextInputDialog().showAndWait();
         if (res.isPresent()) {
             String filename = res.get();
             if (!checkFileName(filename)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, null, "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败", "非法文件名！").showAndWait();
                 return;
             }
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), filename);
@@ -143,16 +122,16 @@ public class ProjectTree extends VBox implements Initializable {
                                 StandardOpenOption.TRUNCATE_EXISTING);
                         return;
                     } catch (IOException e1) {
-                        UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                                "创建失败：" + e1.getMessage()).showAndWait();
+                        UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
+                                e1.getMessage()).showAndWait();
                         return;
                     }
                 } else {
                     return;
                 }
             } catch (IOException e2) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "创建失败：" + e2.getMessage()).showAndWait();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
+                        e2.getMessage()).showAndWait();
                 return;
             }
         }
@@ -170,7 +149,7 @@ public class ProjectTree extends VBox implements Initializable {
         pathList.removeLast(); // remove root since it has been included in rootDir.
         Collections.reverse(pathList);
         String res = String.join(File.separator, pathList);
-        return getRootDir() + File.separator + res;
+        return rootDir + File.separator + res;
     }
 
     private boolean checkFileName(String name) {
@@ -192,9 +171,9 @@ public class ProjectTree extends VBox implements Initializable {
         parent.getChildren().add(newItem);
     }
 
-    private TreeItem getSelectedNearestFolder() {
-        TreeItem<TreeItemInfo> selectedItem = (TreeItem<TreeItemInfo>) treeView.getSelectionModel()
-                .getSelectedItem(); // select the first item by default
+    private TreeItem<TreeItemInfo> getSelectedNearestFolder() {
+        // select the first item by default
+        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
         // if no item selected, return root, or the nearest folder else.
         return selectedItem == null ? treeView.getRoot() :
                 (selectedItem.getValue().getType() == TreeItemInfo.FileType.File ?
@@ -202,45 +181,44 @@ public class ProjectTree extends VBox implements Initializable {
     }
 
     @FXML
-    protected void newFolder(MouseEvent event) {
+    protected void newFolder() {
         Optional<String> res = new TextInputDialog().showAndWait();
         if (res.isPresent()) {
             String foldername = res.get();
             if (!checkFileName(foldername)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, null, "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败", "非法文件名！").showAndWait();
                 return;
             }
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), foldername);
             try {
                 Files.createDirectory(target);
             } catch (IOException e) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "创建失败：" + e.getMessage()).showAndWait();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
+                        e.getMessage()).showAndWait();
                 return;
             }
         }
     }
 
     @FXML
-    protected void remove(MouseEvent event) {
-        TreeItem<TreeItemInfo> selectedItem = (TreeItem<TreeItemInfo>) treeView.getSelectionModel()
-                .getSelectedItem();
+    protected void remove() {
+        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, null,
+            UiUtils.getAlert(Alert.AlertType.WARNING, "删除失败",
                     "请先选择要删除的文件！").showAndWait();
             return;
         }
         if (selectedItem  == treeView.getRoot()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, null,
+            UiUtils.getAlert(Alert.AlertType.WARNING, "删除失败",
                     "根目录不允许删除！").showAndWait();
             return;
         }
         try {
             delete(getAbsolutePath(selectedItem));
         } catch (IOException e) {
-            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                    "删除失败：" + e.getMessage()).showAndWait();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "删除失败",
+                    e.getMessage()).showAndWait();
             return;
         }
 
@@ -259,13 +237,13 @@ public class ProjectTree extends VBox implements Initializable {
         TreeItem<TreeItemInfo> selectedItem = (TreeItem<TreeItemInfo>) treeView.getSelectionModel()
                 .getSelectedItem();
         if (selectedItem == null) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, null,
+            UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败",
                     "请先选择要重命名的文件！").showAndWait();
             return;
         }
 
         if (selectedItem == treeView.getRoot()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, null,
+            UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败",
                     "根目录暂不支持重命名！").showAndWait();
             return;
         }
@@ -275,7 +253,7 @@ public class ProjectTree extends VBox implements Initializable {
             String newname = res.get();
             if (!checkFileName(newname)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, null, "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败", "非法文件名！").showAndWait();
                 return;
             }
 
@@ -283,8 +261,8 @@ public class ProjectTree extends VBox implements Initializable {
             try {
                 Files.move(source, source.resolveSibling(newname));
             } catch (IOException e) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "重命名失败：" + e.getMessage()).showAndWait();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "重命名失败",
+                        e.getMessage()).showAndWait();
                 return;
             }
 
@@ -292,7 +270,7 @@ public class ProjectTree extends VBox implements Initializable {
     }
 
     private TreeItem<TreeItemInfo> getTreeItemByPath(String pathname) {
-        String pnStr = pathname.replace(getRootDir(), "");
+        String pnStr = pathname.replace(rootDir, "");
         Path pn = Paths.get(pnStr);
         TreeItem<TreeItemInfo> res = treeView.getRoot();
         for (Path ele:

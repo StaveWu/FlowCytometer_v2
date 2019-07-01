@@ -11,22 +11,22 @@
     <children>
       <ToolBar>
          <items>
-               <Button fx:id="btnNewFile" mnemonicParsing="false" onMouseClicked="#newFile" text="NewFile">
+               <Button fx:id="btnNewFile" mnemonicParsing="false" onAction="#newFile" text="NewFile">
                    <tooltip>
                        <Tooltip text="新建文件..." />
                    </tooltip>
                </Button>
-               <Button fx:id="btnNewFolder" mnemonicParsing="false" onMouseClicked="#newFolder" text="NewFolder">
+               <Button fx:id="btnNewFolder" mnemonicParsing="false" onAction="#newFolder" text="NewFolder">
                    <tooltip>
                        <Tooltip text="新建文件夹..." />
                    </tooltip>
                </Button>
-               <Button fx:id="btnRemove" mnemonicParsing="false" onMouseClicked="#remove" text="Remove">
+               <Button fx:id="btnRemove" mnemonicParsing="false" onAction="#remove" text="Remove">
                    <tooltip>
                        <Tooltip text="删除" />
                    </tooltip>
                </Button>
-               <Button fx:id="btnRename" mnemonicParsing="false" onMouseClicked="#rename" text="Rename">
+               <Button fx:id="btnRename" mnemonicParsing="false" onAction="#rename" text="Rename">
                    <tooltip>
                        <Tooltip text="重命名" />
                    </tooltip>
