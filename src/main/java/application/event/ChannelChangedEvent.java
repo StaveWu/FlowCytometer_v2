@@ -1,17 +1,21 @@
 package application.event;
 
+import application.channel.model.ChannelMeta;
+
+import java.util.List;
+
 /**
  * channel -> dashboard, ask dashboard to follow channel number changing.
  */
 public class ChannelChangedEvent {
 
-    private int numChannels;
+    private List<ChannelMeta> channelMetas;
 
-    public ChannelChangedEvent(int numChannels) {
-        this.numChannels = numChannels;
+    public ChannelChangedEvent(List<ChannelMeta> channelMetas) {
+        this.channelMetas = channelMetas;
     }
 
-    public int getNumChannels() {
-        return numChannels;
+    public List<ChannelMeta> getChannelMetas() {
+        return channelMetas;
     }
 }

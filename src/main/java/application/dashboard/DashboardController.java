@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -88,8 +90,7 @@ public class DashboardController implements Initializable {
 
     private CircuitBoard circuitBoard = new CircuitBoard();
 
-    @Autowired
-    private ChannelMetaRepository channelMetaRepository;
+    private List<ChannelMeta> channelMetas = new ArrayList<>();
 
     public DashboardController() {
         eventBus.register(this);
@@ -107,7 +108,6 @@ public class DashboardController implements Initializable {
         log.info("loading settings");
         DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "dashboard.json");
-        System.out.println(dashboardSetting);
         connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());
         frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
                 new NumberStringConverter());
@@ -135,18 +135,12 @@ public class DashboardController implements Initializable {
         modeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             SampleMode mode = observable.getValue();
             if (mode != null) {
-                switch (mode) {
-                    case TIME:
-                        setCellDisable(true);
-                        setTimeDisable(false);
-                        break;
-                    case CELL_NUMBER:
-                        setTimeDisable(true);
-                        setCellDisable(false);
-                        break;
-                    default:
-                        setCellDisable(true);
-                        setTimeDisable(false);
+                if (mode == SampleMode.CELL_NUMBER) {
+                    setTimeDisable(true);
+                    setCellDisable(false);
+                } else {
+                    setCellDisable(true);
+                    setTimeDisable(false);
                 }
             }
         });
@@ -159,15 +153,10 @@ public class DashboardController implements Initializable {
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             CommunicationDevice device = observable.getValue();
             if (device != null) {
-                switch (device) {
-                    case USB:
-                        circuitBoard.setCommDevice(new UsbCommDevice());
-                        break;
-                    case SERIAL:
-                        circuitBoard.setCommDevice(new SerialCommDevice());
-                        break;
-                    default:
-                        circuitBoard.setCommDevice(new UsbCommDevice());
+                if (device == CommunicationDevice.SERIAL) {
+                    circuitBoard.setCommDevice(new SerialCommDevice());
+                } else {
+                    circuitBoard.setCommDevice(new UsbCommDevice());
                 }
             }
         });
@@ -175,7 +164,8 @@ public class DashboardController implements Initializable {
 
     @Subscribe
     public void listen(ChannelChangedEvent event) {
-        log.info(event.getNumChannels() + " channels open");
+        log.info("channel meta changed");
+        this.channelMetas = event.getChannelMetas();
     }
 
     @FXML
@@ -237,7 +227,7 @@ public class DashboardController implements Initializable {
             eventBus.post(new StartSamplingEvent());
             log.info("start sampling");
             tickService.start();
-            circuitBoard.startSampling(channelMetaRepository.findAll().stream()
+            circuitBoard.startSampling(channelMetas.stream()
                     .map(ChannelMeta::getId)
                     .collect(Collectors.toList()));
         } catch (Exception e) {
@@ -251,7 +241,7 @@ public class DashboardController implements Initializable {
     private void initializeBoard() throws Exception {
         // set channel
         for (ChannelMeta model :
-                channelMetaRepository.findAll()) {
+                channelMetas) {
             circuitBoard.setVoltage(model.getId(), "" + model.getVoltage());
         }
         // set sampling frequency

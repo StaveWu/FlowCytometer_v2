@@ -54,8 +54,11 @@ public class ChannelController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         channelsHBox.getChildren().addListener((ListChangeListener<Node>) c -> {
-            saveChannelInformation();
-            eventBus.post(new ChannelChangedEvent(channelsHBox.getChildren().size()));
+            List<ChannelMeta> updatedMetas = channelsHBox.getChildren().stream()
+                    .map(e -> ((ChannelCell)e).getChannelMeta())
+                    .collect(Collectors.toList());
+            saveChannelInformation(updatedMetas);
+            eventBus.post(new ChannelChangedEvent(updatedMetas));
         });
 
         channelMetaRepository.setLocation(FCMRunTimeConfig.getInstance()
@@ -89,7 +92,13 @@ public class ChannelController implements Initializable {
 
     private void addChannelCell(ChannelMeta model) {
         ChannelCell channelCell = new ChannelCell(this, model);
-        channelCell.addPropertyChangeHandler(this::saveChannelInformation);
+        channelCell.addPropertyChangeHandler(() -> {
+            List<ChannelMeta> updatedMetas = channelsHBox.getChildren().stream()
+                    .map(e -> ((ChannelCell)e).getChannelMeta())
+                    .collect(Collectors.toList());
+            saveChannelInformation(updatedMetas);
+            eventBus.post(new ChannelChangedEvent(updatedMetas));
+        });
         channelsHBox.getChildren().add(channelCell);
     }
 
@@ -102,7 +111,7 @@ public class ChannelController implements Initializable {
         channelsHBox.getChildren().remove(cell);
     }
 
-    private void saveChannelInformation() {
+    private void saveChannelInformation(List<ChannelMeta> channelMetas) {
         try {
             channelMetaRepository.saveAll(channelsHBox.getChildren().stream()
                     .map(e -> ((ChannelCell)e).getChannelMeta())
