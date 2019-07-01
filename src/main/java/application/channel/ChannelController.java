@@ -1,10 +1,7 @@
 package application.channel;
 
 import application.channel.model.*;
-import application.event.ChannelChangedEvent;
-import application.event.EventBusFactory;
-import application.event.SamplingPointsCapturedEvent;
-import application.event.StartSamplingEvent;
+import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
@@ -43,6 +40,8 @@ public class ChannelController implements Initializable {
 
     @Autowired
     private SamplingPointSeriesTranslator samplingPointSeriesTranslator;
+
+    private CellFeatureCapturer cellFeatureCapturer;
 
     @FXML
     private HBox channelsHBox;
@@ -113,9 +112,7 @@ public class ChannelController implements Initializable {
 
     private void saveChannelInformation(List<ChannelMeta> channelMetas) {
         try {
-            channelMetaRepository.saveAll(channelsHBox.getChildren().stream()
-                    .map(e -> ((ChannelCell)e).getChannelMeta())
-                    .collect(Collectors.toList()));
+            channelMetaRepository.saveAll(channelMetas);
         } catch (IOException e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "保存通道数据失败",
@@ -128,11 +125,15 @@ public class ChannelController implements Initializable {
         String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
         samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);
+
+        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll());
+        cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
     }
 
     @Subscribe
     protected void listen(SamplingPointsCapturedEvent event) {
         samplingPointRepository.savePoints(event.getSamplingPoints());
+        event.getSamplingPoints().forEach(point -> cellFeatureCapturer.addSamplingPoint(point));
     }
 
 }

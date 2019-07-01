@@ -118,7 +118,7 @@ public class CircuitBoard {
                     }
                     samplingPoints.add(new SamplingPoint(channelIds, coords));
                 }
-                System.out.println(samplingPoints);
+//                System.out.println(samplingPoints);
                 handler.onDataReceived(samplingPoints);
             }
         });
