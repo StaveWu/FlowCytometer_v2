@@ -104,33 +104,6 @@ public class DashboardController implements Initializable {
         connectionCombo.getItems().add(CommunicationDevice.SERIAL);
         connectionCombo.getItems().add(CommunicationDevice.USB);
 
-        // bind model
-        log.info("loading settings");
-        DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
-                .getProjectConfigFolder() + File.separator + "dashboard.json");
-        connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());
-        frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
-                new NumberStringConverter());
-        modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
-        cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
-                new NumberStringConverter());
-        hourTextField.textProperty().bindBidirectional(dashboardSetting.hourProperty(),
-                new NumberStringConverter());
-        miniteTextField.textProperty().bindBidirectional(dashboardSetting.minuteProperty(),
-                new NumberStringConverter());
-        secondTextField.textProperty().bindBidirectional(dashboardSetting.secondProperty(),
-                new NumberStringConverter());
-        valveCheckBox1.selectedProperty().bindBidirectional(dashboardSetting.valve1Property());
-        valveCheckBox2.selectedProperty().bindBidirectional(dashboardSetting.valve2Property());
-        valveCheckBox3.selectedProperty().bindBidirectional(dashboardSetting.valve3Property());
-        valveCheckBox4.selectedProperty().bindBidirectional(dashboardSetting.valve4Property());
-        valveCheckBox5.selectedProperty().bindBidirectional(dashboardSetting.valve5Property());
-        valveCheckBox6.selectedProperty().bindBidirectional(dashboardSetting.valve6Property());
-        supValveTextField1.textProperty().bindBidirectional(dashboardSetting.supValve1Property(),
-                new NumberStringConverter());
-        supValveTextField2.textProperty().bindBidirectional(dashboardSetting.supValve2Property(),
-                new NumberStringConverter());
-
         // define ui constraint
         modeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             SampleMode mode = observable.getValue();
@@ -160,6 +133,33 @@ public class DashboardController implements Initializable {
                 }
             }
         });
+
+        // bind model
+        log.info("loading settings");
+        DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "dashboard.json");
+        connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());
+        frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
+                new NumberStringConverter());
+        modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
+        cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
+                new NumberStringConverter());
+        hourTextField.textProperty().bindBidirectional(dashboardSetting.hourProperty(),
+                new NumberStringConverter());
+        miniteTextField.textProperty().bindBidirectional(dashboardSetting.minuteProperty(),
+                new NumberStringConverter());
+        secondTextField.textProperty().bindBidirectional(dashboardSetting.secondProperty(),
+                new NumberStringConverter());
+        valveCheckBox1.selectedProperty().bindBidirectional(dashboardSetting.valve1Property());
+        valveCheckBox2.selectedProperty().bindBidirectional(dashboardSetting.valve2Property());
+        valveCheckBox3.selectedProperty().bindBidirectional(dashboardSetting.valve3Property());
+        valveCheckBox4.selectedProperty().bindBidirectional(dashboardSetting.valve4Property());
+        valveCheckBox5.selectedProperty().bindBidirectional(dashboardSetting.valve5Property());
+        valveCheckBox6.selectedProperty().bindBidirectional(dashboardSetting.valve6Property());
+        supValveTextField1.textProperty().bindBidirectional(dashboardSetting.supValve1Property(),
+                new NumberStringConverter());
+        supValveTextField2.textProperty().bindBidirectional(dashboardSetting.supValve2Property(),
+                new NumberStringConverter());
     }
 
     @Subscribe
