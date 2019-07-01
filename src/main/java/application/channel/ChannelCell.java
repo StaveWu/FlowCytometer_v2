@@ -120,8 +120,6 @@ public class ChannelCell extends VBox implements Initializable {
             return areaToggle;
         }
         switch (policy) {
-            case "Area":
-                return areaToggle;
             case "Height":
                 return heightToggle;
             case "Width":

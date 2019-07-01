@@ -7,20 +7,26 @@ public class WaveWatcher {
 
     private ChannelMeta meta;
     private List<Float> data = new ArrayList<>();
+    private FeatureCalculationStrategy strategy;
 
     private boolean isOnGenerating;
     private List<WaveCapturedHandler> handlers = new ArrayList<>();
 
     public WaveWatcher(ChannelMeta meta) {
         this.meta = meta;
+        if (meta.getPeakPolicy().equals("Area")) {
+            strategy = FeatureCalculation.AREA;
+        } else if (meta.getPeakPolicy().equals("Height")) {
+            strategy = FeatureCalculation.HEIGHT;
+        } else if (meta.getPeakPolicy().equals("Width")) {
+            strategy = FeatureCalculation.WIDTH;
+        } else {
+            throw new RuntimeException("can not reach here");
+        }
     }
 
     public Float getWave() {
-        Float sum = 0f;
-        for (Float ele : data) {
-            sum += ele;
-        }
-        return sum;
+        return strategy.getFeature(data);
     }
 
     public void add(Float maybeWaveValue) {
