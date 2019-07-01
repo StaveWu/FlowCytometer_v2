@@ -1,9 +1,7 @@
-package application.channel.model;
+package application.channel.featurecapturing;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileReader;
@@ -29,7 +27,7 @@ public class ChannelMetaRepository {
 
     private void checkLocation() {
         if (location == null) {
-            throw new RuntimeException("channel model repository location has not been set");
+            throw new RuntimeException("channel featurecapturing repository location has not been set");
         }
     }
     /**

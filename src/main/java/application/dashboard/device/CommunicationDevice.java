@@ -1,4 +1,4 @@
-package application.dashboard.model;
+package application.dashboard.device;
 
 import java.util.Arrays;
 

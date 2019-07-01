@@ -1,5 +1,6 @@
-package application.channel.model;
+package application.channel.featurecapturing;
 
+import application.channel.sampling.SamplingPoint;
 import application.event.CellFeatureCapturedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

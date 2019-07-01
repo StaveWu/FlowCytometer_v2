@@ -1,4 +1,4 @@
-package application.channel.model;
+package application.channel.sampling;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

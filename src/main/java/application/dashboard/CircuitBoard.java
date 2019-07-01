@@ -1,6 +1,6 @@
 package application.dashboard;
 
-import application.channel.model.SamplingPoint;
+import application.channel.sampling.SamplingPoint;
 import application.dashboard.device.CommDeviceEventAdapter;
 import application.dashboard.device.ICommDevice;
 import org.slf4j.Logger;
@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

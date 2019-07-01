@@ -1,4 +1,4 @@
-package application.channel.model;
+package application.channel.sampling;
 
 import javafx.scene.chart.XYChart;
 import org.springframework.stereotype.Service;

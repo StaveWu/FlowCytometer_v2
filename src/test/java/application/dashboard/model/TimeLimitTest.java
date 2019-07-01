@@ -1,8 +1,7 @@
 package application.dashboard.model;
 
+import application.dashboard.TimeLimit;
 import org.junit.Test;
-
-import java.sql.Time;
 
 import static org.junit.Assert.*;
 

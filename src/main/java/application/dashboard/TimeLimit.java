@@ -1,4 +1,4 @@
-package application.dashboard.model;
+package application.dashboard;
 
 /**
  * This class serve as a value object.

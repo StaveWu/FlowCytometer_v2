@@ -1,4 +1,4 @@
-package application.channel.model;
+package application.channel.featurecapturing;
 
 import application.event.CellFeatureCapturedEvent;
 

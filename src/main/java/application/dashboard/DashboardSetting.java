@@ -1,5 +1,6 @@
-package application.dashboard.model;
+package application.dashboard;
 
+import application.dashboard.device.CommunicationDevice;
 import com.google.gson.Gson;
 import javafx.beans.property.*;
 

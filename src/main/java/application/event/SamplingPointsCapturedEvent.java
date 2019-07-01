@@ -1,6 +1,6 @@
 package application.event;
 
-import application.channel.model.SamplingPoint;
+import application.channel.sampling.SamplingPoint;
 
 import java.util.List;
 

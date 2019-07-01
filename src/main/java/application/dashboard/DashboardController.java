@@ -1,12 +1,9 @@
 package application.dashboard;
 
-import application.channel.model.*;
+import application.channel.featurecapturing.*;
 import application.dashboard.device.SerialCommDevice;
 import application.dashboard.device.UsbCommDevice;
-import application.dashboard.model.CommunicationDevice;
-import application.dashboard.model.DashboardSetting;
-import application.dashboard.model.SampleMode;
-import application.dashboard.model.TimeLimit;
+import application.dashboard.device.CommunicationDevice;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import application.event.SamplingPointsCapturedEvent;
@@ -19,11 +16,9 @@ import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -134,7 +129,7 @@ public class DashboardController implements Initializable {
             }
         });
 
-        // bind model
+        // bind featurecapturing
         log.info("loading settings");
         DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "dashboard.json");

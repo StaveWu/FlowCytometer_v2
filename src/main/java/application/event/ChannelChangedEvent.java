@@ -1,6 +1,6 @@
 package application.event;
 
-import application.channel.model.ChannelMeta;
+import application.channel.featurecapturing.ChannelMeta;
 
 import java.util.List;
 

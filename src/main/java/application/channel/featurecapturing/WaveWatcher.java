@@ -1,4 +1,4 @@
-package application.channel.model;
+package application.channel.featurecapturing;
 
 import java.util.ArrayList;
 import java.util.List;

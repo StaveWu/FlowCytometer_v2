@@ -1,6 +1,9 @@
 package application.channel;
 
-import application.channel.model.*;
+import application.channel.sampling.SamplingPoint;
+import application.channel.sampling.SamplingPointRepository;
+import application.channel.sampling.SamplingPointSeriesTranslator;
+import application.channel.featurecapturing.*;
 import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;

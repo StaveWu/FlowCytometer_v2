@@ -1,6 +1,6 @@
 package application.channel;
 
-import application.channel.model.ChannelMeta;
+import application.channel.featurecapturing.ChannelMeta;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -80,7 +80,7 @@ public class ChannelCell extends VBox implements Initializable {
         // set toggle when first load
         peakgroup.selectToggle(getSelectedToggle(channelMeta.getPeakPolicy()));
 
-        // bind model and hook property change handler
+        // bind featurecapturing and hook property change handler
         nameTextField.textProperty().bindBidirectional(channelMeta.nameProperty());
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
