@@ -128,10 +128,10 @@ public class LinkedChartsPane extends AnchorPane {
                 else {
                     //src取左，dst取右
                     bestStartX = startChart.getLayoutX();
-                    bestEndX = endChart.getLayoutX() + endChart.getHeight();
+                    bestEndX = endChart.getLayoutX() + endChart.getWidth();
                 }
-                bestStartY = (int) (a * bestStartX + b);
-                bestEndY = (int) (a * bestEndX + b);
+                bestStartY = a * bestStartX + b;
+                bestEndY = a * bestEndX + b;
             }
             else {
                 if(dstCenter.getY() > srcCenter.getY()) {
