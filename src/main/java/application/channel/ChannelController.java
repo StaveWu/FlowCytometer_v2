@@ -68,7 +68,7 @@ public class ChannelController implements Initializable {
         channelMetaRepository.findAll().forEach(this::addChannelCell);
 
         // start a thread to monitor channel series
-        Thread histgramUpdater = new Thread(() -> {
+        Thread seriesMonitor = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(200);
@@ -88,8 +88,8 @@ public class ChannelController implements Initializable {
                 });
             }
         });
-        histgramUpdater.setDaemon(true);
-        histgramUpdater.start();
+        seriesMonitor.setDaemon(true);
+        seriesMonitor.start();
     }
 
     private void addChannelCell(ChannelMeta model) {

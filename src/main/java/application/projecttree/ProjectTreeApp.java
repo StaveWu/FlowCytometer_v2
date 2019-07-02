@@ -1,4 +1,4 @@
-package application.projectTree;
+package application.projecttree;
 
 import application.starter.FCMRunTimeConfig;
 import javafx.application.Application;

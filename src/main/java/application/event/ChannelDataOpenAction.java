@@ -1,7 +1,7 @@
 package application.event;
 
 /**
- * projectTree -> channel, ask channel to load data
+ * projecttree -> channel, ask channel to load data
  */
 public class ChannelDataOpenAction {
 

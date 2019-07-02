@@ -14,14 +14,18 @@ public class WaveWatcher {
 
     public WaveWatcher(ChannelMeta meta) {
         this.meta = meta;
-        if (meta.getPeakPolicy().equals("Area")) {
-            strategy = FeatureCalculation.AREA;
-        } else if (meta.getPeakPolicy().equals("Height")) {
-            strategy = FeatureCalculation.HEIGHT;
-        } else if (meta.getPeakPolicy().equals("Width")) {
-            strategy = FeatureCalculation.WIDTH;
-        } else {
-            throw new RuntimeException("can not reach here");
+        switch (meta.getPeakPolicy()) {
+            case "Area":
+                strategy = FeatureCalculation.AREA;
+                break;
+            case "Height":
+                strategy = FeatureCalculation.HEIGHT;
+                break;
+            case "Width":
+                strategy = FeatureCalculation.WIDTH;
+                break;
+            default:
+                throw new RuntimeException("can not reach here");
         }
     }
 

@@ -1,13 +1,10 @@
-package application.projectTree;
+package application.projecttree;
 
 import application.starter.FCMRunTimeConfig;
 import application.utils.Resource;
 import application.utils.UiUtils;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

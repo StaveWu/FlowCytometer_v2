@@ -129,8 +129,8 @@ public class DashboardController implements Initializable {
             }
         });
 
-        // bind featurecapturing
-        log.info("loading settings");
+        // bind model
+        log.info("loading dashboard settings");
         DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "dashboard.json");
         connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());

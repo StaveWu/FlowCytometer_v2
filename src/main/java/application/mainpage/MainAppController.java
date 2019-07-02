@@ -1,6 +1,6 @@
 package application.mainpage;
 
-import application.projectTree.ProjectTree;
+import application.projecttree.ProjectTree;
 import application.starter.StarterController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

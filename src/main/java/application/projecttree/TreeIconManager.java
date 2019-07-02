@@ -1,4 +1,4 @@
-package application.projectTree;
+package application.projecttree;
 
 import javafx.scene.Node;
 import application.utils.Resource;

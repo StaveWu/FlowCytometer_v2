@@ -1,4 +1,4 @@
-package application.projectTree;
+package application.projecttree;
 
 public class TreeItemInfo {
 
