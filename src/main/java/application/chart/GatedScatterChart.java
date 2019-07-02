@@ -1,5 +1,6 @@
 package application.chart;
 
+import application.chart.gate.Gatable;
 import application.chart.gate.Gate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.ScatterChart;
-import javafx.scene.input.MouseButton;
 
 import java.util.Iterator;
 

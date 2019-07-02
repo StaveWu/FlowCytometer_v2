@@ -13,7 +13,7 @@
    <children>
       <ToolBar>
         <items>
-             <Button fx:id="scatterBtn" mnemonicParsing="false" text="散点图" onAction="#createScatterChart">
+             <Button fx:id="scatterBtn" mnemonicParsing="false" onAction="#createScatterChart" text="散点图">
                  <tooltip>
                      <Tooltip text="散点图" />
                  </tooltip>
@@ -50,6 +50,7 @@
                      <Tooltip text="删除" />
                  </tooltip>
              </Button>
+            <Button mnemonicParsing="false" onAction="#connect" text="连接" />
         </items>
       </ToolBar>
       <ScrollPane prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS">

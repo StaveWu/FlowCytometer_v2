@@ -1,6 +1,5 @@
-package application.chart;
+package application.chart.gate;
 
-import application.chart.gate.Gate;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;

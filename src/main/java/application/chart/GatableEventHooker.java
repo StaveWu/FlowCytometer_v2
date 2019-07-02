@@ -1,5 +1,6 @@
 package application.chart;
 
+import application.chart.gate.Gatable;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
