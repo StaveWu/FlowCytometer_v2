@@ -12,7 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
-public class ChartWrapper extends VBox {
+public class ChartWrapper extends VBox implements LinkedNode {
 
     private Pane titledPane;
     private Pane bottomPane;
@@ -20,13 +20,16 @@ public class ChartWrapper extends VBox {
 
     private boolean canResize = false;
     private boolean canDrag = false;
-    private DragContext contextForDrag;
+    private DragContext dragContext;
+
+    private LinkedNode prevNode;
+    private LinkedNode nextNode;
 
     public ChartWrapper(Chart chart) {
         super();
         createTitledPane();
         createBottomPane();
-        createRegionForResize();
+        createResizeMarkRegion();
         bottomPane.getChildren().add(resizeMarkRegion);
         setVgrow(chart, Priority.ALWAYS);
 
@@ -61,7 +64,7 @@ public class ChartWrapper extends VBox {
         bottomPane = new Pane();
     }
 
-    private void createRegionForResize() {
+    private void createResizeMarkRegion() {
         final int WIDTH = 10;
         final int HEIGHT = 10;
         resizeMarkRegion = new Rectangle(WIDTH, HEIGHT);
@@ -78,24 +81,24 @@ public class ChartWrapper extends VBox {
     }
 
     public void hookDragHandlers() {
-        contextForDrag = new DragContext();
+        dragContext = new DragContext();
         addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (titledPane.contains(event.getX(), event.getY())) {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
-                contextForDrag.mouseAnchorX = mouseLoc.getX();
-                contextForDrag.mouseAnchorY = mouseLoc.getY();
-                contextForDrag.initialLayoutX = getLayoutX();
-                contextForDrag.initialLayoutY = getLayoutY();
+                dragContext.mouseAnchorX = mouseLoc.getX();
+                dragContext.mouseAnchorY = mouseLoc.getY();
+                dragContext.initialLayoutX = getLayoutX();
+                dragContext.initialLayoutY = getLayoutY();
                 canDrag = true;
             }
         });
         addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             if (canDrag) {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
-                setLayoutX(contextForDrag.initialLayoutX
-                        + mouseLoc.getX() - contextForDrag.mouseAnchorX);
-                setLayoutY(contextForDrag.initialLayoutY
-                        + mouseLoc.getY() - contextForDrag.mouseAnchorY);
+                setLayoutX(dragContext.initialLayoutX
+                        + mouseLoc.getX() - dragContext.mouseAnchorX);
+                setLayoutY(dragContext.initialLayoutY
+                        + mouseLoc.getY() - dragContext.mouseAnchorY);
             }
         });
         addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
@@ -127,5 +130,25 @@ public class ChartWrapper extends VBox {
         double mouseAnchorY;
         double initialLayoutX;
         double initialLayoutY;
+    }
+
+    @Override
+    public LinkedNode getPrevNode() {
+        return prevNode;
+    }
+
+    @Override
+    public void setPrevNode(LinkedNode node) {
+        prevNode = node;
+    }
+
+    @Override
+    public LinkedNode getNextNode() {
+        return nextNode;
+    }
+
+    @Override
+    public void setNextNode(LinkedNode node) {
+        nextNode = node;
     }
 }

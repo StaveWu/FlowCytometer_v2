@@ -1,36 +1,57 @@
 package application.worksheet;
 
 import application.chart.ChartWrapper;
+import application.chart.GatedHistogram;
 import application.chart.GatedScatterChart;
+import application.event.CellFeatureCapturedEvent;
+import application.event.EventBusFactory;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 @Component
-public class WorksheetController implements Initializable {
+public class WorksheetController {
 
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);
+    private final EventBus eventBus = EventBusFactory.getEventBus();
+
 
     private int delta = 0;
 
     @FXML
     private LinkedChartsPane chartsPane;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public WorksheetController() {
+        eventBus.register(this);
+    }
+
+    @Subscribe
+    public void listen(CellFeatureCapturedEvent event) {
+        log.info("cell feature received in worksheet");
     }
 
     @FXML
     protected void createScatterChart() {
-        GatedScatterChart<Number, Number> scatterChart = new GatedScatterChart<>(new NumberAxis(),
+        GatedScatterChart<Number, Number> scatterChart = new GatedScatterChart<>(
+                new NumberAxis(),
                 new NumberAxis());
         ChartWrapper wrapper = new ChartWrapper(scatterChart);
+        final int loc = getDelta();
+        wrapper.setLayoutX(loc);
+        wrapper.setLayoutY(loc);
+        chartsPane.getChildren().add(wrapper);
+    }
+
+    @FXML
+    protected void createHistogram() {
+        GatedHistogram<Number, Number> histogram = new GatedHistogram<>(
+                new NumberAxis(),
+                new NumberAxis());
+        ChartWrapper wrapper = new ChartWrapper(histogram);
         final int loc = getDelta();
         wrapper.setLayoutX(loc);
         wrapper.setLayoutY(loc);

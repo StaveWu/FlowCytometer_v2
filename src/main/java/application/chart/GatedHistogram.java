@@ -6,21 +6,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 
-import java.util.Iterator;
-
-public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatable {
+public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements Gatable {
 
     private Gate<X, Y> gate;
 
-    public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis) {
+    public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
     }
 
-    public GatedScatterChart(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
+    public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
         GatableEventHooker gatableEventHooker = new GatableEventHooker(this);
         gatableEventHooker.hookContextMenu();
@@ -36,29 +33,6 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
 
     private Node getPlotArea() {
         return lookup(".chart-plot-background");
-    }
-
-    public ObservableList<Series<X, Y>> getGatedData() {
-        if (gate == null) { // return an empty list if gate not ready
-            return FXCollections.observableArrayList();
-        }
-
-        ObservableList<Series<X, Y>> res = FXCollections.observableArrayList();
-        for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
-            Series<X, Y> series = getData().get(seriesIndex);
-            Series<X, Y> gatedSeries = new Series<>();
-            gatedSeries.setName(series.getName());
-            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-                Data<X, Y> item = it.next();
-                double x = getXAxis().getDisplayPosition(item.getXValue());
-                double y = getYAxis().getDisplayPosition(item.getYValue());
-                if (gate.getNode().contains(x, y)) {
-                    gatedSeries.getData().add(item);
-                }
-            }
-            res.add(gatedSeries);
-        }
-        return res;
     }
 
     /**
@@ -115,5 +89,4 @@ public class GatedScatterChart<X, Y> extends ScatterChart<X, Y> implements Gatab
             getPlotChildren().remove(gate.getNode());
         }
     }
-
 }

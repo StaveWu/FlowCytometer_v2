@@ -5,10 +5,13 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
-public class ArrowHead extends Path {
+public class ArrowHead extends Path implements LinkedNode {
 
     private MoveTo start = new MoveTo();
     private LineTo end = new LineTo();
+
+    private LinkedNode prevNode;
+    private LinkedNode nextNode;
 
     public ArrowHead(double startX, double startY) {
         super();
@@ -39,5 +42,25 @@ public class ArrowHead extends Path {
 
     public Point2D getEnd() {
         return new Point2D(end.getX(), end.getY());
+    }
+
+    @Override
+    public LinkedNode getPrevNode() {
+        return prevNode;
+    }
+
+    @Override
+    public void setPrevNode(LinkedNode node) {
+        prevNode = node;
+    }
+
+    @Override
+    public LinkedNode getNextNode() {
+        return nextNode;
+    }
+
+    @Override
+    public void setNextNode(LinkedNode node) {
+        nextNode = node;
     }
 }
