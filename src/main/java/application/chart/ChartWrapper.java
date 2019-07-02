@@ -16,10 +16,10 @@ public class ChartWrapper extends VBox {
 
     private Pane titledPane;
     private Pane bottomPane;
-    private Rectangle regionForResize;
+    private Rectangle resizeMarkRegion;
 
-    private boolean canResizable = false;
-    private boolean canDraggable = false;
+    private boolean canResize = false;
+    private boolean canDrag = false;
     private DragContext contextForDrag;
 
     public ChartWrapper(Chart chart) {
@@ -27,7 +27,7 @@ public class ChartWrapper extends VBox {
         createTitledPane();
         createBottomPane();
         createRegionForResize();
-        bottomPane.getChildren().add(regionForResize);
+        bottomPane.getChildren().add(resizeMarkRegion);
         setVgrow(chart, Priority.ALWAYS);
 
         getChildren().add(titledPane);
@@ -40,8 +40,8 @@ public class ChartWrapper extends VBox {
         setPrefWidth(300);
         setPrefHeight(220);
 
-        hookDraggableEvent();
-        hookResizableEvent();
+        hookDragHandlers();
+        hookResizeHandlers();
     }
 
     private void createTitledPane() {
@@ -64,20 +64,20 @@ public class ChartWrapper extends VBox {
     private void createRegionForResize() {
         final int WIDTH = 10;
         final int HEIGHT = 10;
-        regionForResize = new Rectangle(WIDTH, HEIGHT);
+        resizeMarkRegion = new Rectangle(WIDTH, HEIGHT);
         IntegerProperty xDelta = new SimpleIntegerProperty(WIDTH);
         IntegerProperty yDelta = new SimpleIntegerProperty(HEIGHT);
-        regionForResize.xProperty().bind(bottomPane.widthProperty().subtract(xDelta));
-        regionForResize.yProperty().bind(bottomPane.heightProperty().subtract(yDelta));
-        regionForResize.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+        resizeMarkRegion.xProperty().bind(bottomPane.widthProperty().subtract(xDelta));
+        resizeMarkRegion.yProperty().bind(bottomPane.heightProperty().subtract(yDelta));
+        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             getScene().setCursor(Cursor.NW_RESIZE);
         });
-        regionForResize.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             getScene().setCursor(Cursor.DEFAULT);
         });
     }
 
-    public void hookDraggableEvent() {
+    public void hookDragHandlers() {
         contextForDrag = new DragContext();
         addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (titledPane.contains(event.getX(), event.getY())) {
@@ -86,11 +86,11 @@ public class ChartWrapper extends VBox {
                 contextForDrag.mouseAnchorY = mouseLoc.getY();
                 contextForDrag.initialTranslateX = getTranslateX();
                 contextForDrag.initialTranslateY = getTranslateY();
-                canDraggable = true;
+                canDrag = true;
             }
         });
         addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            if (canDraggable) {
+            if (canDrag) {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
                 setTranslateX(contextForDrag.initialTranslateX
                         + mouseLoc.getX() - contextForDrag.mouseAnchorX);
@@ -99,25 +99,25 @@ public class ChartWrapper extends VBox {
             }
         });
         addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            if (canDraggable) {
-                canDraggable = false;
+            if (canDrag) {
+                canDrag = false;
             }
         });
     }
 
-    public void hookResizableEvent() {
-        regionForResize.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            canResizable = true;
+    public void hookResizeHandlers() {
+        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            canResize = true;
         });
         addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            if (canResizable) {
+            if (canResize) {
                 setPrefWidth(event.getX());
                 setPrefHeight(event.getY());
             }
         });
-        regionForResize.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            if (canResizable) {
-                canResizable = false;
+        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            if (canResize) {
+                canResize = false;
             }
         });
     }

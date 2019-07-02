@@ -1,5 +1,6 @@
 package application.chart;
 
+import javafx.geometry.Point2D;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -30,5 +31,13 @@ public class ArrowHead extends Path {
     public void setEnd(double x, double y) {
         end.setX(x);
         end.setY(y);
+    }
+
+    public Point2D getStart() {
+        return new Point2D(start.getX(), start.getY());
+    }
+
+    public Point2D getEnd() {
+        return new Point2D(end.getX(), end.getY());
     }
 }
