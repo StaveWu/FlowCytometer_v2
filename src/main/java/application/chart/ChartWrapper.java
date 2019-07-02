@@ -84,17 +84,17 @@ public class ChartWrapper extends VBox {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
                 contextForDrag.mouseAnchorX = mouseLoc.getX();
                 contextForDrag.mouseAnchorY = mouseLoc.getY();
-                contextForDrag.initialTranslateX = getTranslateX();
-                contextForDrag.initialTranslateY = getTranslateY();
+                contextForDrag.initialLayoutX = getLayoutX();
+                contextForDrag.initialLayoutY = getLayoutY();
                 canDrag = true;
             }
         });
         addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             if (canDrag) {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
-                setTranslateX(contextForDrag.initialTranslateX
+                setLayoutX(contextForDrag.initialLayoutX
                         + mouseLoc.getX() - contextForDrag.mouseAnchorX);
-                setTranslateY(contextForDrag.initialTranslateY
+                setLayoutY(contextForDrag.initialLayoutY
                         + mouseLoc.getY() - contextForDrag.mouseAnchorY);
             }
         });
@@ -125,7 +125,7 @@ public class ChartWrapper extends VBox {
     private static final class DragContext {
         double mouseAnchorX;
         double mouseAnchorY;
-        double initialTranslateX;
-        double initialTranslateY;
+        double initialLayoutX;
+        double initialLayoutY;
     }
 }

@@ -56,7 +56,7 @@ public class LinkedChartsPane extends AnchorPane {
                     removeArrowHead();
                     return;
                 }
-                System.out.println(getChildren().get(1).getLayoutX());
+
                 ChartWrapper endChart = queryChartByPoint(activeArrowHead.getEnd());
                 if (endChart == null) {
                     removeArrowHead();
@@ -69,7 +69,8 @@ public class LinkedChartsPane extends AnchorPane {
 
     private ChartWrapper queryChartByPoint(Point2D point) {
         return (ChartWrapper) getChildren().stream()
-                .filter(child -> child instanceof ChartWrapper && child.contains(point))
+                .filter(child -> child instanceof ChartWrapper
+                        && child.contains(child.parentToLocal(point)))
                 .findFirst()
                 .orElse(null);
     }
@@ -83,7 +84,7 @@ public class LinkedChartsPane extends AnchorPane {
         Point2D cp1 = getCenterPoint(startChart);
         Point2D cp2 = getCenterPoint(endChart);
         activeArrowHead.setStart(cp1.getX(), cp1.getY());
-        activeArrowHead.setStart(cp2.getX(), cp2.getY());
+        activeArrowHead.setEnd(cp2.getX(), cp2.getY());
     }
 
     private Point2D getCenterPoint(ChartWrapper chart) {
