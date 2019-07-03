@@ -19,7 +19,6 @@ public class WorksheetController {
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
-
     private int delta = 0;
 
     @FXML
