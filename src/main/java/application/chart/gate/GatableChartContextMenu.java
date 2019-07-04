@@ -1,4 +1,4 @@
-package application.chart;
+package application.chart.gate;
 
 import application.chart.gate.GatableChart;
 import application.chart.gate.Gate;

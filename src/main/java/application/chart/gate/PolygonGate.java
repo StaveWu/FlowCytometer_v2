@@ -25,7 +25,7 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
     public PolygonGate() {
         node = new Path();
         node.setStyle("-fx-fill: transparent; " +
-                "-fx-stroke: black; " +
+                "-fx-stroke: red; " +
                 "-fx-stroke-width: 1;");
     }
 

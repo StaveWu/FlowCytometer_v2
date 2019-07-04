@@ -1,16 +1,15 @@
-package application.chart;
+package application.chart.gate;
 
-import application.chart.gate.GatableChart;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-public class GateActionHooker {
+public class GatableHooker {
 
     private GatableChart gatableChart;
     private GatableChartContextMenu contextMenu;
 
-    public GateActionHooker(GatableChart gatableChart) {
+    public GatableHooker(GatableChart gatableChart) {
         this.gatableChart = gatableChart;
     }
 

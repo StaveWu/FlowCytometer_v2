@@ -1,16 +1,15 @@
 package application.chart;
 
 import application.chart.axis.LogarithmicAxis;
+import application.chart.gate.GatedScatterChart;
 import application.utils.Resource;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class CustomChartApp extends Application {

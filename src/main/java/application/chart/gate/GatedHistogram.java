@@ -1,8 +1,5 @@
-package application.chart;
+package application.chart.gate;
 
-import application.chart.gate.GatableChart;
-import application.chart.gate.Gate;
-import application.chart.gate.KVData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -20,9 +17,9 @@ public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements GatableChar
 
     public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
-        GateActionHooker gateActionHooker = new GateActionHooker(this);
-        gateActionHooker.hookContextMenu();
-        gateActionHooker.hookGateAction();
+        GatableHooker gatableHooker = new GatableHooker(this);
+        gatableHooker.hookContextMenu();
+        gatableHooker.hookGateAction();
     }
 
     private Data<X, Y> getDataForDisplay(double x, double y) {

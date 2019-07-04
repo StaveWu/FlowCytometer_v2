@@ -1,8 +1,8 @@
 package application.worksheet;
 
 import application.chart.ChartWrapper;
-import application.chart.GatedHistogram;
-import application.chart.GatedScatterChart;
+import application.chart.gate.GatedHistogram;
+import application.chart.gate.GatedScatterChart;
 import application.event.CellFeatureCapturedEvent;
 import application.event.EventBusFactory;
 import com.google.common.eventbus.EventBus;

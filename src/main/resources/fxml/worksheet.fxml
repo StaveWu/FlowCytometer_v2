@@ -24,17 +24,6 @@
                  </tooltip>
              </Button>
             <Separator orientation="VERTICAL" />
-            <Button fx:id="rectBtn" mnemonicParsing="false" onAction="#gateRectangle" text="矩形圈门">
-                <tooltip>
-                    <Tooltip text="矩形圈门" />
-                </tooltip>
-            </Button>
-            <Button fx:id="polygonBtn" mnemonicParsing="false" text="多边形圈门">
-                <tooltip>
-                    <Tooltip text="多边形圈门" />
-                </tooltip>
-            </Button>
-            <Separator orientation="VERTICAL" />
              <Button fx:id="saveBtn" mnemonicParsing="false" text="保存">
                  <tooltip>
                      <Tooltip text="保存" />
@@ -45,7 +34,11 @@
                      <Tooltip text="删除" />
                  </tooltip>
              </Button>
-            <Button mnemonicParsing="false" onAction="#connect" text="连接" />
+            <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connect" text="连接" >
+                <tooltip>
+                    <Tooltip text="连接"/>
+                </tooltip>
+            </Button>
         </items>
       </ToolBar>
       <ScrollPane prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS">

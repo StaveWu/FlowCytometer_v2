@@ -23,12 +23,7 @@
    -fx-content-display: graphic-only;
 }
 
-#rectBtn {
-   -fx-graphic: url("../icons/rectangle.png");
-   -fx-content-display: graphic-only;
-}
-
-#polygonBtn {
-   -fx-graphic: url("../icons/polygon.png");
+#connectBtn {
+   -fx-graphic: url("../icons/arrowhead.png");
    -fx-content-display: graphic-only;
 }
