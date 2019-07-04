@@ -1,7 +1,8 @@
 package application.chart;
 
-import application.chart.gate.Gatable;
+import application.chart.gate.GatableChart;
 import application.chart.gate.Gate;
+import application.chart.gate.KVData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -9,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 
-public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements Gatable {
+public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements GatableChart {
 
     private Gate<X, Y> gate;
 
@@ -19,9 +20,9 @@ public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements Gatable {
 
     public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
         super(xAxis, yAxis, data);
-        GatableEventHooker gatableEventHooker = new GatableEventHooker(this);
-        gatableEventHooker.hookContextMenu();
-        gatableEventHooker.hookGateAction();
+        GateActionHooker gateActionHooker = new GateActionHooker(this);
+        gateActionHooker.hookContextMenu();
+        gateActionHooker.hookGateAction();
     }
 
     private Data<X, Y> getDataForDisplay(double x, double y) {
@@ -45,7 +46,7 @@ public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements Gatable {
         if (gate == null) {
             return;
         }
-        gate.resizeLocate(getXAxis(), getYAxis());
+        gate.paint(getXAxis(), getYAxis());
     }
 
     @Override
@@ -88,5 +89,15 @@ public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements Gatable {
         if (gate != null) {
             getPlotChildren().remove(gate.getNode());
         }
+    }
+
+    @Override
+    public void addData(KVData data) {
+
+    }
+
+    @Override
+    public boolean isGated(KVData data) {
+        return false;
     }
 }

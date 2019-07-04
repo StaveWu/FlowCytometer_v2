@@ -10,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ChartWrapper extends VBox implements LinkedNode {
@@ -38,7 +39,7 @@ public class ChartWrapper extends VBox implements LinkedNode {
         getChildren().add(bottomPane);
 
         setStyle("-fx-background-color: white;"
-                + "-fx-border-color: black;"
+                + "-fx-border-color: dimgray;"
                 + "-fx-border-width: 1;");
         setPrefWidth(300);
         setPrefHeight(220);
@@ -51,7 +52,7 @@ public class ChartWrapper extends VBox implements LinkedNode {
         titledPane = new FlowPane();
         titledPane.setMinHeight(30);
         titledPane.prefWidthProperty().bind(prefWidthProperty());
-        titledPane.setStyle("-fx-background-color: black;");
+        titledPane.setStyle("-fx-background-color: dimgray;");
         titledPane.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             getScene().setCursor(Cursor.MOVE);
         });
@@ -68,6 +69,7 @@ public class ChartWrapper extends VBox implements LinkedNode {
         final int WIDTH = 10;
         final int HEIGHT = 10;
         resizeMarkRegion = new Rectangle(WIDTH, HEIGHT);
+        resizeMarkRegion.setStyle("-fx-fill: dimgray;");
         IntegerProperty xDelta = new SimpleIntegerProperty(WIDTH);
         IntegerProperty yDelta = new SimpleIntegerProperty(HEIGHT);
         resizeMarkRegion.xProperty().bind(bottomPane.widthProperty().subtract(xDelta));

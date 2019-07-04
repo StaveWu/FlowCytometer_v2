@@ -4,7 +4,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 
-public interface Gatable {
+public interface GatableChart {
 
     boolean isActive();
 
@@ -17,6 +17,10 @@ public interface Gatable {
     void setGate(Gate gate);
 
     void removeGate();
+
+    void addData(KVData data);
+
+    boolean isGated(KVData data);
 
     <T extends Event> void addEventHandler(EventType<T> eventType, EventHandler<? super T> handler);
 }
