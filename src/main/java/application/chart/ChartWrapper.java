@@ -6,10 +6,14 @@ import application.chart.gate.GatedScatterChart;
 import application.chart.gate.KVData;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -17,13 +21,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ChartWrapper extends VBox implements LinkedNode {
 
-    private Pane titledPane;
+    private FlowPane titledPane;
     private Pane bottomPane;
     private Rectangle resizeMarkRegion;
 
@@ -64,12 +69,48 @@ public class ChartWrapper extends VBox implements LinkedNode {
         titledPane.setMinHeight(30);
         titledPane.prefWidthProperty().bind(prefWidthProperty());
         titledPane.setStyle("-fx-background-color: dimgray;");
+        titledPane.setAlignment(Pos.CENTER_RIGHT);
         titledPane.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             getScene().setCursor(Cursor.MOVE);
         });
         titledPane.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             getScene().setCursor(Cursor.DEFAULT);
         });
+        Hyperlink hyperlink = new Hyperlink("CLOSE");
+        hyperlink.setStyle("-fx-graphic: url(\"icons/close.png\");"
+                + "-fx-content-display: graphic-only;"
+                + "-fx-opacity: 0.5;");
+        hyperlink.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                hyperlink.setStyle("-fx-graphic: url(\"icons/close.png\");"
+                        + "-fx-content-display: graphic-only;"
+                        + "-fx-opacity: 1;");
+            } else {
+                hyperlink.setStyle("-fx-graphic: url(\"icons/close.png\");"
+                        + "-fx-content-display: graphic-only;"
+                        + "-fx-opacity: 0.5;");
+            }
+        });
+        hyperlink.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            // unbind arrowhead
+            if (this.nextNode != null) {
+                this.nextNode.getNextNode().setPrevNode(null);
+                this.nextNode.setNextNode(null);
+                this.nextNode.setPrevNode(null);
+                ((Pane) getParent()).getChildren().remove(this.nextNode);
+                this.setNextNode(null);
+            }
+            if (this.prevNode != null) {
+                this.prevNode.getPrevNode().setNextNode(null);
+                this.prevNode.setPrevNode(null);
+                this.prevNode.setNextNode(null);
+                ((Pane) getParent()).getChildren().remove(this.prevNode);
+                this.setPrevNode(null);
+            }
+            // remove self
+            ((Pane) getParent()).getChildren().remove(ChartWrapper.this);
+        });
+        titledPane.getChildren().add(hyperlink);
     }
 
     private void createBottomPane() {

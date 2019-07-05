@@ -17,7 +17,7 @@ public class LinkedChartsPane extends AnchorPane {
 
     private ArrowHead activeArrowHead;
 
-    private Point2D chartInitLocation = new Point2D(10, 10);
+    private Point2D chartInitLocation = new Point2D(-30, -30);
     private List<String> axisCandidateNames;
 
     public enum State {
