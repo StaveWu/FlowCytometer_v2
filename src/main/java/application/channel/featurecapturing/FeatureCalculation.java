@@ -25,7 +25,13 @@ public class FeatureCalculation {
 
         @Override
         public Float getFeature(List<Float> waveData) {
-            return Collections.max(waveData);
+            Float max = 0f;
+            for (Float ele : waveData) {
+                if (max < ele) {
+                    max = ele;
+                }
+            }
+            return max;
         }
     }
 

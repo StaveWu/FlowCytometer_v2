@@ -128,7 +128,14 @@ public class GatedHistogram extends AreaChart<Number, Number> implements Gatable
 
     @Override
     public boolean isGated(KVData data) {
-        return false;
+        if (gate == null) {
+            return true;
+        }
+        Float xValue = data.getValueByName(getXAxis().getLabel());
+        Float yValue = data.getValueByName(getYAxis().getLabel());
+        double x = getXAxis().getDisplayPosition(xValue);
+        double y = getYAxis().getDisplayPosition(yValue);
+        return gate.getNode().contains(x, y);
     }
 
     @Override

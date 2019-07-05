@@ -19,7 +19,7 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
         super();
         node = new Rectangle();
         node.setStyle("-fx-fill: transparent; " +
-                "-fx-stroke: red; " +
+                "-fx-stroke: blue; " +
                 "-fx-stroke-width: 1;");
     }
 
