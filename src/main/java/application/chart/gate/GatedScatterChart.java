@@ -10,6 +10,7 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         getYAxis().setLabel("SSC");
         // add empty series
         getData().add(new XYChart.Series<>());
+        setUserData(new ArrayList<String>(Arrays.asList("FSC", "SSC", "FITC")));
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookContextMenu();

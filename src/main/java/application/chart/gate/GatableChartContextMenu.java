@@ -1,7 +1,11 @@
 package application.chart.gate;
 
+import application.chart.ChartSettings;
+import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
 public class GatableChartContextMenu extends ContextMenu {
 
@@ -31,11 +35,17 @@ public class GatableChartContextMenu extends ContextMenu {
         });
         MenuItem settingsItem = new MenuItem("设置");
         settingsItem.setOnAction(event -> {
-            // pop up settings stage
+            if (gatableChart instanceof XYChart) {
+                // pop up settings stage
+                Stage stage = new Stage();
+                stage.setTitle("图设置");
+                stage.setScene(new Scene(new ChartSettings((XYChart<Number, Number>) gatableChart)));
+                stage.show();
+            }
         });
         getItems().add(createRectangleGateItem);
         getItems().add(createPolygonGateItem);
         getItems().add(deleteGateItem);
         getItems().add(settingsItem);
-}
+    }
 }
