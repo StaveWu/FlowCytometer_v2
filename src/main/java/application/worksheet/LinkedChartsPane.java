@@ -242,7 +242,7 @@ public class LinkedChartsPane extends AnchorPane {
     }
 
     public void createHistogram() {
-        GatedHistogram<Number, Number> histogram = new GatedHistogram<>(
+        GatedHistogram histogram = new GatedHistogram(
                 new NumberAxis(),
                 new NumberAxis());
         ChartWrapper wrapper = new ChartWrapper(histogram);

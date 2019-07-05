@@ -1,31 +1,42 @@
 package application.chart.gate;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.XYChart;
 
-public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements GatableChart {
+import java.util.*;
 
-    private Gate<X, Y> gate;
+public class GatedHistogram extends AreaChart<Number, Number> implements GatableChart {
 
-    public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis) {
+    private Gate<Number, Number> gate;
+    private List<KVData> dataList = new ArrayList<>();
+
+    public GatedHistogram(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
     }
 
-    public GatedHistogram(Axis<X> xAxis, Axis<Y> yAxis, ObservableList<Series<X, Y>> data) {
+    public GatedHistogram(Axis<Number> xAxis, Axis<Number> yAxis,
+                          ObservableList<Series<Number, Number>> data) {
         super(xAxis, yAxis, data);
+        // add empty series
+        getData().add(new XYChart.Series<>());
+        // use user data to store axis names
+        getYAxis().setLabel("Count");
+        setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookContextMenu();
         gatableHooker.hookGateAction();
     }
 
-    private Data<X, Y> getDataForDisplay(double x, double y) {
+    private Data<Number, Number> getDataForDisplay(double x, double y) {
         Point2D local = getPlotArea().sceneToLocal(new Point2D(x, y));
-        X xValue = getXAxis().getValueForDisplay(local.getX());
-        Y yValue = getYAxis().getValueForDisplay(local.getY());
+        Number xValue = getXAxis().getValueForDisplay(local.getX());
+        Number yValue = getYAxis().getValueForDisplay(local.getY());
         return new Data<>(xValue, yValue);
     }
 
@@ -90,11 +101,39 @@ public class GatedHistogram<X, Y> extends AreaChart<X, Y> implements GatableChar
 
     @Override
     public void addData(KVData data) {
+        dataList.add(data);
+        if (!checkLabel(getXAxis())) {
+            return;
+        }
+        Float xValue = data.getValueByName(getXAxis().getLabel());
+        // traverse existing count from xydata, if not, add new one.
+        Platform.runLater(() -> {
+            Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
+                    .filter(d -> d.getXValue().floatValue() == xValue)
+                    .findFirst();
 
+            if (existing.isPresent()) {
+                System.out.println("presented");
+                existing.get().setYValue(existing.get().getYValue().intValue() + 1);
+            } else {
+                System.out.println("new in");
+                getData().get(0).getData().add(new Data<>(xValue, 1));
+            }
+        });
+    }
+
+    private boolean checkLabel(Axis axis) {
+        return !(axis.getLabel() == null || axis.getLabel().equals(""));
     }
 
     @Override
     public boolean isGated(KVData data) {
         return false;
+    }
+
+    @Override
+    public void setAxisCandidateNames(List<String> names) {
+        getXAxis().setUserData(names);
+        getYAxis().setUserData(new ArrayList<>(Arrays.asList("Count")));
     }
 }

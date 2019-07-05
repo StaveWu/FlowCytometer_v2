@@ -79,17 +79,17 @@ public class ChartSettings extends VBox implements Initializable {
             }
         });
 
-        List<String> candidateNames = (List<String>) chart.getUserData();
-
         NumberAxis xAxis = (NumberAxis) chart.getXAxis();
-        xNameCombo.setItems(FXCollections.observableArrayList(candidateNames));
+        List<String> xCandidateNames = (List<String>) xAxis.getUserData();
+        xNameCombo.setItems(FXCollections.observableArrayList(xCandidateNames));
         xNameCombo.getSelectionModel().select(xAxis.getLabel());
         xAutoRangeCheckBox.setSelected(xAxis.isAutoRanging());
         xMinTextField.setText("" + xAxis.getLowerBound());
         xMaxTextField.setText("" + xAxis.getUpperBound());
 
         NumberAxis yAxis = (NumberAxis) chart.getYAxis();
-        yNameCombo.setItems(FXCollections.observableArrayList(candidateNames));
+        List<String> yCandidateNames = (List<String>) yAxis.getUserData();
+        yNameCombo.setItems(FXCollections.observableArrayList(yCandidateNames));
         yNameCombo.getSelectionModel().select(yAxis.getLabel());
         yAutoRangeCheckBox.setSelected(yAxis.isAutoRanging());
         yMinTextField.setText("" + yAxis.getLowerBound());

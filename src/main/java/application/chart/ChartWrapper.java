@@ -177,6 +177,8 @@ public class ChartWrapper extends VBox implements LinkedNode {
     }
 
     public void setAxisCandidateNames(List<String> names) {
-        chart.setUserData(names);
+        if (chart instanceof GatableChart) {
+            ((GatableChart) chart).setAxisCandidateNames(names);
+        }
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class GatedScatterChart extends ScatterChart<Number, Number> implements GatableChart {
 
     private Gate<Number, Number> gate;
+    private List<KVData> dataList = new ArrayList<>();
 
     public GatedScatterChart(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -27,7 +28,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         super(xAxis, yAxis, data);
         // add empty series
         getData().add(new XYChart.Series<>());
-        setUserData(new ArrayList<>());
+        // use user data to store axis names
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookContextMenu();
@@ -121,11 +122,8 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         }
     }
 
-    private List<KVData> dataList = new ArrayList<>();
-
     @Override
     public void addData(KVData data) {
-        System.out.println("here");
         dataList.add(data);
         // check axis label
         if (!checkLabel(getXAxis()) || !checkLabel(getYAxis())) {
@@ -135,8 +133,6 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         System.out.println("plot data");
         Float xValue = data.getValueByName(getXAxis().getLabel());
         Float yValue = data.getValueByName(getYAxis().getLabel());
-        System.out.println("x: " + xValue);
-        System.out.println("y: " + yValue);
         Platform.runLater(() -> {
             getData().get(0).getData().add(new Data<>(xValue, yValue));
         });
@@ -156,6 +152,12 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         double x = getXAxis().getDisplayPosition(xValue);
         double y = getYAxis().getDisplayPosition(yValue);
         return gate.getNode().contains(x, y);
+    }
+
+    @Override
+    public void setAxisCandidateNames(List<String> names) {
+        getXAxis().setUserData(names);
+        getYAxis().setUserData(names);
     }
 
 }
