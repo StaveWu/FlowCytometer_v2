@@ -25,11 +25,9 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
     public GatedScatterChart(Axis<Number> xAxis, Axis<Number> yAxis,
                              ObservableList<Series<Number, Number>> data) {
         super(xAxis, yAxis, data);
-        getXAxis().setLabel("FSC");
-        getYAxis().setLabel("SSC");
         // add empty series
         getData().add(new XYChart.Series<>());
-        setUserData(new ArrayList<String>(Arrays.asList("FSC", "SSC", "FITC")));
+        setUserData(new ArrayList<>());
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookContextMenu();

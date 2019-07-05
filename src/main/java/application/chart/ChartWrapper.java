@@ -1,6 +1,8 @@
 package application.chart;
 
 import application.chart.gate.GatableChart;
+import application.chart.gate.GatedHistogram;
+import application.chart.gate.GatedScatterChart;
 import application.chart.gate.KVData;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -16,6 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ChartWrapper extends VBox implements LinkedNode {
 
     private Pane titledPane;
@@ -29,9 +34,9 @@ public class ChartWrapper extends VBox implements LinkedNode {
     private LinkedNode prevNode;
     private LinkedNode nextNode;
 
-    private Chart chart;
+    private XYChart chart;
 
-    public ChartWrapper(Chart chart) {
+    public ChartWrapper(XYChart chart) {
         super();
         this.chart = chart;
         createTitledPane();
@@ -169,5 +174,9 @@ public class ChartWrapper extends VBox implements LinkedNode {
                 nextChart.addData(data);
             }
         }
+    }
+
+    public void setAxisCandidateNames(List<String> names) {
+        chart.setUserData(names);
     }
 }

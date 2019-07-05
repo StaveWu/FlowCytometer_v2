@@ -1,31 +1,42 @@
 package application.worksheet;
 
-import application.chart.ChartWrapper;
-import application.chart.gate.GatedHistogram;
-import application.chart.gate.GatedScatterChart;
+import application.channel.featurecapturing.ChannelMeta;
 import application.event.CellFeatureCapturedEvent;
+import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
-import javafx.scene.chart.NumberAxis;
+import javafx.fxml.Initializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 @Component
-public class WorksheetController {
+public class WorksheetController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
-    private int delta = 0;
-
     @FXML
     private LinkedChartsPane chartsPane;
 
+    private List<String> channelNames = new ArrayList<>();
+
     public WorksheetController() {
         eventBus.register(this);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        log.info("initialize");
+        chartsPane.setAxisCandidateNames(channelNames);
     }
 
     @Subscribe
@@ -34,37 +45,25 @@ public class WorksheetController {
         chartsPane.addCellFeature(new CellFeature(event.getCellFeature()));
     }
 
+    @Subscribe
+    public void listen(ChannelChangedEvent event) {
+        log.info("channel changed");
+        channelNames = event.getChannelMetas().stream()
+                .map(ChannelMeta::getName)
+                .collect(Collectors.toList());
+        if (chartsPane != null) {
+            chartsPane.setAxisCandidateNames(channelNames);
+        }
+    }
+
     @FXML
     protected void createScatterChart() {
-        GatedScatterChart scatterChart = new GatedScatterChart(
-                new NumberAxis(),
-                new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(scatterChart);
-        final int loc = getDelta();
-        wrapper.setLayoutX(loc);
-        wrapper.setLayoutY(loc);
-        chartsPane.getChildren().add(wrapper);
+        chartsPane.createScatterChart();
     }
 
     @FXML
     protected void createHistogram() {
-        GatedHistogram<Number, Number> histogram = new GatedHistogram<>(
-                new NumberAxis(),
-                new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(histogram);
-        final int loc = getDelta();
-        wrapper.setLayoutX(loc);
-        wrapper.setLayoutY(loc);
-        chartsPane.getChildren().add(wrapper);
-    }
-
-    private int getDelta() {
-        if (delta > 200) {
-            delta = 10;
-        } else {
-            delta += 40;
-        }
-        return delta;
+        chartsPane.createHistogram();
     }
 
     @FXML
