@@ -1,9 +1,5 @@
 package application.chart.gate;
 
-import application.chart.gate.GatableChart;
-import application.chart.gate.Gate;
-import application.chart.gate.PolygonGate;
-import application.chart.gate.RectangleGate;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 

@@ -1,19 +1,19 @@
 package application.event;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * channel -> worksheet, ask worksheet to add cell feature.
  */
 public class CellFeatureCapturedEvent {
 
-    private List<Float> cellFeature;
+    private Map<String, Float> cellFeature;
 
-    public CellFeatureCapturedEvent(List<Float> cellFeature) {
+    public CellFeatureCapturedEvent(Map<String, Float> cellFeature) {
         this.cellFeature = cellFeature;
     }
 
-    public List<Float> getCellFeature() {
+    public Map<String, Float> getCellFeature() {
         return cellFeature;
     }
 }

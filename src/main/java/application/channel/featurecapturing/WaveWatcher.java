@@ -29,6 +29,10 @@ public class WaveWatcher {
         }
     }
 
+    public String getName() {
+        return meta.getName();
+    }
+
     public Float getWave() {
         return strategy.getFeature(data);
     }

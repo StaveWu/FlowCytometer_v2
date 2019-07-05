@@ -30,12 +30,13 @@ public class WorksheetController {
 
     @Subscribe
     public void listen(CellFeatureCapturedEvent event) {
-        log.info("cell feature received in worksheet");
+        log.info("cell feature received: " + event.getCellFeature());
+        chartsPane.addCellFeature(new CellFeature(event.getCellFeature()));
     }
 
     @FXML
     protected void createScatterChart() {
-        GatedScatterChart<Number, Number> scatterChart = new GatedScatterChart<>(
+        GatedScatterChart scatterChart = new GatedScatterChart(
                 new NumberAxis(),
                 new NumberAxis());
         ChartWrapper wrapper = new ChartWrapper(scatterChart);

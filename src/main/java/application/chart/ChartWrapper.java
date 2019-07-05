@@ -1,10 +1,13 @@
 package application.chart;
 
+import application.chart.gate.GatableChart;
+import application.chart.gate.KVData;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -26,8 +29,11 @@ public class ChartWrapper extends VBox implements LinkedNode {
     private LinkedNode prevNode;
     private LinkedNode nextNode;
 
+    private Chart chart;
+
     public ChartWrapper(Chart chart) {
         super();
+        this.chart = chart;
         createTitledPane();
         createBottomPane();
         createResizeMarkRegion();
@@ -152,5 +158,16 @@ public class ChartWrapper extends VBox implements LinkedNode {
     @Override
     public void setNextNode(LinkedNode node) {
         nextNode = node;
+    }
+
+    public void addData(KVData data) {
+        if (chart instanceof GatableChart) {
+            GatableChart gatableChart = (GatableChart) chart;
+            gatableChart.addData(data);
+            if (gatableChart.isGated(data) && nextNode != null) {
+                ChartWrapper nextChart = (ChartWrapper) nextNode.getNextNode();
+                nextChart.addData(data);
+            }
+        }
     }
 }

@@ -18,8 +18,7 @@ public class CustomChartApp extends Application {
         stage.setTitle("Scatter Chart Sample");
         final LogarithmicAxis xAxis = new LogarithmicAxis(1, 100);
         final NumberAxis yAxis = new NumberAxis(0, 100, 10);
-        final ScatterChart<Number,Number> sc = new
-                GatedScatterChart<>(xAxis,yAxis);
+        final ScatterChart sc = new GatedScatterChart(xAxis,yAxis);
         sc.getStylesheets().add(Resource.getStyle("chart.css"));
         xAxis.setLabel("Age (years)");
         yAxis.setLabel("Returns to date");

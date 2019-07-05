@@ -2,6 +2,7 @@ package application.worksheet;
 
 import application.chart.ArrowHead;
 import application.chart.ChartWrapper;
+import application.chart.LinkedNode;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -196,5 +197,16 @@ public class LinkedChartsPane extends AnchorPane {
             ChartWrapper nextChart = (ChartWrapper) nextArrowHead.getNextNode();
             correctArrowHead(nextArrowHead, chart, nextChart);
         }
+    }
+
+    public void addCellFeature(CellFeature cellFeature) {
+        getHeadChart().addData(cellFeature);
+    }
+
+    private ChartWrapper getHeadChart() {
+        return (ChartWrapper) getChildren().stream()
+                .filter(child -> ((ChartWrapper)child).getPrevNode() == null)
+                .findFirst()
+                .orElse(null);
     }
 }

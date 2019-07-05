@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
@@ -56,11 +58,13 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
 
     @Override
     public void waveCaptured() {
-        List<Float> waves = waveWatchers.stream()
-                .map(WaveWatcher::getWave)
-                .collect(Collectors.toList());
-        log.info("wave captured: " + waves);
-        handlers.forEach(handler -> handler.cellFeatureCaptured(new CellFeatureCapturedEvent(waves)));
+        Map<String, Float> cellFeature = new HashMap<>();
+        for (WaveWatcher watcher :
+                waveWatchers) {
+            cellFeature.put(watcher.getName(), watcher.getWave());
+        }
+        log.info("wave captured: " + cellFeature);
+        handlers.forEach(handler -> handler.cellFeatureCaptured(new CellFeatureCapturedEvent(cellFeature)));
     }
 
     public void registerCellFeatureCapturedHandler(CellFeatureCapturedHandler handler) {
