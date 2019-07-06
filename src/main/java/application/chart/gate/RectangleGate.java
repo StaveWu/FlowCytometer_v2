@@ -52,6 +52,11 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
     }
 
     @Override
+    public List<XYChart.Data<X, Y>> getPoints() {
+        return points;
+    }
+
+    @Override
     public void setRunningPoint(XYChart.Data<X, Y> point) {
         if (!isLocated() || isCompleted()) {
             return;

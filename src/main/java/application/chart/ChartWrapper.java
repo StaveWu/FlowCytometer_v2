@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseEvent;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListener {
@@ -31,6 +33,8 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
     private LinkedNode nextNode;
 
     private XYChart chart;
+
+    private List<ChartRemovedListener> listeners = new ArrayList<>();
 
     public ChartWrapper(XYChart chart) {
         super();
@@ -103,6 +107,8 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
             }
             // remove self
             ((Pane) getParent()).getChildren().remove(ChartWrapper.this);
+            // fire remove event
+            listeners.forEach(ChartRemovedListener::chartRemoved);
         });
         titledPane.getChildren().add(hyperlink);
     }
@@ -239,6 +245,84 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
     public void setAxisCandidateNames(List<String> names) {
         if (chart instanceof GatableChart) {
             ((GatableChart) chart).setAxisCandidateNames(names);
+        }
+    }
+
+    public void addChartRemovedListener(ChartRemovedListener listener) {
+        listeners.add(listener);
+    }
+
+    public XYChart getChart() {
+        return chart;
+    }
+
+    public JsonObject toJsonObject() {
+        // get type
+        String type;
+        if (chart instanceof GatedScatterChart) {
+            type = "Scatter";
+        } else if (chart instanceof GatedHistogram) {
+            type = "Histogram";
+        } else {
+            throw new RuntimeException("Unknown type of chart");
+        }
+        return new JsonObject(type, getLayoutX(), getLayoutY(),
+                getPrefWidth(), getPrefHeight(),
+                AxisJsonObject.fromAxis((NumberAxis) chart.getXAxis()),
+                AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()));
+    }
+
+    public static ChartWrapper fromJsonObject(JsonObject json) {
+        XYChart chart;
+        if (json.type.equals("Scatter")) {
+            chart = new GatedScatterChart(
+                    new NumberAxis(),
+                    new NumberAxis());
+        } else {
+            chart = new GatedHistogram(
+                    new NumberAxis(),
+                    new NumberAxis());
+        }
+        json.xAxisJson.initAxis((NumberAxis) chart.getXAxis());
+        json.yAxisJson.initAxis((NumberAxis) chart.getYAxis());
+
+//        Gate<Number, Number> gate;
+//        if (json.gateJson.type.equals("Rectangle")) {
+//            gate = new RectangleGate<>();
+//        } else {
+//            gate = new PolygonGate<>();
+//        }
+//        json.gateJson.points.forEach(p -> gate.addPoint((XYChart.Data<Number, Number>) p));
+//        ((GatableChart) chart).setGate(gate);
+
+        ChartWrapper wrapper = new ChartWrapper(chart);
+        wrapper.setLayoutX(json.x);
+        wrapper.setLayoutY(json.y);
+        wrapper.setPrefWidth(json.width);
+        wrapper.setPrefHeight(json.height);
+        return wrapper;
+    }
+
+    public class JsonObject {
+        public final String type;
+        public final double x;
+        public final double y;
+        public final double width;
+        public final double height;
+        public final AxisJsonObject xAxisJson;
+        public final AxisJsonObject yAxisJson;
+//        public final GateJsonObject gateJson;
+
+        public JsonObject(String type, double x, double y, double width, double height,
+                          AxisJsonObject xAxisJson, AxisJsonObject yAxisJson) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.xAxisJson = xAxisJson;
+            this.yAxisJson = yAxisJson;
+//            this.gateJson = gateJson;
         }
     }
 }

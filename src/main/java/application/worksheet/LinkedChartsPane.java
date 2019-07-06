@@ -1,18 +1,24 @@
 package application.worksheet;
 
 import application.chart.ArrowHead;
+import application.chart.ChartRemovedListener;
 import application.chart.ChartWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LinkedChartsPane extends AnchorPane {
 
     private ArrowHead activeArrowHead;
+    private List<ChartLifeCycleListener> listeners = new ArrayList<>();
 
     public enum State {
         ON_CONNECTING,
@@ -220,5 +226,46 @@ public class LinkedChartsPane extends AnchorPane {
         getChildren().stream()
                 .filter(child -> child instanceof ChartWrapper)
                 .forEach(child -> ((ChartWrapper) child).setAxisCandidateNames(names));
+    }
+
+    public List<ChartWrapper> getCharts() {
+        return getChildren().stream()
+                .filter(child -> child instanceof ChartWrapper)
+                .map(child -> (ChartWrapper) child)
+                .collect(Collectors.toList());
+    }
+
+    public void add(ChartWrapper chart) {
+        hookChartPropertyChangeListener(chart);
+        hookChartRemoveListener(chart);
+        getChildren().add(chart);
+        listeners.forEach(ChartLifeCycleListener::afterCreate);
+    }
+
+    private void hookChartRemoveListener(ChartWrapper chart) {
+        chart.addChartRemovedListener(() -> listeners.forEach(ChartLifeCycleListener::afterRemove));
+    }
+
+    private void hookChartPropertyChangeListener(ChartWrapper chart) {
+        chart.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        chart.layoutXProperty().addListener((observable, oldValue, newValue) -> {
+            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        chart.layoutYProperty().addListener((observable, oldValue, newValue) -> {
+            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        chart.getChart().getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        chart.getChart().getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+
+    }
+
+    public void addChartLifeCycleListener(ChartLifeCycleListener listener) {
+        listeners.add(listener);
     }
 }

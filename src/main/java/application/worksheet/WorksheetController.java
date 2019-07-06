@@ -7,16 +7,22 @@ import application.chart.gate.GatedScatterChart;
 import application.event.CellFeatureCapturedEvent;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
+import application.starter.FCMRunTimeConfig;
+import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +41,9 @@ public class WorksheetController implements Initializable {
     @FXML
     private LinkedChartsPane chartsPane;
 
+    @Autowired
+    private ChartRepository repository;
+
     public WorksheetController() {
         eventBus.register(this);
     }
@@ -42,6 +51,33 @@ public class WorksheetController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chartsPane.setAxisCandidateNames(channelNames);
+
+        repository.setLocation(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "charts.json");
+        repository.findAll().forEach(chart -> {
+            chart.setAxisCandidateNames(channelNames);
+            chartsPane.add(chart);
+        });
+
+        chartsPane.addChartLifeCycleListener(new ChartLifeCycleListener() {
+            @Override
+            public void afterCreate() {
+                log.info("afterCreate");
+                saveCharts();
+            }
+
+            @Override
+            public void afterRemove() {
+                log.info("afterRemove");
+                saveCharts();
+            }
+
+            @Override
+            public void propertyChanged() {
+                log.info("propertyChanged");
+                saveCharts();
+            }
+        });
     }
 
     @Subscribe
@@ -71,7 +107,17 @@ public class WorksheetController implements Initializable {
         wrapper.setLayoutX(chartInitLocation.getX());
         wrapper.setLayoutY(chartInitLocation.getY());
         wrapper.setAxisCandidateNames(channelNames);
-        chartsPane.getChildren().add(wrapper);
+        chartsPane.add(wrapper);
+    }
+
+    public void saveCharts() {
+        try {
+            repository.saveAll(chartsPane.getCharts());
+        } catch (IOException e) {
+            e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "保存数据失败",
+                    e.getMessage()).showAndWait();
+        }
     }
 
     @FXML
@@ -84,7 +130,7 @@ public class WorksheetController implements Initializable {
         wrapper.setLayoutX(chartInitLocation.getX());
         wrapper.setLayoutY(chartInitLocation.getY());
         wrapper.setAxisCandidateNames(channelNames);
-        chartsPane.getChildren().add(wrapper);
+        chartsPane.add(wrapper);
     }
 
     @FXML

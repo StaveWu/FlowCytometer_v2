@@ -125,6 +125,11 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     }
 
     @Override
+    public Gate getGate() {
+        return gate;
+    }
+
+    @Override
     public void addData(KVData data) {
         dataList.add(data);
         // check axis label

@@ -20,6 +20,8 @@ public interface GatableChart {
 
     void removeGate();
 
+    Gate getGate();
+
     void addData(KVData data);
 
     boolean isGated(KVData data);

@@ -27,7 +27,7 @@ public class ChannelMetaRepository {
 
     private void checkLocation() {
         if (location == null) {
-            throw new RuntimeException("channel featurecapturing repository location has not been set");
+            throw new RuntimeException("channel meta repository location has not been set");
         }
     }
     /**

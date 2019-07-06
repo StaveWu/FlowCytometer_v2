@@ -104,6 +104,11 @@ public class GatedHistogram extends AreaChart<Number, Number>
     }
 
     @Override
+    public Gate getGate() {
+        return gate;
+    }
+
+    @Override
     public void addData(KVData data) {
         dataList.add(data);
         if (!checkLabel(getXAxis())) {
