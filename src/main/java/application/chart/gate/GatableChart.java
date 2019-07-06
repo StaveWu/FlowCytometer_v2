@@ -27,4 +27,8 @@ public interface GatableChart {
     <T extends Event> void addEventHandler(EventType<T> eventType, EventHandler<? super T> handler);
 
     void setAxisCandidateNames(List<String> names);
+
+    void addGateLifeCycleListener(GateLifeCycleListener listener);
+
+    List<KVData> getKVData();
 }

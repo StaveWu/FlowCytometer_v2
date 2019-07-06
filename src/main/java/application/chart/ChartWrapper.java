@@ -1,17 +1,11 @@
 package application.chart;
 
-import application.chart.gate.GatableChart;
-import application.chart.gate.GatedHistogram;
-import application.chart.gate.GatedScatterChart;
-import application.chart.gate.KVData;
+import application.chart.gate.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseEvent;
@@ -19,14 +13,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class ChartWrapper extends VBox implements LinkedNode {
+public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListener {
 
     private FlowPane titledPane;
     private Pane bottomPane;
@@ -44,6 +35,9 @@ public class ChartWrapper extends VBox implements LinkedNode {
     public ChartWrapper(XYChart chart) {
         super();
         this.chart = chart;
+        if (chart instanceof GatableChart) {
+            ((GatableChart) chart).addGateLifeCycleListener(this);
+        }
         createTitledPane();
         createBottomPane();
         createResizeMarkRegion();
@@ -179,6 +173,31 @@ public class ChartWrapper extends VBox implements LinkedNode {
         });
     }
 
+    @Override
+    public void afterComplete() {
+        System.out.println("afterComplete");
+        propagateToNextChart();
+    }
+
+    @Override
+    public void afterDestroy() {
+        System.out.println("afterDestroy");
+        propagateToNextChart();
+    }
+
+    private void propagateToNextChart() {
+        if (nextNode == null) {
+            return;
+        }
+        GatableChart gatableChart = (GatableChart) chart;
+        gatableChart.getKVData().stream()
+                .filter(gatableChart::isGated)
+                .forEach(kvData -> {
+                    ChartWrapper nextChart = (ChartWrapper) nextNode.getNextNode();
+                    nextChart.addData(kvData);
+                });
+    }
+
     private static final class DragContext {
         double mouseAnchorX;
         double mouseAnchorY;
@@ -210,7 +229,7 @@ public class ChartWrapper extends VBox implements LinkedNode {
         if (chart instanceof GatableChart) {
             GatableChart gatableChart = (GatableChart) chart;
             gatableChart.addData(data);
-            if (gatableChart.isGated(data) && nextNode != null) {
+            if (nextNode != null && gatableChart.isGated(data)) {
                 ChartWrapper nextChart = (ChartWrapper) nextNode.getNextNode();
                 nextChart.addData(data);
             }

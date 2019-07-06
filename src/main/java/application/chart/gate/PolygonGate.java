@@ -17,6 +17,8 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
     private List<XYChart.Data<X, Y>> points = new ArrayList<>();
     private XYChart.Data<X, Y> runningPoint;
 
+    private List<GateCompletedListener> listeners = new ArrayList<>();
+
     private LineTo dynamicLine = new LineTo();
 
     private boolean isCompleted = false;
@@ -93,6 +95,8 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
                     // correct last element to make node closure
                     points.get(0).setXValue(points.get(points.size() - 1).getXValue());
                     points.get(0).setYValue(points.get(points.size() - 1).getYValue());
+                    // fire event
+                    listeners.forEach(GateCompletedListener::onCompleted);
                 }
             }
         }
@@ -103,6 +107,11 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
         if (isCompleted()) {
             relocateNode(xAxis, yAxis);
         }
+    }
+
+    @Override
+    public void addCompletedListener(GateCompletedListener listener) {
+        listeners.add(listener);
     }
 
     private boolean closeEnough(Point2D p1, Point2D p2) {

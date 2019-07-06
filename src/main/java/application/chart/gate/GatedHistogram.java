@@ -11,10 +11,12 @@ import javafx.scene.chart.XYChart;
 
 import java.util.*;
 
-public class GatedHistogram extends AreaChart<Number, Number> implements GatableChart {
+public class GatedHistogram extends AreaChart<Number, Number>
+        implements GatableChart, GateCompletedListener {
 
     private Gate<Number, Number> gate;
     private List<KVData> dataList = new ArrayList<>();
+    private List<GateLifeCycleListener> listeners = new ArrayList<>();
 
     public GatedHistogram(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -90,12 +92,14 @@ public class GatedHistogram extends AreaChart<Number, Number> implements Gatable
     @Override
     public void setGate(Gate gate) {
         this.gate = gate;
+        this.gate.addCompletedListener(this);
     }
 
     @Override
     public void removeGate() {
         if (gate != null) {
             getPlotChildren().remove(gate.getNode());
+            listeners.forEach(GateLifeCycleListener::afterDestroy);
         }
     }
 
@@ -142,5 +146,20 @@ public class GatedHistogram extends AreaChart<Number, Number> implements Gatable
     public void setAxisCandidateNames(List<String> names) {
         getXAxis().setUserData(names);
         getYAxis().setUserData(new ArrayList<>(Arrays.asList("Count")));
+    }
+
+    @Override
+    public void addGateLifeCycleListener(GateLifeCycleListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public List<KVData> getKVData() {
+        return dataList;
+    }
+
+    @Override
+    public void onCompleted() {
+        listeners.forEach(GateLifeCycleListener::afterComplete);
     }
 }

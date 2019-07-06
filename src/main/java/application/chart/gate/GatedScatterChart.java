@@ -10,14 +10,14 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-public class GatedScatterChart extends ScatterChart<Number, Number> implements GatableChart {
+public class GatedScatterChart extends ScatterChart<Number, Number>
+        implements GatableChart, GateCompletedListener {
 
     private Gate<Number, Number> gate;
     private List<KVData> dataList = new ArrayList<>();
+    private List<GateLifeCycleListener> listeners = new ArrayList<>();
 
     public GatedScatterChart(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -113,12 +113,14 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
     @Override
     public void setGate(Gate gate) {
         this.gate = gate;
+        gate.addCompletedListener(this);
     }
 
     @Override
     public void removeGate() {
         if (gate != null) {
             getPlotChildren().remove(gate.getNode());
+            listeners.forEach(GateLifeCycleListener::afterDestroy);
         }
     }
 
@@ -160,4 +162,18 @@ public class GatedScatterChart extends ScatterChart<Number, Number> implements G
         getYAxis().setUserData(names);
     }
 
+    @Override
+    public void addGateLifeCycleListener(GateLifeCycleListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public List<KVData> getKVData() {
+        return dataList;
+    }
+
+    @Override
+    public void onCompleted() {
+        listeners.forEach(GateLifeCycleListener::afterComplete);
+    }
 }

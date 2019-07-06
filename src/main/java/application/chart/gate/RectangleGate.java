@@ -15,6 +15,8 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
     private List<XYChart.Data<X, Y>> points = new ArrayList<>();
     private XYChart.Data<X, Y> runningPoint;
 
+    private List<GateCompletedListener> listeners = new ArrayList<>();
+
     public RectangleGate() {
         super();
         node = new Rectangle();
@@ -44,6 +46,9 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
             return;
         }
         points.add(point);
+        if (isCompleted()) {
+            listeners.forEach(GateCompletedListener::onCompleted);
+        }
     }
 
     @Override
@@ -62,6 +67,11 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
         if (isCompleted()) {
             relocateNodeByPoint(xAxis, yAxis);
         }
+    }
+
+    @Override
+    public void addCompletedListener(GateCompletedListener listener) {
+        listeners.add(listener);
     }
 
     protected void decideNextPointAnimation(Axis<X> xAxis, Axis<Y> yAxis) {

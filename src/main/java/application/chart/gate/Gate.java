@@ -17,4 +17,6 @@ public interface Gate<X, Y> {
     Node getNode();
 
     void paint(Axis<X> xAxis, Axis<Y> yAxis);
+
+    void addCompletedListener(GateCompletedListener listener);
 }
