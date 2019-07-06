@@ -1,11 +1,23 @@
 package application.chart.gate;
 
 import application.chart.ChartSettings;
+import application.utils.UiUtils;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GatableChartContextMenu extends ContextMenu {
 
@@ -43,9 +55,40 @@ public class GatableChartContextMenu extends ContextMenu {
                 stage.show();
             }
         });
+        MenuItem exportKVDataItem = new MenuItem("导出数据");
+        exportKVDataItem.setOnAction(event -> {
+            List<KVData> dataList = gatableChart.getKVData();
+            if (dataList.isEmpty()) {
+                UiUtils.getAlert(Alert.AlertType.INFORMATION, null,
+                        "当前图无数据可保存").showAndWait();
+                return;
+            }
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Save...");
+            File file = chooser.showSaveDialog(this.getScene().getWindow());
+            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()),
+                    Charset.forName("utf-8"))) {
+                // write header
+                List<String> names = dataList.get(0).getNames();
+                writer.write(String.join("\t", names));
+                writer.newLine();
+                // write data
+                for (KVData data :
+                        dataList) {
+                    List<String> values = names.stream()
+                            .map(name -> String.valueOf(data.getValueByName(name)))
+                            .collect(Collectors.toList());
+                    writer.write(String.join("\t", values));
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         getItems().add(createRectangleGateItem);
         getItems().add(createPolygonGateItem);
         getItems().add(deleteGateItem);
         getItems().add(settingsItem);
+        getItems().add(exportKVDataItem);
     }
 }
