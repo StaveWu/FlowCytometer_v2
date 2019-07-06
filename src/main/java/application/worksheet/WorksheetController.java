@@ -71,9 +71,4 @@ public class WorksheetController implements Initializable {
         log.info("on connecting");
         chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
     }
-
-    @FXML
-    protected void gateRectangle() {
-        log.info("on rectangle gating");
-    }
 }
