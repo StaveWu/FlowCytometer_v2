@@ -1,6 +1,9 @@
 package application.worksheet;
 
 import application.channel.featurecapturing.ChannelMeta;
+import application.chart.ChartWrapper;
+import application.chart.gate.GatedHistogram;
+import application.chart.gate.GatedScatterChart;
 import application.event.CellFeatureCapturedEvent;
 import application.event.ChannelChangedEvent;
 import application.event.EventBusFactory;
@@ -8,6 +11,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
+import javafx.scene.chart.NumberAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,10 +29,11 @@ public class WorksheetController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
+    private Point2D chartInitLocation = new Point2D(-30, -30);
+    private List<String> channelNames = new ArrayList<>();
+
     @FXML
     private LinkedChartsPane chartsPane;
-
-    private List<String> channelNames = new ArrayList<>();
 
     public WorksheetController() {
         eventBus.register(this);
@@ -35,7 +41,6 @@ public class WorksheetController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        log.info("initialize");
         chartsPane.setAxisCandidateNames(channelNames);
     }
 
@@ -58,17 +63,44 @@ public class WorksheetController implements Initializable {
 
     @FXML
     protected void createScatterChart() {
-        chartsPane.createScatterChart();
+        GatedScatterChart scatterChart = new GatedScatterChart(
+                new NumberAxis(),
+                new NumberAxis());
+        ChartWrapper wrapper = new ChartWrapper(scatterChart);
+        nextChartLocation();
+        wrapper.setLayoutX(chartInitLocation.getX());
+        wrapper.setLayoutY(chartInitLocation.getY());
+        wrapper.setAxisCandidateNames(channelNames);
+        chartsPane.getChildren().add(wrapper);
     }
 
     @FXML
     protected void createHistogram() {
-        chartsPane.createHistogram();
+        GatedHistogram histogram = new GatedHistogram(
+                new NumberAxis(),
+                new NumberAxis());
+        ChartWrapper wrapper = new ChartWrapper(histogram);
+        nextChartLocation();
+        wrapper.setLayoutX(chartInitLocation.getX());
+        wrapper.setLayoutY(chartInitLocation.getY());
+        wrapper.setAxisCandidateNames(channelNames);
+        chartsPane.getChildren().add(wrapper);
     }
 
     @FXML
     protected void connect() {
         log.info("on connecting");
         chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
+    }
+
+    private void nextChartLocation() {
+        // Set chart's initial location misalignment, so different
+        // chart can look more clearly
+        Point2D old = chartInitLocation;
+        if (old.getX() > 200) {
+            chartInitLocation = new Point2D(10, 10);
+        } else {
+            chartInitLocation = new Point2D(old.getX() + 40, old.getY() + 40);
+        }
     }
 }

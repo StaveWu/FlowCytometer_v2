@@ -2,12 +2,9 @@ package application.worksheet;
 
 import application.chart.ArrowHead;
 import application.chart.ChartWrapper;
-import application.chart.gate.GatedHistogram;
-import application.chart.gate.GatedScatterChart;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -16,9 +13,6 @@ import java.util.List;
 public class LinkedChartsPane extends AnchorPane {
 
     private ArrowHead activeArrowHead;
-
-    private Point2D chartInitLocation = new Point2D(-30, -30);
-    private List<String> axisCandidateNames;
 
     public enum State {
         ON_CONNECTING,
@@ -223,44 +217,8 @@ public class LinkedChartsPane extends AnchorPane {
     }
 
     public void setAxisCandidateNames(List<String> names) {
-        axisCandidateNames = names;
         getChildren().stream()
                 .filter(child -> child instanceof ChartWrapper)
                 .forEach(child -> ((ChartWrapper) child).setAxisCandidateNames(names));
-    }
-
-    public void createScatterChart() {
-        GatedScatterChart scatterChart = new GatedScatterChart(
-                new NumberAxis(),
-                new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(scatterChart);
-        nextChartLocation();
-        wrapper.setLayoutX(chartInitLocation.getX());
-        wrapper.setLayoutY(chartInitLocation.getY());
-        wrapper.setAxisCandidateNames(axisCandidateNames);
-        getChildren().add(wrapper);
-    }
-
-    public void createHistogram() {
-        GatedHistogram histogram = new GatedHistogram(
-                new NumberAxis(),
-                new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(histogram);
-        nextChartLocation();
-        wrapper.setLayoutX(chartInitLocation.getX());
-        wrapper.setLayoutY(chartInitLocation.getY());
-        wrapper.setAxisCandidateNames(axisCandidateNames);
-        getChildren().add(wrapper);
-    }
-
-    private void nextChartLocation() {
-        // Set chart's initial location misalignment, so different
-        // chart can look more clearly
-        Point2D old = chartInitLocation;
-        if (old.getX() > 200) {
-            chartInitLocation = new Point2D(10, 10);
-        } else {
-            chartInitLocation = new Point2D(old.getX() + 40, old.getY() + 40);
-        }
     }
 }
