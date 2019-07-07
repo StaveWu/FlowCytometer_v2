@@ -7,6 +7,7 @@ import application.chart.gate.GateLifeCycleListener;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.lang.NonNull;
@@ -260,13 +261,32 @@ public class LinkedChartsPane extends AnchorPane {
         chart.layoutYProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        chart.getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+        NumberAxis xAxis = (NumberAxis) chart.getXAxis();
+        xAxis.labelProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        chart.getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+        xAxis.autoRangingProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-
+        xAxis.lowerBoundProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        xAxis.upperBoundProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        NumberAxis yAxis = (NumberAxis) chart.getYAxis();
+        yAxis.labelProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        yAxis.autoRangingProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        yAxis.lowerBoundProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
+        yAxis.upperBoundProperty().addListener((observable, oldValue, newValue) -> {
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
+        });
     }
 
     private void hookGateCompletedListener(WrappedChart chart) {
