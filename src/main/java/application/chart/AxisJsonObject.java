@@ -25,6 +25,7 @@ public class AxisJsonObject {
     }
 
     public void initAxis(NumberAxis axis) {
+        axis.setLabel(label);
         axis.setAutoRanging(autoRanging);
         axis.setTickUnit(tickUnit);
         axis.setLowerBound(lowerBound);
