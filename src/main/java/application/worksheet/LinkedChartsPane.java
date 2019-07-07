@@ -1,10 +1,7 @@
 package application.worksheet;
 
 import application.chart.ArrowHead;
-import application.chart.ChartRemovedListener;
-import application.chart.ChartWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import application.chart.WrappedChart;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -42,8 +39,8 @@ public class LinkedChartsPane extends AnchorPane {
                 if (c.wasAdded()) {
                     for (Node node :
                             c.getAddedSubList()) {
-                        if (node instanceof ChartWrapper) {
-                            addRecorrectArrowHeadListener((ChartWrapper) node);
+                        if (node instanceof WrappedChart) {
+                            addRecorrectArrowHeadListener((WrappedChart) node);
                         }
                     }
                 }
@@ -72,13 +69,13 @@ public class LinkedChartsPane extends AnchorPane {
             if (isOnConnecting()) {
                 activeArrowHead.setEnd(event.getX(), event.getY());
                 setState(State.IDLE);
-                ChartWrapper startChart = queryChartByPoint(activeArrowHead.getStart());
+                WrappedChart startChart = queryChartByPoint(activeArrowHead.getStart());
                 if (startChart == null) { // arrowhead is not valid, so remove it
                     removeArrowHead();
                     return;
                 }
 
-                ChartWrapper endChart = queryChartByPoint(activeArrowHead.getEnd());
+                WrappedChart endChart = queryChartByPoint(activeArrowHead.getEnd());
                 if (endChart == null) {
                     removeArrowHead();
                     return;
@@ -89,9 +86,9 @@ public class LinkedChartsPane extends AnchorPane {
         });
     }
 
-    private ChartWrapper queryChartByPoint(Point2D point) {
-        return (ChartWrapper) getChildren().stream()
-                .filter(child -> child instanceof ChartWrapper
+    private WrappedChart queryChartByPoint(Point2D point) {
+        return (WrappedChart) getChildren().stream()
+                .filter(child -> child instanceof WrappedChart
                         && child.contains(child.parentToLocal(point)))
                 .findFirst()
                 .orElse(null);
@@ -102,7 +99,7 @@ public class LinkedChartsPane extends AnchorPane {
         activeArrowHead = null;
     }
 
-    private void bind(ArrowHead arrowHead, ChartWrapper startChart, ChartWrapper endChart) {
+    private void bind(ArrowHead arrowHead, WrappedChart startChart, WrappedChart endChart) {
         // clear old arrowhead
         if (startChart.getNextNode() != null) {
             getChildren().remove(startChart.getNextNode());
@@ -117,7 +114,7 @@ public class LinkedChartsPane extends AnchorPane {
         endChart.setPrevNode(arrowHead);
     }
 
-    private void correctArrowHead(ArrowHead arrowHead, ChartWrapper startChart, ChartWrapper endChart) {
+    private void correctArrowHead(ArrowHead arrowHead, WrappedChart startChart, WrappedChart endChart) {
         Point2D srcCenter = getCenterPoint(startChart);
         Point2D dstCenter = getCenterPoint(endChart);
 
@@ -176,13 +173,13 @@ public class LinkedChartsPane extends AnchorPane {
         arrowHead.setEnd(bestEndX, bestEndY);
     }
 
-    private Point2D getCenterPoint(ChartWrapper chart) {
+    private Point2D getCenterPoint(WrappedChart chart) {
         double centerX = chart.getLayoutX() + chart.getWidth() / 2;
         double centerY = chart.getLayoutY() + chart.getHeight() / 2;
         return new Point2D(centerX, centerY);
     }
 
-    private void addRecorrectArrowHeadListener(ChartWrapper chart) {
+    private void addRecorrectArrowHeadListener(WrappedChart chart) {
         chart.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             recorrectArrowHead(chart);
         });
@@ -194,15 +191,15 @@ public class LinkedChartsPane extends AnchorPane {
         });
     }
 
-    private void recorrectArrowHead(ChartWrapper chart) {
+    private void recorrectArrowHead(WrappedChart chart) {
         ArrowHead prevArrowHead = (ArrowHead) chart.getPrevNode();
         if (prevArrowHead != null) {
-            ChartWrapper prevChart = (ChartWrapper) prevArrowHead.getPrevNode();
+            WrappedChart prevChart = (WrappedChart) prevArrowHead.getPrevNode();
             correctArrowHead(prevArrowHead, prevChart, chart);
         }
         ArrowHead nextArrowHead = (ArrowHead) chart.getNextNode();
         if (nextArrowHead != null) {
-            ChartWrapper nextChart = (ChartWrapper) nextArrowHead.getNextNode();
+            WrappedChart nextChart = (WrappedChart) nextArrowHead.getNextNode();
             correctArrowHead(nextArrowHead, chart, nextChart);
         }
     }
@@ -214,39 +211,39 @@ public class LinkedChartsPane extends AnchorPane {
         getHeadChart().addData(cellFeature);
     }
 
-    private ChartWrapper getHeadChart() {
-        return (ChartWrapper) getChildren().stream()
-                .filter(child -> child instanceof ChartWrapper)
-                .filter(child -> ((ChartWrapper)child).getPrevNode() == null)
+    private WrappedChart getHeadChart() {
+        return (WrappedChart) getChildren().stream()
+                .filter(child -> child instanceof WrappedChart)
+                .filter(child -> ((WrappedChart)child).getPrevNode() == null)
                 .findFirst()
                 .orElse(null);
     }
 
     public void setAxisCandidateNames(List<String> names) {
         getChildren().stream()
-                .filter(child -> child instanceof ChartWrapper)
-                .forEach(child -> ((ChartWrapper) child).setAxisCandidateNames(names));
+                .filter(child -> child instanceof WrappedChart)
+                .forEach(child -> ((WrappedChart) child).setAxisCandidateNames(names));
     }
 
-    public List<ChartWrapper> getCharts() {
+    public List<WrappedChart> getCharts() {
         return getChildren().stream()
-                .filter(child -> child instanceof ChartWrapper)
-                .map(child -> (ChartWrapper) child)
+                .filter(child -> child instanceof WrappedChart)
+                .map(child -> (WrappedChart) child)
                 .collect(Collectors.toList());
     }
 
-    public void add(ChartWrapper chart) {
+    public void add(WrappedChart chart) {
         hookChartPropertyChangeListener(chart);
         hookChartRemoveListener(chart);
         getChildren().add(chart);
         listeners.forEach(ChartLifeCycleListener::afterCreate);
     }
 
-    private void hookChartRemoveListener(ChartWrapper chart) {
+    private void hookChartRemoveListener(WrappedChart chart) {
         chart.addChartRemovedListener(() -> listeners.forEach(ChartLifeCycleListener::afterRemove));
     }
 
-    private void hookChartPropertyChangeListener(ChartWrapper chart) {
+    private void hookChartPropertyChangeListener(WrappedChart chart) {
         chart.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             listeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
@@ -256,10 +253,10 @@ public class LinkedChartsPane extends AnchorPane {
         chart.layoutYProperty().addListener((observable, oldValue, newValue) -> {
             listeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        chart.getChart().getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+        chart.getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
             listeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        chart.getChart().getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+        chart.getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
             listeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
 

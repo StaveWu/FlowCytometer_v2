@@ -34,7 +34,7 @@ public class CustomChartApp extends Application {
         series1.getData().add(new XYChart.Data(100, 26.4));
 
         sc.getData().addAll(series1);
-        ChartWrapper wrapper = new ChartWrapper(sc);
+        WrappedChart wrapper = new WrappedChart(sc);
 
         Pane root = new Pane();
         root.getChildren().add(wrapper);

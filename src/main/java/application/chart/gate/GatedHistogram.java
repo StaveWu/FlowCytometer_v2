@@ -12,7 +12,7 @@ import javafx.scene.chart.XYChart;
 import java.util.*;
 
 public class GatedHistogram extends AreaChart<Number, Number>
-        implements GatableChart, GateCompletedListener {
+        implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
 
     private Gate<Number, Number> gate;
     private List<KVData> dataList = new ArrayList<>();
@@ -31,7 +31,6 @@ public class GatedHistogram extends AreaChart<Number, Number>
         getYAxis().setLabel("Count");
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
-        gatableHooker.hookContextMenu();
         gatableHooker.hookGateAction();
     }
 
@@ -104,7 +103,7 @@ public class GatedHistogram extends AreaChart<Number, Number>
     }
 
     @Override
-    public Gate getGate() {
+    public Gate<Number, Number> getGate() {
         return gate;
     }
 

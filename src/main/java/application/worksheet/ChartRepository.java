@@ -1,6 +1,6 @@
 package application.worksheet;
 
-import application.chart.ChartWrapper;
+import application.chart.WrappedChart;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Repository;
@@ -30,21 +30,21 @@ public class ChartRepository {
         }
     }
 
-    public void saveAll(List<ChartWrapper> charts) throws IOException {
+    public void saveAll(List<WrappedChart> charts) throws IOException {
         checkLocation();
-        List<ChartWrapper.JsonObject> jsonCharts = charts.stream()
-                .map(ChartWrapper::toJsonObject)
+        List<WrappedChart.JsonObject> jsonCharts = charts.stream()
+                .map(WrappedChart::toJsonObject)
                 .collect(Collectors.toList());
         Files.write(Paths.get(location), gson.toJson(jsonCharts).getBytes());
     }
 
-    public List<ChartWrapper> findAll() {
+    public List<WrappedChart> findAll() {
         checkLocation();
-        List<ChartWrapper> charts = new ArrayList<>();
+        List<WrappedChart> charts = new ArrayList<>();
         try (Reader reader = new FileReader(location)) {
-            List<ChartWrapper.JsonObject> jsonCharts = gson.fromJson(reader,
-                    new TypeToken<List<ChartWrapper.JsonObject>>(){}.getType());
-            jsonCharts.stream().map(ChartWrapper::fromJsonObject).forEach(charts::add);
+            List<WrappedChart.JsonObject> jsonCharts = gson.fromJson(reader,
+                    new TypeToken<List<WrappedChart.JsonObject>>(){}.getType());
+            jsonCharts.stream().map(WrappedChart::fromJsonObject).forEach(charts::add);
         } catch (IOException e) {
             // do nothing
         }

@@ -6,9 +6,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -19,7 +23,8 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListener {
+public class WrappedChart extends VBox implements LinkedNode,
+        GatableChart<Number, Number>, GateLifeCycleListener {
 
     private FlowPane titledPane;
     private Pane bottomPane;
@@ -32,16 +37,18 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
     private LinkedNode prevNode;
     private LinkedNode nextNode;
 
-    private XYChart chart;
+    private XYChart<Number, Number> chart;
+    private ContextMenu contextMenu;
 
     private List<ChartRemovedListener> listeners = new ArrayList<>();
 
-    public ChartWrapper(XYChart chart) {
+    public WrappedChart(XYChart<Number, Number> chart) {
         super();
         this.chart = chart;
-        if (chart instanceof GatableChart) {
-            ((GatableChart) chart).addGateLifeCycleListener(this);
+        if (!(chart instanceof GatableChart)) {
+            throw new IllegalArgumentException();
         }
+        ((GatableChart) chart).addGateLifeCycleListener(this);
         createTitledPane();
         createBottomPane();
         createResizeMarkRegion();
@@ -60,6 +67,7 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
 
         hookDragHandlers();
         hookResizeHandlers();
+        hookContextMenu();
     }
 
     private void createTitledPane() {
@@ -106,7 +114,7 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
                 this.setPrevNode(null);
             }
             // remove self
-            ((Pane) getParent()).getChildren().remove(ChartWrapper.this);
+            ((Pane) getParent()).getChildren().remove(WrappedChart.this);
             // fire remove event
             listeners.forEach(ChartRemovedListener::chartRemoved);
         });
@@ -134,7 +142,7 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
         });
     }
 
-    public void hookDragHandlers() {
+    private void hookDragHandlers() {
         dragContext = new DragContext();
         addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (titledPane.contains(event.getX(), event.getY())) {
@@ -162,7 +170,7 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
         });
     }
 
-    public void hookResizeHandlers() {
+    private void hookResizeHandlers() {
         resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             canResize = true;
         });
@@ -175,6 +183,18 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
         resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if (canResize) {
                 canResize = false;
+            }
+        });
+    }
+
+    private void hookContextMenu() {
+        chart.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.isPopupTrigger()) {
+                if (contextMenu == null) {
+                    contextMenu = new GatableChartContextMenu((GatableChart) chart);
+                }
+                contextMenu.show(chart,
+                        event.getScreenX(), event.getScreenY());
             }
         });
     }
@@ -195,13 +215,16 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
         if (nextNode == null) {
             return;
         }
-        GatableChart gatableChart = (GatableChart) chart;
-        gatableChart.getKVData().stream()
-                .filter(gatableChart::isGated)
+        gatableChart().getKVData().stream()
+                .filter(gatableChart()::isGated)
                 .forEach(kvData -> {
-                    ChartWrapper nextChart = (ChartWrapper) nextNode.getNextNode();
+                    WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
                     nextChart.addData(kvData);
                 });
+    }
+
+    private GatableChart<Number, Number> gatableChart() {
+        return (GatableChart<Number, Number>) chart;
     }
 
     private static final class DragContext {
@@ -231,29 +254,61 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
         nextNode = node;
     }
 
+    @Override
+    public void setGate(Gate gate) {
+        gatableChart().setGate(gate);
+    }
+
+    @Override
+    public void removeGate() {
+        gatableChart().removeGate();
+    }
+
+    @Override
+    public Gate<Number, Number> getGate() {
+        return gatableChart().getGate();
+    }
+
+    @Override
     public void addData(KVData data) {
-        if (chart instanceof GatableChart) {
-            GatableChart gatableChart = (GatableChart) chart;
-            gatableChart.addData(data);
-            if (nextNode != null && gatableChart.isGated(data)) {
-                ChartWrapper nextChart = (ChartWrapper) nextNode.getNextNode();
-                nextChart.addData(data);
-            }
+        gatableChart().addData(data);
+        if (nextNode != null && gatableChart().isGated(data)) {
+            WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
+            nextChart.addData(data);
         }
     }
 
+    @Override
+    public boolean isGated(KVData data) {
+        return gatableChart().isGated(data);
+    }
+
     public void setAxisCandidateNames(List<String> names) {
-        if (chart instanceof GatableChart) {
-            ((GatableChart) chart).setAxisCandidateNames(names);
-        }
+        gatableChart().setAxisCandidateNames(names);
+    }
+
+    @Override
+    public void addGateLifeCycleListener(GateLifeCycleListener listener) {
+        gatableChart().addGateLifeCycleListener(listener);
+    }
+
+    @Override
+    public List<KVData> getKVData() {
+        return gatableChart().getKVData();
+    }
+
+    @Override
+    public Axis<Number> getXAxis() {
+        return gatableChart().getXAxis();
+    }
+
+    @Override
+    public Axis<Number> getYAxis() {
+        return gatableChart().getYAxis();
     }
 
     public void addChartRemovedListener(ChartRemovedListener listener) {
         listeners.add(listener);
-    }
-
-    public XYChart getChart() {
-        return chart;
     }
 
     public JsonObject toJsonObject() {
@@ -272,8 +327,8 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
                 AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()));
     }
 
-    public static ChartWrapper fromJsonObject(JsonObject json) {
-        XYChart chart;
+    public static WrappedChart fromJsonObject(JsonObject json) {
+        XYChart<Number, Number> chart;
         if (json.type.equals("Scatter")) {
             chart = new GatedScatterChart(
                     new NumberAxis(),
@@ -295,7 +350,7 @@ public class ChartWrapper extends VBox implements LinkedNode, GateLifeCycleListe
 //        json.gateJson.points.forEach(p -> gate.addPoint((XYChart.Data<Number, Number>) p));
 //        ((GatableChart) chart).setGate(gate);
 
-        ChartWrapper wrapper = new ChartWrapper(chart);
+        WrappedChart wrapper = new WrappedChart(chart);
         wrapper.setLayoutX(json.x);
         wrapper.setLayoutY(json.y);
         wrapper.setPrefWidth(json.width);

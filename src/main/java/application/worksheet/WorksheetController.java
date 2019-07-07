@@ -1,7 +1,7 @@
 package application.worksheet;
 
 import application.channel.featurecapturing.ChannelMeta;
-import application.chart.ChartWrapper;
+import application.chart.WrappedChart;
 import application.chart.gate.GatedHistogram;
 import application.chart.gate.GatedScatterChart;
 import application.event.CellFeatureCapturedEvent;
@@ -102,7 +102,7 @@ public class WorksheetController implements Initializable {
         GatedScatterChart scatterChart = new GatedScatterChart(
                 new NumberAxis(),
                 new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(scatterChart);
+        WrappedChart wrapper = new WrappedChart(scatterChart);
         nextChartLocation();
         wrapper.setLayoutX(chartInitLocation.getX());
         wrapper.setLayoutY(chartInitLocation.getY());
@@ -125,7 +125,7 @@ public class WorksheetController implements Initializable {
         GatedHistogram histogram = new GatedHistogram(
                 new NumberAxis(),
                 new NumberAxis());
-        ChartWrapper wrapper = new ChartWrapper(histogram);
+        WrappedChart wrapper = new WrappedChart(histogram);
         nextChartLocation();
         wrapper.setLayoutX(chartInitLocation.getX());
         wrapper.setLayoutY(chartInitLocation.getY());

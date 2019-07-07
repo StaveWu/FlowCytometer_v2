@@ -1,40 +1,26 @@
 package application.chart.gate;
 
-import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class GatableHooker {
 
-    private GatableChart gatableChart;
-    private GatableChartContextMenu contextMenu;
+    private Gatable gatable;
 
-    public GatableHooker(GatableChart gatableChart) {
-        this.gatableChart = gatableChart;
-    }
-
-    public void hookContextMenu() {
-        gatableChart.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.isPopupTrigger()) {
-                if (contextMenu == null) {
-                    contextMenu = new GatableChartContextMenu(gatableChart);
-                }
-                contextMenu.show((Node) gatableChart,
-                        event.getScreenX(), event.getScreenY());
-            }
-        });
+    public GatableHooker(Gatable gatable) {
+        this.gatable = gatable;
     }
 
     public void hookGateAction() {
-        gatableChart.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (gatableChart.isActive()
+        gatable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (gatable.isActive()
                     && event.getButton() == MouseButton.PRIMARY) {
-                gatableChart.addPoint(event.getSceneX(), event.getSceneY());
+                gatable.addPoint(event.getSceneX(), event.getSceneY());
             }
         });
-        gatableChart.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
-            if (gatableChart.isActive() && gatableChart.isLocated()) {
-                gatableChart.setRunningPoint(event.getSceneX(), event.getSceneY());
+        gatable.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
+            if (gatable.isActive() && gatable.isLocated()) {
+                gatable.setRunningPoint(event.getSceneX(), event.getSceneY());
             }
         });
     }

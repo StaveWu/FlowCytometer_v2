@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GatedScatterChart extends ScatterChart<Number, Number>
-        implements GatableChart, GateCompletedListener {
+        implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
 
     private Gate<Number, Number> gate;
     private List<KVData> dataList = new ArrayList<>();
@@ -31,7 +31,6 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         // use user data to store axis names
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
-        gatableHooker.hookContextMenu();
         gatableHooker.hookGateAction();
     }
 
@@ -125,7 +124,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     }
 
     @Override
-    public Gate getGate() {
+    public Gate<Number, Number> getGate() {
         return gate;
     }
 
