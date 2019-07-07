@@ -9,7 +9,10 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class GatedHistogram extends AreaChart<Number, Number>
         implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
@@ -82,16 +85,16 @@ public class GatedHistogram extends AreaChart<Number, Number>
         if (gate == null) {
             return;
         }
-        if (!getPlotChildren().contains(gate.getNode())) {
-            getPlotChildren().add(gate.getNode());
-        }
         gate.addPoint(getDataForDisplay(x, y));
     }
 
     @Override
-    public void setGate(Gate gate) {
+    public void setGate(Gate<Number, Number> gate) {
         this.gate = gate;
         this.gate.addCompletedListener(this);
+        if (!getPlotChildren().contains(gate.getNode())) {
+            getPlotChildren().add(gate.getNode());
+        }
     }
 
     @Override

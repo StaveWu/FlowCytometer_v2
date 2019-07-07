@@ -3,6 +3,8 @@ package application.worksheet;
 import application.chart.WrappedChart;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileReader;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ChartRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(ChartRepository.class);
 
     private Gson gson = new Gson();
     private String location;
@@ -47,6 +51,7 @@ public class ChartRepository {
             jsonCharts.stream().map(WrappedChart::fromJsonObject).forEach(charts::add);
         } catch (IOException e) {
             // do nothing
+            log.info("io error occurred when load all chart");
         }
         return charts;
     }

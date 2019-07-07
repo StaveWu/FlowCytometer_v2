@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GatableChart<X, Y> {
 
-    void setGate(Gate gate);
+    void setGate(Gate<X, Y> gate);
 
     void removeGate();
 

@@ -103,16 +103,16 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         if (gate == null) {
             return;
         }
-        if (!getPlotChildren().contains(gate.getNode())) {
-            getPlotChildren().add(gate.getNode());
-        }
         gate.addPoint(getDataForDisplay(x, y));
     }
 
     @Override
-    public void setGate(Gate gate) {
+    public void setGate(Gate<Number, Number> gate) {
         this.gate = gate;
         gate.addCompletedListener(this);
+        if (!getPlotChildren().contains(gate.getNode())) {
+            getPlotChildren().add(gate.getNode());
+        }
     }
 
     @Override

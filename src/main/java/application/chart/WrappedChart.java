@@ -324,7 +324,8 @@ public class WrappedChart extends VBox implements LinkedNode,
         return new JsonObject(type, getLayoutX(), getLayoutY(),
                 getPrefWidth(), getPrefHeight(),
                 AxisJsonObject.fromAxis((NumberAxis) chart.getXAxis()),
-                AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()));
+                AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()),
+                GateJsonObject.fromGate(getGate()));
     }
 
     public static WrappedChart fromJsonObject(JsonObject json) {
@@ -333,28 +334,35 @@ public class WrappedChart extends VBox implements LinkedNode,
             chart = new GatedScatterChart(
                     new NumberAxis(),
                     new NumberAxis());
-        } else {
+        } else if (json.type.equals("Histogram")) {
             chart = new GatedHistogram(
                     new NumberAxis(),
                     new NumberAxis());
+        } else {
+            throw new RuntimeException("Unknown type of chart");
         }
         json.xAxisJson.initAxis((NumberAxis) chart.getXAxis());
         json.yAxisJson.initAxis((NumberAxis) chart.getYAxis());
-
-//        Gate<Number, Number> gate;
-//        if (json.gateJson.type.equals("Rectangle")) {
-//            gate = new RectangleGate<>();
-//        } else {
-//            gate = new PolygonGate<>();
-//        }
-//        json.gateJson.points.forEach(p -> gate.addPoint((XYChart.Data<Number, Number>) p));
-//        ((GatableChart) chart).setGate(gate);
 
         WrappedChart wrapper = new WrappedChart(chart);
         wrapper.setLayoutX(json.x);
         wrapper.setLayoutY(json.y);
         wrapper.setPrefWidth(json.width);
         wrapper.setPrefHeight(json.height);
+
+        if (!json.gateJson.type.equals("")) {
+            Gate<Number, Number> gate;
+            if (json.gateJson.type.equals("Rectangle")) {
+                gate = new RectangleGate<>();
+            } else if (json.gateJson.type.equals("Polygon")) {
+                gate = new PolygonGate<>();
+            } else {
+                throw new RuntimeException("Unknown type of gate");
+            }
+            wrapper.setGate(gate);
+            json.gateJson.initGate(gate);
+        }
+
         return wrapper;
     }
 
@@ -366,10 +374,11 @@ public class WrappedChart extends VBox implements LinkedNode,
         public final double height;
         public final AxisJsonObject xAxisJson;
         public final AxisJsonObject yAxisJson;
-//        public final GateJsonObject gateJson;
+        public final GateJsonObject<Number, Number> gateJson;
 
         public JsonObject(String type, double x, double y, double width, double height,
-                          AxisJsonObject xAxisJson, AxisJsonObject yAxisJson) {
+                          AxisJsonObject xAxisJson, AxisJsonObject yAxisJson,
+                          GateJsonObject<Number, Number> gateJson) {
             this.type = type;
             this.x = x;
             this.y = y;
@@ -377,7 +386,7 @@ public class WrappedChart extends VBox implements LinkedNode,
             this.height = height;
             this.xAxisJson = xAxisJson;
             this.yAxisJson = yAxisJson;
-//            this.gateJson = gateJson;
+            this.gateJson = gateJson;
         }
     }
 }

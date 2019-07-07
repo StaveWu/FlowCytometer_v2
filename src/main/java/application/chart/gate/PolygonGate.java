@@ -9,6 +9,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PolygonGate<X, Y> implements Gate<X, Y> {
@@ -16,6 +17,7 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
     private Path node;
     private List<XYChart.Data<X, Y>> points = new ArrayList<>();
     private XYChart.Data<X, Y> runningPoint;
+    private LinkedList<XYChart.Data<X, Y>> memoryPoints = new LinkedList<>();
 
     private List<GateCompletedListener> listeners = new ArrayList<>();
 
@@ -51,8 +53,13 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
         if (isCompleted()) {
             return;
         }
-        points.add(point);
-        newPointAdded = true;
+        if (!newPointAdded) {
+            points.add(point);
+            newPointAdded = true;
+        }
+        else { // means the previous point has not been draw yet, so remember it first.
+            memoryPoints.addLast(point);
+        }
     }
 
     @Override
@@ -70,6 +77,14 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
 
     @Override
     public void paint(Axis<X> xAxis, Axis<Y> yAxis) {
+        // handle points that are too late to draw, usually
+        // when points loading first from repository
+        if (!newPointAdded && !memoryPoints.isEmpty()) {
+            points.add(memoryPoints.removeFirst());
+            newPointAdded = true;
+        }
+
+        // accept the drawing of new in point
         if (newPointAdded) {
             newPointAdded = false;
             // add new point to node
