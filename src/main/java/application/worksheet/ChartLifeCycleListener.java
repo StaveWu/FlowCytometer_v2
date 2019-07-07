@@ -2,7 +2,7 @@ package application.worksheet;
 
 public interface ChartLifeCycleListener {
 
-    void afterCreate();
+    void afterAdd();
 
     void afterRemove();
 

@@ -2,6 +2,7 @@ package application.worksheet;
 
 import application.channel.featurecapturing.ChannelMeta;
 import application.chart.WrappedChart;
+import application.chart.gate.GateLifeCycleListener;
 import application.chart.gate.GatedHistogram;
 import application.chart.gate.GatedScatterChart;
 import application.event.CellFeatureCapturedEvent;
@@ -42,7 +43,9 @@ public class WorksheetController implements Initializable {
     private LinkedChartsPane chartsPane;
 
     @Autowired
-    private ChartRepository repository;
+    private ChartRepository chartRepository;
+    @Autowired
+    private ChartChainRepository chartChainRepository;
 
     public WorksheetController() {
         eventBus.register(this);
@@ -52,31 +55,55 @@ public class WorksheetController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         chartsPane.setAxisCandidateNames(channelNames);
 
-        repository.setLocation(FCMRunTimeConfig.getInstance()
+        chartRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "charts.json");
-        repository.findAll().forEach(chart -> {
+        chartRepository.findAll().forEach(chart -> {
             chart.setAxisCandidateNames(channelNames);
             chartsPane.add(chart);
         });
 
+        chartChainRepository.setLocation(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "chart_chains.json");
+        chartsPane.setChartChains(chartChainRepository.findAll());
+        System.out.println(chartChainRepository.findAll());
+
         chartsPane.addChartLifeCycleListener(new ChartLifeCycleListener() {
             @Override
-            public void afterCreate() {
-                log.info("afterCreate");
-                saveCharts();
+            public void afterAdd() {
+                log.info("afterAdd");
+                saveWorksheetSnapshot();
             }
 
             @Override
             public void afterRemove() {
                 log.info("afterRemove");
-                saveCharts();
+                saveWorksheetSnapshot();
             }
 
             @Override
             public void propertyChanged() {
                 log.info("propertyChanged");
-                saveCharts();
+                saveWorksheetSnapshot();
             }
+        });
+
+        chartsPane.addGateLifeCycleListener(new GateLifeCycleListener() {
+            @Override
+            public void afterComplete() {
+                log.info("Gate:afterComplete");
+                saveWorksheetSnapshot();
+            }
+
+            @Override
+            public void afterDestroy() {
+                log.info("Gate:afterDestroy");
+                saveWorksheetSnapshot();
+            }
+        });
+
+        chartsPane.addChartConnectedListener(() -> {
+            log.info("chart connected");
+            saveWorksheetSnapshot();
         });
     }
 
@@ -110,9 +137,10 @@ public class WorksheetController implements Initializable {
         chartsPane.add(wrapper);
     }
 
-    public void saveCharts() {
+    public void saveWorksheetSnapshot() {
         try {
-            repository.saveAll(chartsPane.getCharts());
+            chartRepository.saveAll(chartsPane.getCharts());
+            chartChainRepository.saveAll(chartsPane.getChartChains());
         } catch (IOException e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "保存数据失败",
@@ -135,7 +163,6 @@ public class WorksheetController implements Initializable {
 
     @FXML
     protected void connect() {
-        log.info("on connecting");
         chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
     }
 

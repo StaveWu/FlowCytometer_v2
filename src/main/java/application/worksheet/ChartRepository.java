@@ -51,7 +51,7 @@ public class ChartRepository {
             jsonCharts.stream().map(WrappedChart::fromJsonObject).forEach(charts::add);
         } catch (IOException e) {
             // do nothing
-            log.info("io error occurred when load all chart");
+            log.info("never mind for io error occurring when load all chart");
         }
         return charts;
     }

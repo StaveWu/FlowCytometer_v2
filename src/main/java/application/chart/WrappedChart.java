@@ -26,6 +26,9 @@ import java.util.List;
 public class WrappedChart extends VBox implements LinkedNode,
         GatableChart<Number, Number>, GateLifeCycleListener {
 
+    private static int idCount;
+    private int uniqueId;
+
     private FlowPane titledPane;
     private Pane bottomPane;
     private Rectangle resizeMarkRegion;
@@ -42,8 +45,18 @@ public class WrappedChart extends VBox implements LinkedNode,
 
     private List<ChartRemovedListener> listeners = new ArrayList<>();
 
+    private static final class DragContext {
+        double mouseAnchorX;
+        double mouseAnchorY;
+        double initialLayoutX;
+        double initialLayoutY;
+    }
+
     public WrappedChart(XYChart<Number, Number> chart) {
         super();
+        uniqueId = idCount;
+        idCount++;
+
         this.chart = chart;
         if (!(chart instanceof GatableChart)) {
             throw new IllegalArgumentException();
@@ -199,6 +212,10 @@ public class WrappedChart extends VBox implements LinkedNode,
         });
     }
 
+    public int getUniqueId() {
+        return uniqueId;
+    }
+
     @Override
     public void afterComplete() {
         System.out.println("afterComplete");
@@ -227,13 +244,6 @@ public class WrappedChart extends VBox implements LinkedNode,
         return (GatableChart<Number, Number>) chart;
     }
 
-    private static final class DragContext {
-        double mouseAnchorX;
-        double mouseAnchorY;
-        double initialLayoutX;
-        double initialLayoutY;
-    }
-
     @Override
     public LinkedNode getPrevNode() {
         return prevNode;
@@ -255,7 +265,7 @@ public class WrappedChart extends VBox implements LinkedNode,
     }
 
     @Override
-    public void setGate(Gate gate) {
+    public void setGate(Gate<Number, Number> gate) {
         gatableChart().setGate(gate);
     }
 
@@ -321,7 +331,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         } else {
             throw new RuntimeException("Unknown type of chart");
         }
-        return new JsonObject(type, getLayoutX(), getLayoutY(),
+        return new JsonObject(getUniqueId(), type, getLayoutX(), getLayoutY(),
                 getPrefWidth(), getPrefHeight(),
                 AxisJsonObject.fromAxis((NumberAxis) chart.getXAxis()),
                 AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()),
@@ -367,6 +377,7 @@ public class WrappedChart extends VBox implements LinkedNode,
     }
 
     public class JsonObject {
+        public final int uniqueId;
         public final String type;
         public final double x;
         public final double y;
@@ -376,9 +387,10 @@ public class WrappedChart extends VBox implements LinkedNode,
         public final AxisJsonObject yAxisJson;
         public final GateJsonObject<Number, Number> gateJson;
 
-        public JsonObject(String type, double x, double y, double width, double height,
+        public JsonObject(int uniqueId, String type, double x, double y, double width, double height,
                           AxisJsonObject xAxisJson, AxisJsonObject yAxisJson,
                           GateJsonObject<Number, Number> gateJson) {
+            this.uniqueId = uniqueId;
             this.type = type;
             this.x = x;
             this.y = y;

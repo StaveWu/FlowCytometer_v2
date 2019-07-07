@@ -1,21 +1,27 @@
 package application.worksheet;
 
 import application.chart.ArrowHead;
+import application.chart.LinkedNode;
 import application.chart.WrappedChart;
+import application.chart.gate.GateLifeCycleListener;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class LinkedChartsPane extends AnchorPane {
 
     private ArrowHead activeArrowHead;
-    private List<ChartLifeCycleListener> listeners = new ArrayList<>();
+    private List<ChartLifeCycleListener> chartLifeCycleListeners = new ArrayList<>();
+    private List<GateLifeCycleListener> gateLifeCycleListeners = new ArrayList<>();
+    private List<ChartConnectedListener> chartConnectedListeners = new ArrayList<>();
 
     public enum State {
         ON_CONNECTING,
@@ -81,7 +87,6 @@ public class LinkedChartsPane extends AnchorPane {
                     return;
                 }
                 bind(activeArrowHead, startChart, endChart);
-                correctArrowHead(activeArrowHead, startChart, endChart);
             }
         });
     }
@@ -101,10 +106,14 @@ public class LinkedChartsPane extends AnchorPane {
 
     private void bind(ArrowHead arrowHead, WrappedChart startChart, WrappedChart endChart) {
         // clear old arrowhead
-        if (startChart.getNextNode() != null) {
+        LinkedNode nextArrowHead = startChart.getNextNode();
+        if (nextArrowHead != null) {
+            nextArrowHead.getNextNode().setPrevNode(null);
             getChildren().remove(startChart.getNextNode());
         }
-        if (endChart.getPrevNode() != null) {
+        LinkedNode prevArrowHead = endChart.getPrevNode();
+        if (prevArrowHead != null) {
+            prevArrowHead.getPrevNode().setNextNode(null);
             getChildren().remove(endChart.getPrevNode());
         }
         // bind three linked nodes
@@ -112,6 +121,10 @@ public class LinkedChartsPane extends AnchorPane {
         arrowHead.setNextNode(endChart);
         startChart.setNextNode(arrowHead);
         endChart.setPrevNode(arrowHead);
+
+        correctArrowHead(arrowHead, startChart, endChart);
+        // fire event
+        chartConnectedListeners.forEach(ChartConnectedListener::chartConnected);
     }
 
     private void correctArrowHead(ArrowHead arrowHead, WrappedChart startChart, WrappedChart endChart) {
@@ -205,24 +218,17 @@ public class LinkedChartsPane extends AnchorPane {
     }
 
     public void addCellFeature(CellFeature cellFeature) {
-        if (getHeadChart() == null) {
-            return;
-        }
-        getHeadChart().addData(cellFeature);
+        getHeadCharts().forEach(chart -> chart.addData(cellFeature));
     }
 
-    private WrappedChart getHeadChart() {
-        return (WrappedChart) getChildren().stream()
-                .filter(child -> child instanceof WrappedChart)
-                .filter(child -> ((WrappedChart)child).getPrevNode() == null)
-                .findFirst()
-                .orElse(null);
+    private List<WrappedChart> getHeadCharts() {
+        return getCharts().stream()
+                .filter(child -> child.getPrevNode() == null)
+                .collect(Collectors.toList());
     }
 
     public void setAxisCandidateNames(List<String> names) {
-        getChildren().stream()
-                .filter(child -> child instanceof WrappedChart)
-                .forEach(child -> ((WrappedChart) child).setAxisCandidateNames(names));
+        getCharts().forEach(child -> child.setAxisCandidateNames(names));
     }
 
     public List<WrappedChart> getCharts() {
@@ -235,34 +241,95 @@ public class LinkedChartsPane extends AnchorPane {
     public void add(WrappedChart chart) {
         hookChartPropertyChangeListener(chart);
         hookChartRemoveListener(chart);
+        hookGateCompletedListener(chart);
         getChildren().add(chart);
-        listeners.forEach(ChartLifeCycleListener::afterCreate);
+        chartLifeCycleListeners.forEach(ChartLifeCycleListener::afterAdd);
     }
 
     private void hookChartRemoveListener(WrappedChart chart) {
-        chart.addChartRemovedListener(() -> listeners.forEach(ChartLifeCycleListener::afterRemove));
+        chart.addChartRemovedListener(() -> chartLifeCycleListeners.forEach(ChartLifeCycleListener::afterRemove));
     }
 
     private void hookChartPropertyChangeListener(WrappedChart chart) {
         chart.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
         chart.layoutXProperty().addListener((observable, oldValue, newValue) -> {
-            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
         chart.layoutYProperty().addListener((observable, oldValue, newValue) -> {
-            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
         chart.getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
-            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
         chart.getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
-            listeners.forEach(ChartLifeCycleListener::propertyChanged);
+            chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
 
     }
 
+    private void hookGateCompletedListener(WrappedChart chart) {
+        chart.addGateLifeCycleListener(new GateLifeCycleListener() {
+            @Override
+            public void afterComplete() {
+                gateLifeCycleListeners.forEach(GateLifeCycleListener::afterComplete);
+            }
+
+            @Override
+            public void afterDestroy() {
+                gateLifeCycleListeners.forEach(GateLifeCycleListener::afterDestroy);
+            }
+        });
+    }
+
     public void addChartLifeCycleListener(ChartLifeCycleListener listener) {
-        listeners.add(listener);
+        chartLifeCycleListeners.add(listener);
+    }
+
+    public void addGateLifeCycleListener(GateLifeCycleListener listener) {
+        gateLifeCycleListeners.add(listener);
+    }
+
+    public void addChartConnectedListener(ChartConnectedListener listener) {
+        chartConnectedListeners.add(listener);
+    }
+
+    public List<ChartChain> getChartChains() {
+        List<ChartChain> res = new ArrayList<>();
+        getHeadCharts().forEach(headChart -> {
+            System.out.println(headChart.getUniqueId());
+            ChartChain chain = new ChartChain();
+            chain.add(headChart.getUniqueId());
+
+            LinkedNode nextArrowHead = headChart.getNextNode();
+            while (nextArrowHead != null) {
+                WrappedChart nextChart = (WrappedChart) nextArrowHead.getNextNode();
+                chain.add(nextChart.getUniqueId());
+                nextArrowHead = nextChart.getNextNode();
+            }
+            res.add(chain);
+        });
+        System.out.println(res);
+        return res;
+    }
+
+    public void setChartChains(@NonNull List<ChartChain> chains) {
+        chains.forEach(chain -> {
+            for (int i = 0; i < chain.getIds().size() - 1; i++) {
+                WrappedChart chart = getChartById(chain.getIds().get(i));
+                WrappedChart nextChart = getChartById(chain.getIds().get(i + 1));
+                ArrowHead arrowHead = new ArrowHead(0, 0);
+                getChildren().add(arrowHead);
+                bind(arrowHead, chart, nextChart);
+            }
+        });
+    }
+
+    public WrappedChart getChartById(int chartId) {
+        return getCharts().stream()
+                .filter(chart -> chart.getUniqueId() == chartId)
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
     }
 }
