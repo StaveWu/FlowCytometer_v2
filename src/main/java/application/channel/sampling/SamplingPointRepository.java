@@ -2,13 +2,22 @@ package application.channel.sampling;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class SamplingPointRepository {
 
     private SamplingPointSaver saver;
     private SamplingPointCacher cacher;
+
+    private String location;
 
     public SamplingPointRepository() {
         saver = new SamplingPointSaver();
@@ -28,7 +37,34 @@ public class SamplingPointRepository {
         }
     }
 
+    public Stream<SamplingPoint> pointsStream() throws IOException {
+        // get header
+        List<String> channelIds = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(location))) {
+            String line = reader.readLine();
+            if (line == null) {
+                throw new IOException("empty file");
+            }
+            channelIds.addAll(Arrays.asList(line.split("\t")));
+        }
+        // get sampling point stream
+        return Files.lines(Paths.get(location)).skip(1).map(line -> {
+            List<Float> coords = new ArrayList<>();
+            for (String s :
+                    line.split("\t")) {
+                Float f = Float.valueOf(s);
+                coords.add(f);
+            }
+            SamplingPoint point = new SamplingPoint(channelIds, coords);
+            List<SamplingPoint> pointCache = new ArrayList<>();
+            pointCache.add(point);
+            cacher.cache(pointCache);
+            return point;
+        });
+    }
+
     public void setLocation(String location) {
+        this.location = location;
         saver.setLocation(location);
     }
 }

@@ -25,6 +25,10 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -137,6 +141,22 @@ public class ChannelController implements Initializable {
     protected void listen(SamplingPointsCapturedEvent event) {
         samplingPointRepository.savePoints(event.getSamplingPoints());
         event.getSamplingPoints().forEach(point -> cellFeatureCapturer.addSamplingPoint(point));
+    }
+
+    @Subscribe
+    protected void listen(ChannelDataLoadAction action) {
+        log.info("load channel data: " + action.getChannelDataPath());
+        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll());
+        cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
+
+        samplingPointRepository.setLocation(action.getChannelDataPath());
+        try {
+            samplingPointRepository.pointsStream().forEach(cellFeatureCapturer::addSamplingPoint);
+        } catch (IOException e) {
+            e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "读取文件失败",
+                    e.getMessage()).showAndWait();
+        }
     }
 
 }

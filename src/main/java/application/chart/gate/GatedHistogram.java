@@ -124,10 +124,8 @@ public class GatedHistogram extends AreaChart<Number, Number>
                     .findFirst();
 
             if (existing.isPresent()) {
-                System.out.println("presented");
                 existing.get().setYValue(existing.get().getYValue().intValue() + 1);
             } else {
-                System.out.println("new in");
                 getData().get(0).getData().add(new Data<>(xValue, 1));
             }
         });

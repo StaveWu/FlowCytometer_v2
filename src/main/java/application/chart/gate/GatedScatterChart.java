@@ -45,27 +45,6 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         return lookup(".chart-plot-background");
     }
 
-//    public ObservableList<Series<X, Y>> getGatedData() {
-//        if (gate == null) { // return an empty list if gate not ready
-//            return FXCollections.observableArrayList();
-//        }
-//
-//        ObservableList<Series<X, Y>> res = FXCollections.observableArrayList();
-//        for (int seriesIndex = 0; seriesIndex < getData().size(); seriesIndex++) {
-//            Series<X, Y> series = getData().get(seriesIndex);
-//            Series<X, Y> gatedSeries = new Series<>();
-//            gatedSeries.setName(series.getName());
-//            for (Iterator<Data<X, Y>> it = getDisplayedDataIterator(series); it.hasNext(); ) {
-//                Data<X, Y> item = it.next();
-//                if (gateContains(item.getXValue(), item.getYValue())) {
-//                    gatedSeries.getData().add(item);
-//                }
-//            }
-//            res.add(gatedSeries);
-//        }
-//        return res;
-//    }
-
     /**
      * this method is valid on plot area, different with layoutChildren() method, which
      * belongs to any node class.
@@ -136,7 +115,6 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
             return;
         }
         // plot data
-        System.out.println("plot data");
         Float xValue = data.getValueByName(getXAxis().getLabel());
         Float yValue = data.getValueByName(getYAxis().getLabel());
         Platform.runLater(() -> {

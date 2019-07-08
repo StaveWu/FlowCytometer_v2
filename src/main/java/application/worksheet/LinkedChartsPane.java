@@ -318,7 +318,6 @@ public class LinkedChartsPane extends AnchorPane {
     public List<ChartChain> getChartChains() {
         List<ChartChain> res = new ArrayList<>();
         getHeadCharts().forEach(headChart -> {
-            System.out.println(headChart.getUniqueId());
             ChartChain chain = new ChartChain();
             chain.add(headChart.getUniqueId());
 
@@ -330,7 +329,6 @@ public class LinkedChartsPane extends AnchorPane {
             }
             res.add(chain);
         });
-        System.out.println(res);
         return res;
     }
 

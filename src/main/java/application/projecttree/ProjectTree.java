@@ -1,16 +1,21 @@
 package application.projecttree;
 
+import application.event.ChannelDataLoadAction;
+import application.event.EventBusFactory;
 import application.starter.FCMRunTimeConfig;
 import application.utils.Resource;
 import application.utils.UiUtils;
+import com.google.common.eventbus.EventBus;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +34,13 @@ public class ProjectTree extends VBox implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectTree.class);
     private String rootDir = FCMRunTimeConfig.getInstance().getRootDir();
+    private final EventBus eventBus = EventBusFactory.getEventBus();
 
     @FXML
     private TreeView<TreeItemInfo> treeView;
 
     public ProjectTree() {
+        eventBus.register(this);
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("project_tree.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -51,6 +58,17 @@ public class ProjectTree extends VBox implements Initializable {
             log.info("Traverse dir: " + rootDir);
             treeView.setRoot(traverse(rootDir));
             treeView.getRoot().setExpanded(true);
+            treeView.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    Node node = event.getPickResult().getIntersectedNode();
+                    if (node instanceof Text
+                            || (node instanceof TreeCell
+                            && ((TreeCell) node).getText() != null)) {
+                        String path = getAbsolutePath(treeView.getSelectionModel().getSelectedItem());
+                        eventBus.post(new ChannelDataLoadAction(path));
+                    }
+                }
+            });
 
             // start a daemon thread for watching root directory
             Thread watchDirThread = new Thread(() -> {

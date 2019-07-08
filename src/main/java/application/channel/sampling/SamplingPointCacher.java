@@ -2,6 +2,7 @@ package application.channel.sampling;
 
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class SamplingPointCacher {
         this.maxAllowedCache = maxAllowedCache;
     }
 
-    public void cache(@NonNull List<SamplingPoint> points) {
+    public synchronized void cache(@NonNull List<SamplingPoint> points) {
         cachedPoints.addAll(points);
         // Remove elements that exceed the maximum cache limit
         if (cachedPoints.size() > maxAllowedCache) {
@@ -24,7 +25,7 @@ public class SamplingPointCacher {
         }
     }
 
-    public List<SamplingPoint> getCachedPoints() {
-        return cachedPoints;
+    public synchronized List<SamplingPoint> getCachedPoints() {
+        return new ArrayList<>(cachedPoints);
     }
 }

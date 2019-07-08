@@ -3,11 +3,11 @@ package application.event;
 /**
  * projecttree -> channel, ask channel to load data
  */
-public class ChannelDataOpenAction {
+public class ChannelDataLoadAction {
 
     private String channelDataPath;
 
-    public ChannelDataOpenAction(String channelDataPath) {
+    public ChannelDataLoadAction(String channelDataPath) {
         this.channelDataPath = channelDataPath;
     }
 
