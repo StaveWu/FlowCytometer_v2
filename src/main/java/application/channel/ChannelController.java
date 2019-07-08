@@ -152,7 +152,7 @@ public class ChannelController implements Initializable {
         samplingPointRepository.setLocation(action.getChannelDataPath());
         try {
             samplingPointRepository.pointsStream().forEach(cellFeatureCapturer::addSamplingPoint);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "读取文件失败",
                     e.getMessage()).showAndWait();
