@@ -30,7 +30,7 @@ public class WaveWatcher {
     }
 
     public String getName() {
-        return meta.getName();
+        return meta.getNameWithPolicy();
     }
 
     public Float getWave() {

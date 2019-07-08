@@ -84,6 +84,10 @@ public class ChannelMeta {
         peakPolicyProperty().set(peakPolicy);
     }
 
+    public String getNameWithPolicy() {
+        return getName() + "-" + getPeakPolicy().charAt(0);
+    }
+
     public class JsonObject {
         public final String id;
         public final String name;

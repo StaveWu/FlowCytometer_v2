@@ -117,7 +117,7 @@ public class WorksheetController implements Initializable {
     public void listen(ChannelChangedEvent event) {
         log.info("channel changed");
         channelNames = event.getChannelMetas().stream()
-                .map(ChannelMeta::getName)
+                .map(ChannelMeta::getNameWithPolicy)
                 .collect(Collectors.toList());
         if (chartsPane != null) {
             chartsPane.setAxisCandidateNames(channelNames);
