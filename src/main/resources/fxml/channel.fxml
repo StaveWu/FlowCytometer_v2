@@ -22,7 +22,7 @@
     <ScrollPane>
         <HBox fx:id="channelsHBox" fillHeight="false" prefHeight="800.0" spacing="20">
          <padding>
-            <Insets left="10.0" />
+            <Insets left="10.0" top="10.0" />
          </padding></HBox>
     </ScrollPane>
     <stylesheets>
