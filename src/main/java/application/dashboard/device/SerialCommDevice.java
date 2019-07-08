@@ -42,7 +42,10 @@ public class SerialCommDevice implements ICommDevice {
 
     @Override
     public void write(byte[] data) throws Exception {
-
+        String dataStr = new String(data);
+        if (dataStr.startsWith("StopSampling")) {
+            canRead = false;
+        }
     }
 
     @Override

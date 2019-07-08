@@ -232,12 +232,11 @@ public class WrappedChart extends VBox implements LinkedNode,
         if (nextNode == null) {
             return;
         }
+        WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
+        nextChart.clearAllData();
         gatableChart().getKVData().stream()
                 .filter(gatableChart()::isGated)
-                .forEach(kvData -> {
-                    WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
-                    nextChart.addData(kvData);
-                });
+                .forEach(nextChart::addData);
     }
 
     private GatableChart<Number, Number> gatableChart() {
@@ -286,6 +285,11 @@ public class WrappedChart extends VBox implements LinkedNode,
             WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
             nextChart.addData(data);
         }
+    }
+
+    @Override
+    public void clearAllData() {
+        gatableChart().clearAllData();
     }
 
     @Override

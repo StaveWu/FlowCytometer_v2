@@ -9,6 +9,7 @@ public class CounterTickService extends Service<Void> {
 
     private int countLimit;
     private AtomicInteger currentCount = new AtomicInteger(0);
+    private boolean stop = false;
 
     public CounterTickService(int countLimit) {
         this.countLimit = countLimit;
@@ -21,12 +22,16 @@ public class CounterTickService extends Service<Void> {
             @Override
             protected Void call() {
                 // do count
-                while (currentCount.get() > 0) {
+                while (!stop) {
                     if (isCancelled()) {
                         break;
                     }
-                    updateProgress(countLimit - currentCount.get(), countLimit);
-                    updateMessage("" + currentCount);
+                    int curcnt = currentCount.get();
+                    updateProgress(countLimit - curcnt, countLimit);
+                    updateMessage("" + curcnt);
+                    if (curcnt <= 0) {
+                        stop = true;
+                    }
                 }
                 return null;
             }
@@ -34,7 +39,7 @@ public class CounterTickService extends Service<Void> {
     }
 
     public void countDown() {
-        currentCount.decrementAndGet();
+        currentCount.getAndDecrement();
     }
 
 }

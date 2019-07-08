@@ -80,7 +80,7 @@ public class ChannelCell extends VBox implements Initializable {
         // set toggle when first load
         peakgroup.selectToggle(getSelectedToggle(channelMeta.getPeakPolicy()));
 
-        // bind featurecapturing and hook property change handler
+        // bind meta and hook property change handler
         nameTextField.textProperty().bindBidirectional(channelMeta.nameProperty());
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);

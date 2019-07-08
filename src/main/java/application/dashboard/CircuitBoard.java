@@ -18,7 +18,7 @@ public class CircuitBoard {
 
     private ICommDevice commDevice;
     private DataReceivedHandler handler;
-    private boolean isOnSampling = true;
+    private boolean isOnSampling;
     private List<String> channelIds;
 
     private void checkCommDevice() {
@@ -79,6 +79,10 @@ public class CircuitBoard {
         String msg = getCommandMessage("SetValve", valveId, enabled ? 0 : 1);
         commDevice.write(msg.getBytes());
         log.info(msg);
+    }
+
+    public boolean isOnSampling() {
+        return isOnSampling;
     }
 
     public void setCommDevice(ICommDevice device) {

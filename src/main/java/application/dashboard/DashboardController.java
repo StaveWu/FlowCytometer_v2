@@ -4,10 +4,7 @@ import application.channel.featurecapturing.*;
 import application.dashboard.device.SerialCommDevice;
 import application.dashboard.device.UsbCommDevice;
 import application.dashboard.device.CommunicationDevice;
-import application.event.ChannelChangedEvent;
-import application.event.EventBusFactory;
-import application.event.SamplingPointsCapturedEvent;
-import application.event.StartSamplingEvent;
+import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
@@ -16,6 +13,7 @@ import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,7 +136,17 @@ public class DashboardController implements Initializable {
                 new NumberStringConverter());
         modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
         cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
-                new NumberStringConverter());
+                new StringConverter<Number>() {
+                    @Override
+                    public String toString(Number object) {
+                        return "" + object.longValue();
+                    }
+
+                    @Override
+                    public Number fromString(String string) {
+                        return Long.valueOf(string);
+                    }
+                });
         hourTextField.textProperty().bindBidirectional(dashboardSetting.hourProperty(),
                 new NumberStringConverter());
         miniteTextField.textProperty().bindBidirectional(dashboardSetting.minuteProperty(),
@@ -161,6 +169,13 @@ public class DashboardController implements Initializable {
     public void listen(ChannelChangedEvent event) {
         log.info("channel meta changed");
         this.channelMetas = event.getChannelMetas();
+    }
+
+    @Subscribe
+    public void listen(CellFeatureCapturedEvent event) {
+        if (circuitBoard.isOnSampling() && tickService instanceof CounterTickService) {
+            ((CounterTickService) tickService).countDown();
+        }
     }
 
     @FXML

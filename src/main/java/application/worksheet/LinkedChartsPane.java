@@ -88,6 +88,11 @@ public class LinkedChartsPane extends AnchorPane {
                     return;
                 }
                 bind(activeArrowHead, startChart, endChart);
+                // propagateToNextChart
+                endChart.clearAllData();
+                startChart.getKVData().stream()
+                        .filter(startChart::isGated)
+                        .forEach(endChart::addData);
             }
         });
     }

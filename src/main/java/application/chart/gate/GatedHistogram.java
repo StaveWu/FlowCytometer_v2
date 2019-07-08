@@ -131,6 +131,12 @@ public class GatedHistogram extends AreaChart<Number, Number>
         });
     }
 
+    @Override
+    public void clearAllData() {
+        dataList.clear();
+        getData().get(0).getData().clear();
+    }
+
     private boolean checkLabel(Axis axis) {
         return !(axis.getLabel() == null || axis.getLabel().equals(""));
     }

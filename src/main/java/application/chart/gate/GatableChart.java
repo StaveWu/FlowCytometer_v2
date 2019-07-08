@@ -14,6 +14,8 @@ public interface GatableChart<X, Y> {
 
     void addData(KVData data);
 
+    void clearAllData();
+
     boolean isGated(KVData data);
 
     void setAxisCandidateNames(List<String> names);
