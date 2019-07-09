@@ -1,8 +1,12 @@
 package application.chart;
 
 import application.chart.gate.*;
+import application.utils.UiUtils;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -10,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseButton;
@@ -81,6 +86,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         hookDragHandlers();
         hookResizeHandlers();
         hookContextMenu();
+        hookAxisLabelListeners();
     }
 
     private void createTitledPane() {
@@ -212,8 +218,26 @@ public class WrappedChart extends VBox implements LinkedNode,
         });
     }
 
+    private void hookAxisLabelListeners() {
+        chart.getXAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+            // remove gate first, or the following propagation will be wrong.
+            removeGate();
+            replotChartData();
+            propagateToNextChart();
+        });
+        chart.getYAxis().labelProperty().addListener((observable, oldValue, newValue) -> {
+            removeGate();
+            replotChartData();
+            propagateToNextChart();
+        });
+    }
+
     public int getUniqueId() {
         return uniqueId;
+    }
+
+    public void setUniqueId(int uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     @Override
@@ -228,19 +252,28 @@ public class WrappedChart extends VBox implements LinkedNode,
         propagateToNextChart();
     }
 
-    private void propagateToNextChart() {
-        if (nextNode == null) {
-            return;
+    public void propagateToNextChart() {
+        // clear all data from current chart to tail chart
+        LinkedNode nextArrow = getNextNode();
+        while (nextArrow != null) {
+            WrappedChart nextChart = (WrappedChart) nextArrow.getNextNode();
+            nextChart.clearAllData();
+            nextArrow = nextChart.getNextNode();
         }
-        WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
-        nextChart.clearAllData();
-        gatableChart().getKVData().stream()
-                .filter(gatableChart()::isGated)
-                .forEach(nextChart::addData);
+        if (getNextChart() != null) {
+            getGatedData().forEach(getNextChart()::addData);
+        }
     }
 
     private GatableChart<Number, Number> gatableChart() {
         return (GatableChart<Number, Number>) chart;
+    }
+
+    private WrappedChart getNextChart() {
+        if (nextNode == null) {
+            return null;
+        }
+        return(WrappedChart) nextNode.getNextNode();
     }
 
     @Override
@@ -280,16 +313,27 @@ public class WrappedChart extends VBox implements LinkedNode,
 
     @Override
     public void addData(KVData data) {
-        gatableChart().addData(data);
-        if (nextNode != null && gatableChart().isGated(data)) {
-            WrappedChart nextChart = (WrappedChart) nextNode.getNextNode();
-            nextChart.addData(data);
-        }
+        Platform.runLater(() -> {
+            gatableChart().addData(data);
+            if (getNextChart() != null && gatableChart().isGated(data)) {
+                getNextChart().addData(data);
+            }
+        });
     }
 
     @Override
     public void clearAllData() {
         gatableChart().clearAllData();
+    }
+
+    @Override
+    public void replotChartData() {
+        gatableChart().replotChartData();
+    }
+
+    @Override
+    public List<KVData> getGatedData() {
+        return gatableChart().getGatedData();
     }
 
     @Override
@@ -359,6 +403,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         json.yAxisJson.initAxis((NumberAxis) chart.getYAxis());
 
         WrappedChart wrapper = new WrappedChart(chart);
+        wrapper.setUniqueId(json.uniqueId);
         wrapper.setLayoutX(json.x);
         wrapper.setLayoutY(json.y);
         wrapper.setPrefWidth(json.width);

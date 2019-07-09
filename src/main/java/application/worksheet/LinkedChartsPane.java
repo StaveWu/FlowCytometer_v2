@@ -89,10 +89,7 @@ public class LinkedChartsPane extends AnchorPane {
                 }
                 bind(activeArrowHead, startChart, endChart);
                 // propagateToNextChart
-                endChart.clearAllData();
-                startChart.getKVData().stream()
-                        .filter(startChart::isGated)
-                        .forEach(endChart::addData);
+                startChart.propagateToNextChart();
             }
         });
     }
@@ -245,6 +242,7 @@ public class LinkedChartsPane extends AnchorPane {
     }
 
     public void add(WrappedChart chart) {
+        System.out.println("chart id when add: " + chart.getUniqueId());
         hookChartPropertyChangeListener(chart);
         hookChartRemoveListener(chart);
         hookGateCompletedListener(chart);

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GatedHistogram extends AreaChart<Number, Number>
         implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
@@ -101,6 +102,7 @@ public class GatedHistogram extends AreaChart<Number, Number>
     public void removeGate() {
         if (gate != null) {
             getPlotChildren().remove(gate.getNode());
+            gate = null;
             listeners.forEach(GateLifeCycleListener::afterDestroy);
         }
     }
@@ -113,28 +115,47 @@ public class GatedHistogram extends AreaChart<Number, Number>
     @Override
     public void addData(KVData data) {
         dataList.add(data);
+        plotData(data);
+    }
+
+    private void plotData(KVData data) {
         if (!checkLabel(getXAxis())) {
             return;
         }
         Float xValue = data.getValueByName(getXAxis().getLabel());
         // traverse existing count from xydata, if not, add new one.
-        Platform.runLater(() -> {
-            Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
-                    .filter(d -> d.getXValue().floatValue() == xValue)
-                    .findFirst();
+        Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
+                .filter(d -> d.getXValue().floatValue() == xValue)
+                .findFirst();
 
-            if (existing.isPresent()) {
-                existing.get().setYValue(existing.get().getYValue().intValue() + 1);
-            } else {
-                getData().get(0).getData().add(new Data<>(xValue, 1));
-            }
-        });
+        if (existing.isPresent()) {
+            existing.get().setYValue(existing.get().getYValue().intValue() + 1);
+        } else {
+            getData().get(0).getData().add(new Data<>(xValue, 1));
+        }
+    }
+
+    public void replotChartData() {
+        renewSeries();
+        dataList.forEach(this::plotData);
+    }
+
+    @Override
+    public List<KVData> getGatedData() {
+        return dataList.stream()
+                .filter(this::isGated)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void clearAllData() {
         dataList.clear();
-        getData().get(0).getData().clear();
+        renewSeries();
+    }
+
+    private void renewSeries() {
+        getData().clear();
+        getData().add(new XYChart.Series<>());
     }
 
     private boolean checkLabel(Axis axis) {
@@ -147,10 +168,18 @@ public class GatedHistogram extends AreaChart<Number, Number>
             return true;
         }
         Float xValue = data.getValueByName(getXAxis().getLabel());
-        Float yValue = data.getValueByName(getYAxis().getLabel());
-        double x = getXAxis().getDisplayPosition(xValue);
-        double y = getYAxis().getDisplayPosition(yValue);
-        return gate.getNode().contains(x, y);
+        Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
+                .filter(d -> d.getXValue().floatValue() == xValue)
+                .findFirst();
+
+        if (existing.isPresent()) {
+            double x, y;
+            x = getXAxis().getDisplayPosition(existing.get().getXValue());
+            y = getYAxis().getDisplayPosition(existing.get().getYValue());
+            return gate.getNode().contains(x, y);
+        } else {
+            return false;
+        }
     }
 
     @Override

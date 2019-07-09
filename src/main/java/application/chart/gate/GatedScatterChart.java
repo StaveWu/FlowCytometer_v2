@@ -11,6 +11,7 @@ import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GatedScatterChart extends ScatterChart<Number, Number>
         implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
@@ -98,6 +99,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     public void removeGate() {
         if (gate != null) {
             getPlotChildren().remove(gate.getNode());
+            gate = null;
             listeners.forEach(GateLifeCycleListener::afterDestroy);
         }
     }
@@ -110,6 +112,10 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     @Override
     public void addData(KVData data) {
         dataList.add(data);
+        plotData(data);
+    }
+
+    private void plotData(KVData data) {
         // check axis label
         if (!checkLabel(getXAxis()) || !checkLabel(getYAxis())) {
             return;
@@ -117,15 +123,31 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         // plot data
         Float xValue = data.getValueByName(getXAxis().getLabel());
         Float yValue = data.getValueByName(getYAxis().getLabel());
-        Platform.runLater(() -> {
-            getData().get(0).getData().add(new Data<>(xValue, yValue));
-        });
+        getData().get(0).getData().add(new Data<>(xValue, yValue));
     }
 
     @Override
     public void clearAllData() {
         dataList.clear();
-        getData().get(0).getData().clear();
+        renewSeries();
+    }
+
+    @Override
+    public void replotChartData() {
+        renewSeries();
+        dataList.forEach(this::plotData);
+    }
+
+    @Override
+    public List<KVData> getGatedData() {
+        return dataList.stream()
+                .filter(this::isGated)
+                .collect(Collectors.toList());
+    }
+
+    private void renewSeries() {
+        getData().clear();
+        getData().add(new XYChart.Series<>());
     }
 
     private boolean checkLabel(Axis axis) {
