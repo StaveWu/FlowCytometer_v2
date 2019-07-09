@@ -210,7 +210,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         chart.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.isPopupTrigger()) {
                 if (contextMenu == null) {
-                    contextMenu = new GatableChartContextMenu((GatableChart) chart);
+                    contextMenu = new GatableChartContextMenu(uniqueId, gatableChart());
                 }
                 contextMenu.show(chart,
                         event.getScreenX(), event.getScreenY());

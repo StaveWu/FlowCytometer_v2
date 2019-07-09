@@ -2,7 +2,10 @@ package application.chart.gate;
 
 import application.chart.ChartSettings;
 import application.utils.UiUtils;
+import application.worksheet.Statistics;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
@@ -21,9 +24,11 @@ import java.util.stream.Collectors;
 
 public class GatableChartContextMenu extends ContextMenu {
 
-    private GatableChart gatableChart;
+    private int chartId;
+    private GatableChart<Number, Number> gatableChart;
 
-    public GatableChartContextMenu(GatableChart gatableChart) {
+    public GatableChartContextMenu(int chartId, GatableChart<Number, Number> gatableChart) {
+        this.chartId = chartId;
         this.gatableChart = gatableChart;
         init();
     }
@@ -54,6 +59,15 @@ public class GatableChartContextMenu extends ContextMenu {
                 stage.setScene(new Scene(new ChartSettings((XYChart<Number, Number>) gatableChart)));
                 stage.show();
             }
+        });
+        MenuItem statisticsItem = new MenuItem("统计");
+        statisticsItem.setOnAction(event -> {
+            Stage stage = new Stage();
+            stage.setTitle(gatableChart.getClass().getSimpleName() + " " + chartId);
+            Statistics statistics = new Statistics();
+            statistics.addData(gatableChart.getKVData());
+            stage.setScene(new Scene(statistics));
+            stage.show();
         });
         MenuItem exportKVDataItem = new MenuItem("导出数据");
         exportKVDataItem.setOnAction(event -> {
@@ -89,6 +103,8 @@ public class GatableChartContextMenu extends ContextMenu {
         getItems().add(createPolygonGateItem);
         getItems().add(deleteGateItem);
         getItems().add(settingsItem);
+        getItems().add(statisticsItem);
         getItems().add(exportKVDataItem);
     }
+
 }

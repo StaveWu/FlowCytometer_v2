@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="tableView">
+        <columns>
+            <TableColumn fx:id="nameColumn" prefWidth="100.0" text="Name" />
+          <TableColumn fx:id="meanColumn" prefWidth="150.0" text="Mean" />
+          <TableColumn fx:id="medianColumn" prefWidth="150.0" text="Median" />
+        </columns>
+      </TableView>
+   </children>
+</fx:root>
