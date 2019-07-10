@@ -1,26 +1,30 @@
 # FlowCytometer_v2
 
-FlowCytometer是流式细胞仪的一个上位机软件，由JavaFX和SpringBoot实现。
+FlowCytometer is a PC software for flow cytometry, implemented by `JavaFX` and `SpringBoot`.
 
-> 流式细胞仪是一种细胞分析仪器，它能够精确控制试管中的细胞逐个通过一个非常微细的管道，在管道中间会有一束激光垂直照射，当细胞流经管道时，细胞中的化合物受光激发，会散射一些光谱，分多通道返回，此时细胞仪的电路系统将采集这些通道的光谱数据并发送到上位机软件。
+## Introduction
 
-## 概览
-![图1 流式细胞仪上位机软件界面](https://github.com/StaveWu/images/blob/master/FlowCytometer_v2/main_page.png)
+What is a flow cytometry?
 
-## 软件功能
-根据需求，软件主要实现以下功能：
- - 接收并解析光谱数据，实时滤波，将滤波后的数据以AreaChart的形式显示；
- - 在光谱数据中实时捕捉谱峰，并计算峰宽/峰高/峰面积，作为细胞在当前通道中的特征；
- - 每个通道对应细胞的一种特征，在worksheet模块中，需要对这些特征实时筛选，选出满足通道1特征在多少范围内、通道2特征在多少范围内、通道1特征在多少范围内...的细胞种群；
- - 软件还需对满足条件的种群进行count，当到达指定个数时停止采集；
- - 项目管理。
+Flow cytometry is a kind of cell analysis instrument, which can precisely control cells to pass through a very fine pipe one by one. There is a laser beam in the middle of the pipe. When the cells flow through the pipe, the molecular structure in the cell is excited by light and scattered. A variety of spectra are captured by the optical path system and returned in multiple channels. At this time, the circuitry of the cytometer will collect the spectral data of these channels and send them to the host computer software.
 
-## 实现方法
-针对软件功能，划分了以下模块：
- - starter：项目启动器，模仿idea IDE的设计；
- - projectTree：项目树，用于管理项目文件；
- - dashboard：与下位机的收发操作都在这里；
- - channel：用于通道数据显示、存储以及峰特征的捕获；
- - worksheet：用于特征筛选和细胞分群。
+FlowCytometer is a PC software for flow cytometry. It needs to complete the task of capturing peak information from the acquired spectral data stream, converting it into cell features, and grouping these features through charts and circle gates to analyze the cellular components.
 
-每个模块均采用**JavaFX + SpringBoot**的方式编写，和第一版的Swing相比，可以节省大量的界面和逻辑代码；另外，模块还设置了单独启动的入口（以“模块名 + App”命名的类），方便调试；模块之间的通信采用Guava的事件总线。
+## Overview
+![FlowCytometer's main page](https://github.com/StaveWu/images/blob/master/FlowCytometer_v2/main_page.png)
+
+## Features
+The software can be roughly divided into 5 parts:
+ - starter: Imitate the design of the `idea` software, which is the entrance to the project.
+ - Project tree: Manage project files;
+ - Dashboard: Control the sampling setup of the underlying circuit, the flow system, and monitor its status;
+ - Channel: Real-time storage and display of channel data, and capture spectral features, support calculation strategies for peak width, peak height, and peak area;
+ - Worksheet: Clustering cell features, rendered by scatter plots and histograms, filtered by rectangular and polygonal circle gates.
+
+## Get Started
+If you **want to play** with the FlowCytometer application, clone the repository and run:
+
+`./gradlew run`
+
+Since the host computer is working with the board, in order to facilitate the test results, I have provided a simulation option in the connected device ComboBox. This option can be used away from the board, and the data source is noise.
+

@@ -3,7 +3,7 @@ package application.dashboard.device;
 import java.util.Arrays;
 
 public enum CommunicationDevice {
-    SERIAL("串口"),
+    SIMULATION("仿真"),
     USB("USB");
 
     private String deviceName;

@@ -1,5 +1,5 @@
 package application.dashboard.device;
 
-public interface SerialListener {
+public interface SimulationListener {
     void dataReceived();
 }

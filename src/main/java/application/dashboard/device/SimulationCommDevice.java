@@ -1,12 +1,12 @@
 package application.dashboard.device;
 
-public class SerialCommDevice implements ICommDevice {
+public class SimulationCommDevice implements ICommDevice {
 
     private CommDeviceEventAdapter handler;
     private volatile boolean canRead = false;
     private boolean isConnected = false;
 
-    public SerialCommDevice() {
+    public SimulationCommDevice() {
         Thread dataCreator = new Thread(() -> {
             while (true) {
                 if (canRead) {

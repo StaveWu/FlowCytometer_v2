@@ -2,7 +2,7 @@ package application.dashboard;
 
 import application.channel.featurecapturing.ChannelMeta;
 import application.dashboard.device.CommunicationDevice;
-import application.dashboard.device.SerialCommDevice;
+import application.dashboard.device.SimulationCommDevice;
 import application.dashboard.device.UsbCommDevice;
 import application.event.*;
 import application.starter.FCMRunTimeConfig;
@@ -97,7 +97,7 @@ public class DashboardController implements Initializable {
         // init comboBox
         modeCombo.getItems().add(SampleMode.TIME);
         modeCombo.getItems().add(SampleMode.CELL_NUMBER);
-        connectionCombo.getItems().add(CommunicationDevice.SERIAL);
+        connectionCombo.getItems().add(CommunicationDevice.SIMULATION);
         connectionCombo.getItems().add(CommunicationDevice.USB);
 
         // define ui constraint
@@ -122,8 +122,8 @@ public class DashboardController implements Initializable {
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             CommunicationDevice device = observable.getValue();
             if (device != null) {
-                if (device == CommunicationDevice.SERIAL) {
-                    circuitBoard.setCommDevice(new SerialCommDevice());
+                if (device == CommunicationDevice.SIMULATION) {
+                    circuitBoard.setCommDevice(new SimulationCommDevice());
                 } else {
                     circuitBoard.setCommDevice(new UsbCommDevice());
                 }
