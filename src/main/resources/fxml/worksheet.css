@@ -8,21 +8,6 @@
    -fx-content-display: graphic-only;
 }
 
-#heatmapBtn {
-   -fx-graphic: url("../icons/heatmap.png");
-   -fx-content-display: graphic-only;
-}
-
-#deleteBtn {
-   -fx-graphic: url("../icons/remove.png");
-   -fx-content-display: graphic-only;
-}
-
-#saveBtn {
-   -fx-graphic: url("../icons/save.png");
-   -fx-content-display: graphic-only;
-}
-
 #connectBtn {
    -fx-graphic: url("../icons/arrowhead.png");
    -fx-content-display: graphic-only;

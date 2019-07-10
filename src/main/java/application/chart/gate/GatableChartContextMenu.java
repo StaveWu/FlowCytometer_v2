@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
 
 public class GatableChartContextMenu extends ContextMenu {
 
-    private int chartId;
     private GatableChart<Number, Number> gatableChart;
 
-    public GatableChartContextMenu(int chartId, GatableChart<Number, Number> gatableChart) {
-        this.chartId = chartId;
+    public GatableChartContextMenu(GatableChart<Number, Number> gatableChart) {
         this.gatableChart = gatableChart;
         init();
     }
@@ -63,7 +61,7 @@ public class GatableChartContextMenu extends ContextMenu {
         MenuItem statisticsItem = new MenuItem("统计");
         statisticsItem.setOnAction(event -> {
             Stage stage = new Stage();
-            stage.setTitle(gatableChart.getClass().getSimpleName() + " " + chartId);
+            stage.setTitle(gatableChart.getClass().getSimpleName());
             Statistics statistics = new Statistics();
             statistics.addData(gatableChart.getKVData());
             stage.setScene(new Scene(statistics));

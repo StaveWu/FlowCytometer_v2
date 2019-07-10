@@ -351,9 +351,9 @@ public class LinkedChartsPane extends AnchorPane {
         });
     }
 
-    public WrappedChart getChartById(int chartId) {
+    public WrappedChart getChartById(String chartId) {
         return getCharts().stream()
-                .filter(chart -> chart.getUniqueId() == chartId)
+                .filter(chart -> chart.getUniqueId().equals(chartId))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }

@@ -70,7 +70,6 @@ public class WorksheetController implements Initializable {
         chartChainRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "chart_chains.json");
         chartsPane.setChartChains(chartChainRepository.findAll());
-        System.out.println(chartChainRepository.findAll());
 
         chartsPane.addChartLifeCycleListener(new ChartLifeCycleListener() {
             @Override

@@ -5,13 +5,13 @@ import java.util.List;
 
 public class ChartChain {
 
-    List<Integer> ids = new ArrayList<>();
+    List<String> ids = new ArrayList<>();
 
-    public void add(int chartId) {
+    public void add(String chartId) {
         ids.add(chartId);
     }
 
-    public List<Integer> getIds() {
+    public List<String> getIds() {
         return ids;
     }
 

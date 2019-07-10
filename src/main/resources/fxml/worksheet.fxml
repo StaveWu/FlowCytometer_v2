@@ -18,22 +18,7 @@
                      <Tooltip text="直方图" />
                  </tooltip>
              </Button>
-             <Button fx:id="heatmapBtn" mnemonicParsing="false" text="密度图">
-                 <tooltip>
-                     <Tooltip text="热图" />
-                 </tooltip>
-             </Button>
             <Separator orientation="VERTICAL" />
-             <Button fx:id="saveBtn" mnemonicParsing="false" text="保存">
-                 <tooltip>
-                     <Tooltip text="保存" />
-                 </tooltip>
-             </Button>
-             <Button fx:id="deleteBtn" mnemonicParsing="false" text="删除">
-                 <tooltip>
-                     <Tooltip text="删除" />
-                 </tooltip>
-             </Button>
             <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connect" text="连接" >
                 <tooltip>
                     <Tooltip text="连接"/>

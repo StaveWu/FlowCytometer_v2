@@ -21,12 +21,12 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WrappedChart extends VBox implements LinkedNode,
         GatableChart<Number, Number>, GateLifeCycleListener {
 
-    private static int idCount;
-    private int uniqueId;
+    private String uniqueId;
 
     private FlowPane titledPane;
     private Pane bottomPane;
@@ -53,8 +53,7 @@ public class WrappedChart extends VBox implements LinkedNode,
 
     public WrappedChart(XYChart<Number, Number> chart) {
         super();
-        uniqueId = idCount;
-        idCount++;
+        uniqueId = UUID.randomUUID().toString();
 
         this.chart = chart;
         if (!(chart instanceof GatableChart)) {
@@ -204,7 +203,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         chart.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.isPopupTrigger()) {
                 if (contextMenu == null) {
-                    contextMenu = new GatableChartContextMenu(uniqueId, gatableChart());
+                    contextMenu = new GatableChartContextMenu(gatableChart());
                 }
                 contextMenu.show(chart,
                         event.getScreenX(), event.getScreenY());
@@ -226,11 +225,11 @@ public class WrappedChart extends VBox implements LinkedNode,
         });
     }
 
-    public int getUniqueId() {
+    public String getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId(int uniqueId) {
+    public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
 
@@ -417,7 +416,7 @@ public class WrappedChart extends VBox implements LinkedNode,
     }
 
     public class JsonObject {
-        public final int uniqueId;
+        public final String uniqueId;
         public final String type;
         public final double x;
         public final double y;
@@ -427,7 +426,7 @@ public class WrappedChart extends VBox implements LinkedNode,
         public final AxisJsonObject yAxisJson;
         public final GateJsonObject<Number, Number> gateJson;
 
-        public JsonObject(int uniqueId, String type, double x, double y, double width, double height,
+        public JsonObject(String uniqueId, String type, double x, double y, double width, double height,
                           AxisJsonObject xAxisJson, AxisJsonObject yAxisJson,
                           GateJsonObject<Number, Number> gateJson) {
             this.uniqueId = uniqueId;

@@ -85,8 +85,8 @@ public class StarterController implements Initializable {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                    "项目打开失败：" + e.getMessage()).showAndWait();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "项目打开失败",
+                    e.getMessage()).showAndWait();
         }
     }
 
@@ -118,8 +118,8 @@ public class StarterController implements Initializable {
                 log.info("creating config folder: " + globalConfig.getProjectConfigFolder());
                 Files.createDirectory(Paths.get(globalConfig.getProjectConfigFolder()));
             } catch (Exception e) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "failed to create project: " + e.getMessage());
+                UiUtils.getAlert(Alert.AlertType.ERROR, "创建项目失败",
+                        e.getMessage());
                 return;
             }
             log.info("project is created on " + abspath);
@@ -143,8 +143,8 @@ public class StarterController implements Initializable {
             globalConfig.setRootDir(abspath);
 
             if (!checkProjectConfigFolder(globalConfig.getProjectConfigFolder())) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                        "导入失败：所导入的文件夹不是项目文件夹！");
+                UiUtils.getAlert(Alert.AlertType.ERROR, "导入失败",
+                        "所导入的文件夹不是项目文件夹！");
                 return;
             }
             log.info("project at " + abspath + " is imported.");
