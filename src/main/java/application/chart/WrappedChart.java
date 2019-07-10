@@ -1,23 +1,17 @@
 package application.chart;
 
 import application.chart.gate.*;
-import application.utils.UiUtils;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -381,26 +375,23 @@ public class WrappedChart extends VBox implements LinkedNode,
         }
         return new JsonObject(getUniqueId(), type, getLayoutX(), getLayoutY(),
                 getPrefWidth(), getPrefHeight(),
-                AxisJsonObject.fromAxis((NumberAxis) chart.getXAxis()),
-                AxisJsonObject.fromAxis((NumberAxis) chart.getYAxis()),
+                AxisJsonObject.fromAxis((ValueAxis<Number>) chart.getXAxis()),
+                AxisJsonObject.fromAxis((ValueAxis<Number>) chart.getYAxis()),
                 GateJsonObject.fromGate(getGate()));
     }
 
     public static WrappedChart fromJsonObject(JsonObject json) {
+        ValueAxis<Number> xAxis = json.xAxisJson.toAxis();
+        ValueAxis<Number> yAxis = json.yAxisJson.toAxis();
+
         XYChart<Number, Number> chart;
         if (json.type.equals("Scatter")) {
-            chart = new GatedScatterChart(
-                    new NumberAxis(),
-                    new NumberAxis());
+            chart = new GatedScatterChart(xAxis, yAxis);
         } else if (json.type.equals("Histogram")) {
-            chart = new GatedHistogram(
-                    new NumberAxis(),
-                    new NumberAxis());
+            chart = new GatedHistogram(xAxis, yAxis);
         } else {
             throw new RuntimeException("Unknown type of chart");
         }
-        json.xAxisJson.initAxis((NumberAxis) chart.getXAxis());
-        json.yAxisJson.initAxis((NumberAxis) chart.getYAxis());
 
         WrappedChart wrapper = new WrappedChart(chart);
         wrapper.setUniqueId(json.uniqueId);

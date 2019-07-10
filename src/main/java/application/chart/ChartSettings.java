@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -79,7 +79,7 @@ public class ChartSettings extends VBox implements Initializable {
             }
         });
 
-        NumberAxis xAxis = (NumberAxis) chart.getXAxis();
+        ValueAxis<Number> xAxis = (ValueAxis<Number>) chart.getXAxis();
         List<String> xCandidateNames = (List<String>) xAxis.getUserData();
         xNameCombo.setItems(FXCollections.observableArrayList(xCandidateNames));
         xNameCombo.getSelectionModel().select(xAxis.getLabel());
@@ -87,7 +87,7 @@ public class ChartSettings extends VBox implements Initializable {
         xMinTextField.setText("" + xAxis.getLowerBound());
         xMaxTextField.setText("" + xAxis.getUpperBound());
 
-        NumberAxis yAxis = (NumberAxis) chart.getYAxis();
+        ValueAxis<Number> yAxis = (ValueAxis<Number>) chart.getYAxis();
         List<String> yCandidateNames = (List<String>) yAxis.getUserData();
         yNameCombo.setItems(FXCollections.observableArrayList(yCandidateNames));
         yNameCombo.getSelectionModel().select(yAxis.getLabel());
@@ -98,23 +98,17 @@ public class ChartSettings extends VBox implements Initializable {
 
     @FXML
     protected void confirm() {
-        NumberAxis xAxis = (NumberAxis) chart.getXAxis();
+        ValueAxis<Number> xAxis = (ValueAxis<Number>) chart.getXAxis();
         xAxis.setLabel(xNameCombo.getValue());
         xAxis.setAutoRanging(xAutoRangeCheckBox.isSelected());
         xAxis.setLowerBound(Double.valueOf(xMinTextField.getText()));
         xAxis.setUpperBound(Double.valueOf(xMaxTextField.getText()));
-        xAxis.setTickUnit(getBestTickUnit(
-                Double.valueOf(xMinTextField.getText()),
-                Double.valueOf(xMaxTextField.getText())));
 
-        NumberAxis yAxis = (NumberAxis) chart.getYAxis();
+        ValueAxis<Number> yAxis = (ValueAxis<Number>) chart.getYAxis();
         yAxis.setLabel(yNameCombo.getValue());
         yAxis.setAutoRanging(yAutoRangeCheckBox.isSelected());
         yAxis.setLowerBound(Double.valueOf(yMinTextField.getText()));
         yAxis.setUpperBound(Double.valueOf(yMaxTextField.getText()));
-        yAxis.setTickUnit(getBestTickUnit(
-                Double.valueOf(yMinTextField.getText()),
-                Double.valueOf(yMaxTextField.getText())));
 
         closeSelf();
     }
@@ -127,19 +121,6 @@ public class ChartSettings extends VBox implements Initializable {
     private void closeSelf() {
         Stage stage = (Stage) this.getScene().getWindow();
         stage.close();
-    }
-
-    private double getBestTickUnit(double lowerBound, double upperBound) {
-        double range = upperBound - lowerBound;
-        if (range < 10) {
-            return 1;
-        } else if (range < 100) {
-            return 10;
-        } else if (range < 1000) {
-            return 100;
-        } else {
-            return 1000;
-        }
     }
 
 }

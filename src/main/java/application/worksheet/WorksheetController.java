@@ -2,6 +2,7 @@ package application.worksheet;
 
 import application.channel.featurecapturing.ChannelMeta;
 import application.chart.WrappedChart;
+import application.chart.axis.LogarithmicAxis;
 import application.chart.gate.GateLifeCycleListener;
 import application.chart.gate.GatedHistogram;
 import application.chart.gate.GatedScatterChart;
@@ -14,9 +15,15 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Alert;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +32,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -126,15 +131,81 @@ public class WorksheetController implements Initializable {
 
     @FXML
     protected void createScatterChart() {
-        GatedScatterChart scatterChart = new GatedScatterChart(
-                new NumberAxis(),
-                new NumberAxis());
-        WrappedChart wrapper = new WrappedChart(scatterChart);
-        nextChartLocation();
-        wrapper.setLayoutX(chartInitLocation.getX());
-        wrapper.setLayoutY(chartInitLocation.getY());
-        wrapper.setAxisCandidateNames(channelNames);
-        chartsPane.add(wrapper);
+        GatedScatterChart scatterChart;
+        Optional<AxisPair> res = getAxisChoiceDialog().showAndWait();
+        if (res.isPresent()) {
+            scatterChart = new GatedScatterChart(res.get().xAxis, res.get().yAxis);
+            WrappedChart wrapper = new WrappedChart(scatterChart);
+            nextChartLocation();
+            wrapper.setLayoutX(chartInitLocation.getX());
+            wrapper.setLayoutY(chartInitLocation.getY());
+            wrapper.setAxisCandidateNames(channelNames);
+            chartsPane.add(wrapper);
+        }
+    }
+
+    @FXML
+    protected void createHistogram() {
+        GatedHistogram histogram;
+        Optional<AxisPair> res = getAxisChoiceDialog().showAndWait();
+        if (res.isPresent()) {
+            histogram = new GatedHistogram(res.get().xAxis, res.get().yAxis);
+            WrappedChart wrapper = new WrappedChart(histogram);
+            nextChartLocation();
+            wrapper.setLayoutX(chartInitLocation.getX());
+            wrapper.setLayoutY(chartInitLocation.getY());
+            wrapper.setAxisCandidateNames(channelNames);
+            chartsPane.add(wrapper);
+        }
+    }
+
+    @FXML
+    protected void connect() {
+        chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
+    }
+
+    private class AxisPair {
+        public final Axis<Number> xAxis;
+        public final Axis<Number> yAxis;
+
+        public AxisPair(String xAxisType, String yAxisType) {
+            xAxis = xAxisType.equals("Linear") ? new NumberAxis() : new LogarithmicAxis();
+            yAxis = yAxisType.equals("Linear") ? new NumberAxis() : new LogarithmicAxis();
+        }
+    }
+
+    private Dialog<AxisPair> getAxisChoiceDialog() {
+        Dialog<AxisPair> dialog = new Dialog<>();
+        dialog.setTitle("图初始化");
+        dialog.setHeaderText("请选择轴类型");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        ComboBox<String> xAxisCombo = new ComboBox<>();
+        xAxisCombo.getItems().addAll("Linear", "Log");
+        xAxisCombo.getSelectionModel().selectFirst();
+        ComboBox<String> yAxisCombo = new ComboBox<>();
+        yAxisCombo.getItems().addAll("Linear", "Log");
+        yAxisCombo.getSelectionModel().selectFirst();
+
+        grid.add(new Label("X轴："), 0, 0);
+        grid.add(xAxisCombo, 1, 0);
+        grid.add(new Label("Y轴："), 0, 1);
+        grid.add(yAxisCombo, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK) {
+                return new AxisPair(xAxisCombo.getValue(), yAxisCombo.getValue());
+            }
+            return null;
+        });
+        return dialog;
     }
 
     public void saveWorksheetSnapshot() {
@@ -146,24 +217,6 @@ public class WorksheetController implements Initializable {
             UiUtils.getAlert(Alert.AlertType.ERROR, "保存数据失败",
                     e.getMessage()).showAndWait();
         }
-    }
-
-    @FXML
-    protected void createHistogram() {
-        GatedHistogram histogram = new GatedHistogram(
-                new NumberAxis(),
-                new NumberAxis());
-        WrappedChart wrapper = new WrappedChart(histogram);
-        nextChartLocation();
-        wrapper.setLayoutX(chartInitLocation.getX());
-        wrapper.setLayoutY(chartInitLocation.getY());
-        wrapper.setAxisCandidateNames(channelNames);
-        chartsPane.add(wrapper);
-    }
-
-    @FXML
-    protected void connect() {
-        chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
     }
 
     private void nextChartLocation() {

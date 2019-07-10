@@ -7,7 +7,7 @@ import application.chart.gate.GateLifeCycleListener;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.lang.NonNull;
@@ -108,6 +108,10 @@ public class LinkedChartsPane extends AnchorPane {
     }
 
     private void bind(ArrowHead arrowHead, WrappedChart startChart, WrappedChart endChart) {
+        // don't allow to bind self
+        if (startChart == endChart) {
+            return;
+        }
         // clear old arrowhead
         LinkedNode nextArrowHead = startChart.getNextNode();
         if (nextArrowHead != null) {
@@ -264,7 +268,7 @@ public class LinkedChartsPane extends AnchorPane {
         chart.layoutYProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        NumberAxis xAxis = (NumberAxis) chart.getXAxis();
+        ValueAxis<Number> xAxis = (ValueAxis<Number>) chart.getXAxis();
         xAxis.labelProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
@@ -277,7 +281,7 @@ public class LinkedChartsPane extends AnchorPane {
         xAxis.upperBoundProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
-        NumberAxis yAxis = (NumberAxis) chart.getYAxis();
+        ValueAxis<Number> yAxis = (ValueAxis<Number>) chart.getYAxis();
         yAxis.labelProperty().addListener((observable, oldValue, newValue) -> {
             chartLifeCycleListeners.forEach(ChartLifeCycleListener::propertyChanged);
         });
