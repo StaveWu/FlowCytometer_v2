@@ -15,7 +15,7 @@ FlowCytometer is a PC software for flow cytometry. It needs to complete the task
 
 ## Features
 The software can be roughly divided into 5 parts:
- - starter: Imitate the design of the `idea` software, which is the entrance to the project.
+ - Starter: Imitate the design of the `idea` software, which is the entrance to the project;
  - Project tree: Manage project files;
  - Dashboard: Control the sampling setup of the underlying circuit, the flow system, and monitor its status;
  - Channel: Real-time storage and display of channel data, and capture spectral features, support calculation strategies for peak width, peak height, and peak area;
