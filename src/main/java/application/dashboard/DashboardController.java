@@ -82,7 +82,7 @@ public class DashboardController implements Initializable {
     private TextField supValveTextField2;
 
     private Service<Void> tickService;
-    private SpeedService speedService = new SpeedService();
+    private SpeedService speedService;
 
     private CircuitBoard circuitBoard = new CircuitBoard();
 
@@ -166,9 +166,6 @@ public class DashboardController implements Initializable {
                 new NumberStringConverter());
         supValveTextField2.textProperty().bindBidirectional(dashboardSetting.supValve2Property(),
                 new NumberStringConverter());
-
-        // bind speed
-        speedLabel.textProperty().bind(speedService.messageProperty());
     }
 
     @Subscribe
@@ -237,6 +234,8 @@ public class DashboardController implements Initializable {
             progressIndicator.progressProperty().unbind();
             progressIndicator.setProgress(0);
         });
+        speedService = new SpeedService();
+        speedLabel.textProperty().bind(speedService.messageProperty());
 
         try {
             log.info("initialize circuit board");
