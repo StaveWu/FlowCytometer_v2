@@ -28,9 +28,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -63,6 +61,11 @@ public class ChannelController implements Initializable {
             List<ChannelMeta> updatedMetas = channelsHBox.getChildren().stream()
                     .map(e -> ((ChannelCell)e).getChannelMeta())
                     .collect(Collectors.toList());
+            if (isIdDuplicated(updatedMetas) || isNameDuplicated(updatedMetas)) {
+                UiUtils.getAlert(Alert.AlertType.WARNING, "非法操作",
+                        "通道类型或通道名不能重复").showAndWait();
+                return;
+            }
             saveChannelInformation(updatedMetas);
             eventBus.post(new ChannelChangedEvent(updatedMetas));
         });
@@ -102,10 +105,39 @@ public class ChannelController implements Initializable {
             List<ChannelMeta> updatedMetas = channelsHBox.getChildren().stream()
                     .map(e -> ((ChannelCell)e).getChannelMeta())
                     .collect(Collectors.toList());
+            if (isIdDuplicated(updatedMetas) || isNameDuplicated(updatedMetas)) {
+                UiUtils.getAlert(Alert.AlertType.WARNING, "非法操作",
+                        "通道类型或通道名不能重复").showAndWait();
+                return;
+            }
             saveChannelInformation(updatedMetas);
             eventBus.post(new ChannelChangedEvent(updatedMetas));
         });
         channelsHBox.getChildren().add(channelCell);
+    }
+
+    private boolean isIdDuplicated(List<ChannelMeta> metas) {
+        Set<String> lump = new HashSet<>();
+        for (ChannelMeta meta :
+                metas) {
+            if (lump.contains(meta.getId())) {
+                return true;
+            }
+            lump.add(meta.getId());
+        }
+        return false;
+    }
+
+    private boolean isNameDuplicated(List<ChannelMeta> metas) {
+        Set<String> lump = new HashSet<>();
+        for (ChannelMeta meta :
+                metas) {
+            if (lump.contains(meta.getName())) {
+                return true;
+            }
+            lump.add(meta.getName());
+        }
+        return false;
     }
 
     @FXML

@@ -1,9 +1,9 @@
 package application.dashboard;
 
-import application.channel.featurecapturing.*;
+import application.channel.featurecapturing.ChannelMeta;
+import application.dashboard.device.CommunicationDevice;
 import application.dashboard.device.SerialCommDevice;
 import application.dashboard.device.UsbCommDevice;
-import application.dashboard.device.CommunicationDevice;
 import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
