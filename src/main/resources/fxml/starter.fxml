@@ -19,7 +19,7 @@
                         <Image url="@../icons/snowflake.png"></Image>
                     </image>
                 </ImageView>
-                <Label fx:id="softname" text="FlowCytometer V2.0.0"></Label>
+                <Label fx:id="softname" text="FlowCytometer V2.0.1"></Label>
                 <Pane prefHeight="40"></Pane>
                 <Hyperlink text="Create New Project" onAction="#createProject"/>
                 <Hyperlink text="Import Project" onAction="#importProject"/>
