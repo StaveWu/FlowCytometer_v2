@@ -16,14 +16,13 @@ import java.util.stream.Collectors;
 public class CellFeatureCapturer implements WaveCapturedHandler {
 
     private List<WaveWatcher> waveWatchers;
-
     private List<CellFeatureCapturedHandler> handlers = new ArrayList<>();
-
     private BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
 
     private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
 
     public CellFeatureCapturer(List<ChannelMeta> metas) {
+        // init wave watchers to watch wave appearing
         waveWatchers = metas.stream()
                 .map(meta -> {
                     WaveWatcher waveWatcher = new WaveWatcher(meta);
@@ -31,6 +30,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                     return waveWatcher;
                 })
                 .collect(Collectors.toList());
+        // start a thread to handle cell feature calculating
         Thread captureWaveThread = new Thread(() -> {
             while (true) {
                 try {
