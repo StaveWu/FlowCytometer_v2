@@ -58,6 +58,8 @@ public class DashboardController implements Initializable {
     private Label timeRemainLabel;
     @FXML
     private ProgressIndicator progressIndicator;
+    @FXML
+    private Label speedLabel;
 
     /**
      * 液流系统
@@ -80,6 +82,7 @@ public class DashboardController implements Initializable {
     private TextField supValveTextField2;
 
     private Service<Void> tickService;
+    private SpeedService speedService = new SpeedService();
 
     private CircuitBoard circuitBoard = new CircuitBoard();
 
@@ -163,6 +166,9 @@ public class DashboardController implements Initializable {
                 new NumberStringConverter());
         supValveTextField2.textProperty().bindBidirectional(dashboardSetting.supValve2Property(),
                 new NumberStringConverter());
+
+        // bind speed
+        speedLabel.textProperty().bind(speedService.messageProperty());
     }
 
     @Subscribe
@@ -176,6 +182,7 @@ public class DashboardController implements Initializable {
         if (circuitBoard.isOnSampling() && tickService instanceof CounterTickService) {
             ((CounterTickService) tickService).countDown();
         }
+        speedService.speedUp();
     }
 
     @FXML
@@ -237,6 +244,7 @@ public class DashboardController implements Initializable {
             eventBus.post(new StartSamplingEvent());
             log.info("start sampling");
             tickService.start();
+            speedService.start();
             circuitBoard.startSampling(channelMetas.stream()
                     .map(ChannelMeta::getId)
                     .collect(Collectors.toList()));
@@ -286,6 +294,7 @@ public class DashboardController implements Initializable {
         if (tickService != null) {
             tickService.cancel();
         }
+        speedService.cancel();
         log.info("stop sampling");
         try {
             circuitBoard.stopSampling();

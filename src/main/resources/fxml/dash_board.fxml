@@ -165,13 +165,13 @@
                      <children>
                         <ProgressIndicator fx:id="progressIndicator" progress="0.0" GridPane.rowSpan="4" />
                         <Label text="速度：" GridPane.columnIndex="1" />
-                        <Label text="999/s" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="speedLabel" text="--- events/s" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="17.0" />
                            </font>
                         </Label>
                         <Label text="剩余：" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label fx:id="timeRemainLabel" text="99999" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label fx:id="timeRemainLabel" text="-----" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <font>
                               <Font size="17.0" />
                            </font>
