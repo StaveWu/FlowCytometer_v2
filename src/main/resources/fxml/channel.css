@@ -3,7 +3,7 @@
    -fx-content-display: graphic-only;
 }
 
-#saveBtn {
-   -fx-graphic: url("../icons/save.png");
+#settingBtn {
+   -fx-graphic: url("../icons/settings.png");
    -fx-content-display: graphic-only;
 }

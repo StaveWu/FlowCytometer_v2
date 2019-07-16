@@ -179,7 +179,9 @@ public class DashboardController implements Initializable {
         if (circuitBoard.isOnSampling() && tickService instanceof CounterTickService) {
             ((CounterTickService) tickService).countDown();
         }
-        speedService.speedUp();
+        if (speedService != null) {
+            speedService.speedUp();
+        }
     }
 
     @FXML

@@ -15,55 +15,28 @@ public class SamplingPointCacher {
 
     private int maxAllowedCache;
     private final LinkedList<SamplingPoint> cachedPoints = new LinkedList<>();
-    private BlockingQueue<List<SamplingPoint>> queue = new LinkedBlockingQueue<>();
 
     public SamplingPointCacher(int maxAllowedCache) {
         this.maxAllowedCache = maxAllowedCache;
-
-//        Thread cacheThread = new Thread(() -> {
-//            while (true) {
-//                try {
-//                    List<SamplingPoint> points = queue.take();
-//                    synchronized (this) {
-//                        if (points.size() > this.maxAllowedCache) {
-//                            cachedPoints.clear();
-//                            cachedPoints.addAll(points.subList(points.size()
-//                                    - this.maxAllowedCache, points.size()));
-//                        } else {
-//                            cachedPoints.addAll(points);
-//                            if (cachedPoints.size() > this.maxAllowedCache) {
-//                                for (int i = 0; i < cachedPoints.size() - this.maxAllowedCache; i++) {
-//                                    cachedPoints.removeFirst();
-//                                }
-//                            }
-//                        }
-////                        System.out.println("cache points: " + cachedPoints.size());
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//        cacheThread.setDaemon(true);
-//        cacheThread.start();
     }
 
     public synchronized void cache(@NonNull List<SamplingPoint> points) {
         if (points.size() > this.maxAllowedCache) {
             cachedPoints.clear();
-            cachedPoints.addAll(points.subList(points.size()
-                    - this.maxAllowedCache, points.size()));
+            cachedPoints.addAll(points.subList(
+                    points.size() - this.maxAllowedCache,
+                    points.size()));
         } else {
             cachedPoints.addAll(points);
-            if (cachedPoints.size() > this.maxAllowedCache) {
-                for (int i = 0; i < cachedPoints.size() - this.maxAllowedCache; i++) {
-                    cachedPoints.removeFirst();
-                }
+            while (cachedPoints.size() > this.maxAllowedCache) {
+                cachedPoints.removeFirst();
             }
         }
     }
 
-    public synchronized List<SamplingPoint> getCachedPoints() {
-        return new ArrayList<>(cachedPoints);
+    public synchronized List<SamplingPoint> getRecentPoints(int lookback) {
+        return cachedPoints.size() > lookback ?
+                cachedPoints.subList(cachedPoints.size() - lookback, cachedPoints.size())
+                : new ArrayList<>(cachedPoints);
     }
 }

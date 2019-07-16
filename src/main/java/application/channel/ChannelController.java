@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,7 @@ public class ChannelController implements Initializable {
     private SamplingPointSeriesTranslator samplingPointSeriesTranslator;
 
     private CellFeatureCapturer cellFeatureCapturer;
+    private ChannelSetting channelSetting;
 
     @FXML
     private HBox channelsHBox;
@@ -74,16 +77,19 @@ public class ChannelController implements Initializable {
                 .getProjectConfigFolder() + File.separator + "channels.json");
         channelMetaRepository.findAll().forEach(this::addChannelCell);
 
+        channelSetting = new ChannelSetting(FCMRunTimeConfig.getInstance()
+                .getProjectConfigFolder() + File.separator + "channel_setting.json");
+
         // start a thread to monitor channel series
         Thread seriesMonitor = new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                log.info("monitor recent sampling points");
-                List<SamplingPoint> points = samplingPointRepository.getRecentPoints();
+                List<SamplingPoint> points = samplingPointRepository
+                        .getRecentPoints(channelSetting.getLookback());
                 List<XYChart.Series<Number, Number>> seriesList = samplingPointSeriesTranslator.toSeries(points);
                 Platform.runLater(() -> {
                     for (int i = 0; i < seriesList.size(); i++) {
@@ -144,6 +150,24 @@ public class ChannelController implements Initializable {
     @FXML
     protected void newChannelCell() {
         addChannelCell(new ChannelMeta());
+    }
+
+    @FXML
+    protected void setting() {
+        Dialog<String> dialog = new TextInputDialog("" + channelSetting.getLookback());
+        dialog.setTitle("设置");
+        dialog.setHeaderText("通道全局设置");
+        dialog.setContentText("每次刷新的采样点数(<=800)：");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(s -> {
+            try {
+                channelSetting.setLookback(Integer.valueOf(s));
+            } catch (Exception e) {
+                e.printStackTrace();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "通道点数设置错误",
+                        e.getMessage()).showAndWait();
+            }
+        });
     }
 
     public void removeChannelCell(ChannelCell cell) {

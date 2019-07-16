@@ -21,11 +21,11 @@ public class SamplingPointRepository {
 
     public SamplingPointRepository() {
         saver = new SamplingPointSaver();
-        cacher = new SamplingPointCacher(100);
+        cacher = new SamplingPointCacher(800);
     }
 
-    public List<SamplingPoint> getRecentPoints() {
-        return cacher.getCachedPoints();
+    public List<SamplingPoint> getRecentPoints(int lookback) {
+        return cacher.getRecentPoints(lookback);
     }
 
     public void savePoints(List<SamplingPoint> points) {
