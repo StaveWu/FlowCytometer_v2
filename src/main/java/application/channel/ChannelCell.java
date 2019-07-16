@@ -1,6 +1,8 @@
 package application.channel;
 
 import application.channel.featurecapturing.ChannelMeta;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -80,6 +82,10 @@ public class ChannelCell extends VBox implements Initializable {
         // set toggle when first load
         peakgroup.selectToggle(getSelectedToggle(channelMeta.getPeakPolicy()));
 
+        // init chart
+        channelChart.getData().add(new XYChart.Series<>());
+        channelChart.setAnimated(false);
+
         // bind meta and hook property change handler
         nameTextField.textProperty().bindBidirectional(channelMeta.nameProperty());
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -93,7 +99,21 @@ public class ChannelCell extends VBox implements Initializable {
         thresholdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
+        channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.startsWith("PMT")) {
+                voltageTextField.setDisable(false);
+                channelChart.getYAxis().setLabel("Voltage");
+            } else if (newValue.startsWith("APD")) {
+                voltageTextField.setDisable(true);
+                channelChart.getYAxis().setLabel("Count");
+            } else {
+                throw new RuntimeException("unknown channel id");
+            }
+            channelChart.getData().get(0).setName(newValue);
+        });
         channelIdCombo.valueProperty().bindBidirectional(channelMeta.idProperty());
+        // NOTE: Do not merge this listener to the listener above, or
+        // the duplicate checking function in controller will not normally work.
         channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
@@ -107,16 +127,10 @@ public class ChannelCell extends VBox implements Initializable {
             String policy = observable.getValue();
             peakgroup.selectToggle(getSelectedToggle(policy));
         });
-
-        // init chart
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Data flow");
-        channelChart.getData().add(series);
-        channelChart.setAnimated(false);
     }
 
     private ToggleButton getSelectedToggle(String policy) {
-        if (policy == null) { // switch...case... damn throw a null pointer ??
+        if (policy == null) { // switch...case... damn throw a null pointer exception ??
             return areaToggle;
         }
         switch (policy) {

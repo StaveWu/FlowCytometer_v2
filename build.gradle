@@ -19,7 +19,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group 'com.stave'
-version '2.1.0-SNAPSHOT'
+version '2.1.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
