@@ -88,6 +88,7 @@ public class ChannelController implements Initializable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+//                log.info("monitor channel...");
                 List<SamplingPoint> points = samplingPointRepository
                         .getRecentPoints(channelSetting.getLookback());
                 List<XYChart.Series<Number, Number>> seriesList = samplingPointSeriesTranslator.toSeries(points);

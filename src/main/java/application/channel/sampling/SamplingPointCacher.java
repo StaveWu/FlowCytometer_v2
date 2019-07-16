@@ -36,7 +36,7 @@ public class SamplingPointCacher {
 
     public synchronized List<SamplingPoint> getRecentPoints(int lookback) {
         return cachedPoints.size() > lookback ?
-                cachedPoints.subList(cachedPoints.size() - lookback, cachedPoints.size())
+                new ArrayList<>(cachedPoints.subList(cachedPoints.size() - lookback, cachedPoints.size()))
                 : new ArrayList<>(cachedPoints);
     }
 }

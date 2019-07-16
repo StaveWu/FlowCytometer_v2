@@ -63,7 +63,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                 waveWatchers) {
             cellFeature.put(watcher.getName(), watcher.getWave());
         }
-        log.info("wave captured: " + cellFeature);
+//        log.info("wave captured: " + cellFeature);
         handlers.forEach(handler -> handler.cellFeatureCaptured(new CellFeatureCapturedEvent(cellFeature)));
     }
 

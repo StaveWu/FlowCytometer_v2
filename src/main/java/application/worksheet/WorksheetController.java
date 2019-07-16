@@ -113,7 +113,7 @@ public class WorksheetController implements Initializable {
 
     @Subscribe
     public void listen(CellFeatureCapturedEvent event) {
-        log.info("cell feature received: " + event.getCellFeature());
+//        log.info("cell feature received: " + event.getCellFeature());
         chartsPane.addCellFeature(new CellFeature(event.getCellFeature()));
     }
 
