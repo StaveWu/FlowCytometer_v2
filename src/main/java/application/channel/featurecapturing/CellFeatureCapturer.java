@@ -35,8 +35,8 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
             while (true) {
                 try {
                     SamplingPoint point = pointQueue.take();
-                    for (int i = 0; i < point.getChannelIds().size(); i++) {
-                        waveWatchers.get(i).add(point.getCoords().get(i));
+                    for (int i = 0; i < point.size(); i++) {
+                        waveWatchers.get(i).add(point.coordOf(i));
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();

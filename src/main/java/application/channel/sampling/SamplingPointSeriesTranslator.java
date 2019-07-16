@@ -21,8 +21,8 @@ public class SamplingPointSeriesTranslator {
             res.add(series);
         }
         for (int i = 0; i < points.size(); i++) {
-            for (int j = 0; j < points.get(i).getChannelIds().size(); j++) {
-                res.get(j).getData().add(new XYChart.Data<>(i, points.get(i).getCoords().get(j)));
+            for (int j = 0; j < points.get(i).size(); j++) {
+                res.get(j).getData().add(new XYChart.Data<>(i, points.get(i).coordOf(j)));
             }
         }
         return res;

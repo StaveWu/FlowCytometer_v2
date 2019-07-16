@@ -37,9 +37,9 @@ public class SamplingPointSaver {
                         for (SamplingPoint point :
                                 points) {
                             writer.newLine();
-                            writer.write(String.join("\t", point.getCoords().stream()
+                            writer.write(point.getCoords().stream()
                                     .map(String::valueOf)
-                                    .collect(Collectors.toList())));
+                                    .collect(Collectors.joining("\t")));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
