@@ -17,7 +17,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
 
     private List<WaveWatcher> waveWatchers;
     private List<CellFeatureCapturedHandler> handlers = new ArrayList<>();
-    private BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
+    private volatile BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
 
     private volatile boolean stop = false;
 

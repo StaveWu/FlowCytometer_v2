@@ -80,10 +80,10 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
     }
 
     protected void decideNextPointAnimation(Axis<X> xAxis, Axis<Y> yAxis) {
-        System.out.println("decide next point...");
+//        System.out.println("decide next point...");
         Point2D start = RealPixelTranslator.getDisplayPosition(points.get(0), xAxis, yAxis);
         Point2D end = RealPixelTranslator.getDisplayPosition(runningPoint, xAxis, yAxis);
-        System.out.println(points.get(0) + "," + runningPoint);
+//        System.out.println(points.get(0) + "," + runningPoint);
         node.setX(start.getX());
         node.setY(start.getY());
         node.setWidth(end.getX() - start.getX());
@@ -91,10 +91,10 @@ public class RectangleGate<X, Y> implements Gate<X, Y> {
     }
 
     protected void relocateNodeByPoint(Axis<X> xAxis, Axis<Y> yAxis) {
-        System.out.println("relocate node...");
+//        System.out.println("relocate node...");
         Point2D start = RealPixelTranslator.getDisplayPosition(points.get(0), xAxis, yAxis);
         Point2D end = RealPixelTranslator.getDisplayPosition(points.get(1), xAxis, yAxis);
-        System.out.println(points.get(0) + "," + points.get(1));
+//        System.out.println(points.get(0) + "," + points.get(1));
         node.setX(start.getX());
         node.setY(start.getY());
         node.setWidth(end.getX() - start.getX());

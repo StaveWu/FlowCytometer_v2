@@ -24,6 +24,11 @@ public class CircuitBoard {
     private boolean isOnSampling;
     private List<String> channelIds;
 
+    /**
+     * represent total number of sampling points received during start and stop period.
+     */
+    private long totalNumOfPointsReceived = 0;
+
     private void checkCommDevice() {
         if (commDevice == null) {
             throw new RuntimeException("communication device has not been set");
@@ -62,6 +67,7 @@ public class CircuitBoard {
         isOnSampling = false;
         commDevice.write(msg.getBytes());
         log.info(msg);
+        totalNumOfPointsReceived = 0;
     }
 
     public void setVoltage(String channelId, String voltage) throws Exception {
@@ -94,12 +100,7 @@ public class CircuitBoard {
         commDevice.setDataReceivedHandler(new CommDeviceEventAdapter() {
             @Override
             public void dataEventOccurred(UsbPipeDataEvent event) {
-                byte[] data = event.getData();
-                System.out.println(Arrays.toString(data));
-                List<SamplingPoint> points = decode(data, channelIds);
-                System.out.println(points.size());
-                System.out.println(points);
-                handler.onDataReceived(points);
+                // submit next irp, this will trigger a new irp processing thread
                 if (isOnSampling) {
                     try {
                         commDevice.read();
@@ -107,6 +108,15 @@ public class CircuitBoard {
                         e.printStackTrace();
                     }
                 }
+                // decode byte data to sampling points
+                byte[] data = event.getData();
+                System.out.println(Arrays.toString(data));
+                List<SamplingPoint> points = decode(data, channelIds);
+                System.out.println(points.size());
+                System.out.println(points);
+                totalNumOfPointsReceived += points.size();
+                log.info("total sampling points received: " + totalNumOfPointsReceived);
+                handler.onDataReceived(points);
             }
 
             @Override
@@ -124,7 +134,8 @@ public class CircuitBoard {
                     }
                     samplingPoints.add(new SamplingPoint(channelIds, coords));
                 }
-//                System.out.println(samplingPoints);
+                totalNumOfPointsReceived += samplingPoints.size();
+                log.info("total sampling points received: " + totalNumOfPointsReceived);
                 handler.onDataReceived(samplingPoints);
             }
         });

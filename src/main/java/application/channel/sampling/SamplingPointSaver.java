@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class SamplingPointSaver {
 
-    private BlockingDeque<List<SamplingPoint>> pointsQueue = new LinkedBlockingDeque<>();
+    private volatile BlockingDeque<List<SamplingPoint>> pointsQueue = new LinkedBlockingDeque<>();
     private String location;
 
     public SamplingPointSaver() {

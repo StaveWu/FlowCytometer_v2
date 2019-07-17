@@ -140,15 +140,15 @@ public class PolygonGate<X, Y> implements Gate<X, Y> {
     }
 
     protected void decideNextPointAnimation(Axis<X> xAxis, Axis<Y> yAxis) {
-        System.out.println("decide next point...");
+//        System.out.println("decide next point...");
         Point2D pos = RealPixelTranslator.getDisplayPosition(runningPoint, xAxis, yAxis);
-        System.out.println(runningPoint);
+//        System.out.println(runningPoint);
         dynamicLine.setX(pos.getX());
         dynamicLine.setY(pos.getY());
     }
 
     protected void relocateNode(Axis<X> xAxis, Axis<Y> yAxis) {
-        System.out.println("relocate node...");
+//        System.out.println("relocate node...");
         for (int i = 0; i < node.getElements().size(); i++) {
             Point2D p = RealPixelTranslator.getDisplayPosition(points.get(i), xAxis, yAxis);
             if (i == 0) {
