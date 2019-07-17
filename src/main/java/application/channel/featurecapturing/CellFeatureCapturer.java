@@ -19,6 +19,8 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
     private List<CellFeatureCapturedHandler> handlers = new ArrayList<>();
     private BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
 
+    private volatile boolean stop = false;
+
     private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
 
     public CellFeatureCapturer(List<ChannelMeta> metas) {
@@ -32,7 +34,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                 .collect(Collectors.toList());
         // start a thread to handle cell feature calculating
         Thread captureWaveThread = new Thread(() -> {
-            while (true) {
+            while (!stop) {
                 try {
                     SamplingPoint point = pointQueue.take();
                     for (int i = 0; i < point.size(); i++) {
@@ -54,6 +56,10 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        stop = true;
     }
 
     @Override

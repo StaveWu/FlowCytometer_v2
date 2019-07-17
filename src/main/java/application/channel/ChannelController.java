@@ -1,9 +1,11 @@
 package application.channel;
 
+import application.channel.featurecapturing.CellFeatureCapturer;
+import application.channel.featurecapturing.ChannelMeta;
+import application.channel.featurecapturing.ChannelMetaRepository;
 import application.channel.sampling.SamplingPoint;
 import application.channel.sampling.SamplingPointRepository;
 import application.channel.sampling.SamplingPointSeriesTranslator;
-import application.channel.featurecapturing.*;
 import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
@@ -27,9 +29,6 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,6 +123,20 @@ public class ChannelController implements Initializable {
         channelsHBox.getChildren().add(channelCell);
     }
 
+    public void removeChannelCell(ChannelCell cell) {
+        channelsHBox.getChildren().remove(cell);
+    }
+
+    private void saveChannelInformation(List<ChannelMeta> channelMetas) {
+        try {
+            channelMetaRepository.saveAll(channelMetas);
+        } catch (IOException e) {
+            e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "保存通道数据失败",
+                    e.getMessage()).showAndWait();
+        }
+    }
+
     private boolean isIdDuplicated(List<ChannelMeta> metas) {
         Set<String> lump = new HashSet<>();
         for (ChannelMeta meta :
@@ -171,28 +184,28 @@ public class ChannelController implements Initializable {
         });
     }
 
-    public void removeChannelCell(ChannelCell cell) {
-        channelsHBox.getChildren().remove(cell);
-    }
-
-    private void saveChannelInformation(List<ChannelMeta> channelMetas) {
-        try {
-            channelMetaRepository.saveAll(channelMetas);
-        } catch (IOException e) {
-            e.printStackTrace();
-            UiUtils.getAlert(Alert.AlertType.ERROR, "保存通道数据失败",
-                    e.getMessage()).showAndWait();
-        }
-    }
-
     @Subscribe
     public void listen(StartSamplingEvent event) {
         String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
         samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);
 
+        startCellFeatureCaptureTask();
+    }
+    private void startCellFeatureCaptureTask() {
+        if (cellFeatureCapturer != null) {
+            cellFeatureCapturer.stop();
+        }
         cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll());
         cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
+    }
+
+    @Subscribe
+    protected void listen(StopSamplingEvent event) {
+        log.info("stop sampling received");
+        if (cellFeatureCapturer != null) {
+            cellFeatureCapturer.stop();
+        }
     }
 
     @Subscribe
@@ -204,8 +217,7 @@ public class ChannelController implements Initializable {
     @Subscribe
     protected void listen(ChannelDataLoadAction action) {
         log.info("load channel data: " + action.getChannelDataPath());
-        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll());
-        cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
+        startCellFeatureCaptureTask();
 
         samplingPointRepository.setLocation(action.getChannelDataPath());
         try {

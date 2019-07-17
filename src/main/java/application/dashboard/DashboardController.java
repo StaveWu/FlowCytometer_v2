@@ -295,7 +295,10 @@ public class DashboardController implements Initializable {
         if (tickService != null) {
             tickService.cancel();
         }
-        speedService.cancel();
+        if (speedService != null) {
+            speedService.cancel();
+        }
+        eventBus.post(new StopSamplingEvent());
         log.info("stop sampling");
         try {
             circuitBoard.stopSampling();
