@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-
 public class Channel extends VBox {
 
     private static final Logger log = LoggerFactory.getLogger(Channel.class);
@@ -22,9 +20,9 @@ public class Channel extends VBox {
             loader.setController(ControlUtils.getController(ChannelController.class));
             loader.load();
         } catch (Exception e) {
-            log.error(Arrays.toString(e.getStackTrace()));
-            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                    "Channel加载失败：" + e.getMessage()).showAndWait();
+            e.printStackTrace();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "Channel加载失败",
+                    e.getMessage()).showAndWait();
         }
     }
 }

@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-
 public class Worksheet extends VBox {
 
     private static final Logger log = LoggerFactory.getLogger(Worksheet.class);
@@ -23,8 +21,8 @@ public class Worksheet extends VBox {
             loader.load();
         } catch (Exception e) {
             e.printStackTrace();
-            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                    "Worksheet加载失败：" + e.getMessage()).showAndWait();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "Worksheet加载失败",
+                    e.getMessage()).showAndWait();
         }
     }
 }
