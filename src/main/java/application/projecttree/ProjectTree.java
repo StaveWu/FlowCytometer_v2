@@ -153,49 +153,6 @@ public class ProjectTree extends VBox implements Initializable {
         }
     }
 
-    private String getAbsolutePath(TreeItem<TreeItemInfo> item) {
-        LinkedList<String> pathList = new LinkedList<>();
-        pathList.add(item.getValue().getName());
-
-        TreeItem<TreeItemInfo> cur = item;
-        while (cur.getParent() != null) {
-            cur = cur.getParent();
-            pathList.add(cur.getValue().getName());
-        }
-        pathList.removeLast(); // remove root since it has been included in rootDir.
-        Collections.reverse(pathList);
-        String res = String.join(File.separator, pathList);
-        return rootDir + File.separator + res;
-    }
-
-    private boolean checkFileName(String name) {
-        // check file name is valid or not
-        if (name.trim().equals("")) {
-            return false;
-        }
-        try {
-            Paths.get(name);
-            return true;
-        } catch (InvalidPathException e) {
-            return false;
-        }
-    }
-
-    protected void appendTreeItem(TreeItem<TreeItemInfo> parent, String filename, TreeItemInfo.FileType type) {
-        TreeItemInfo info = new TreeItemInfo(filename, type);
-        TreeItem<TreeItemInfo> newItem = new TreeItem<>(info, TreeIconManager.getTreeItemIcon(info));
-        parent.getChildren().add(newItem);
-    }
-
-    private TreeItem<TreeItemInfo> getSelectedNearestFolder() {
-        // select the first item by default
-        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
-        // if no item selected, return root, or the nearest folder else.
-        return selectedItem == null ? treeView.getRoot() :
-                (selectedItem.getValue().getType() == TreeItemInfo.FileType.File ?
-                        selectedItem.getParent() : selectedItem);
-    }
-
     @FXML
     protected void newFolder() {
         Optional<String> res = new TextInputDialog().showAndWait();
@@ -248,14 +205,6 @@ public class ProjectTree extends VBox implements Initializable {
         }
     }
 
-    private void delete(String filename) throws IOException {
-        MoreFiles.deleteRecursively(Paths.get(filename), RecursiveDeleteOption.ALLOW_INSECURE);
-    }
-
-    private void removeTreeItem(TreeItem item) {
-        item.getParent().getChildren().remove(item);
-    }
-
     @FXML
     protected void rename(MouseEvent event) {
         TreeItem<TreeItemInfo> selectedItem = (TreeItem<TreeItemInfo>) treeView.getSelectionModel()
@@ -291,6 +240,57 @@ public class ProjectTree extends VBox implements Initializable {
             }
 
         }
+    }
+
+    private String getAbsolutePath(TreeItem<TreeItemInfo> item) {
+        LinkedList<String> pathList = new LinkedList<>();
+        pathList.add(item.getValue().getName());
+
+        TreeItem<TreeItemInfo> cur = item;
+        while (cur.getParent() != null) {
+            cur = cur.getParent();
+            pathList.add(cur.getValue().getName());
+        }
+        pathList.removeLast(); // remove root since it has been included in rootDir.
+        Collections.reverse(pathList);
+        String res = String.join(File.separator, pathList);
+        return rootDir + File.separator + res;
+    }
+
+    private boolean checkFileName(String name) {
+        // check file name is valid or not
+        if (name.trim().equals("")) {
+            return false;
+        }
+        try {
+            Paths.get(name);
+            return true;
+        } catch (InvalidPathException e) {
+            return false;
+        }
+    }
+
+    protected void appendTreeItem(TreeItem<TreeItemInfo> parent, String filename, TreeItemInfo.FileType type) {
+        TreeItemInfo info = new TreeItemInfo(filename, type);
+        TreeItem<TreeItemInfo> newItem = new TreeItem<>(info, TreeIconManager.getTreeItemIcon(info));
+        parent.getChildren().add(newItem);
+    }
+
+    private TreeItem<TreeItemInfo> getSelectedNearestFolder() {
+        // select the first item by default
+        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        // if no item selected, return root, or the nearest folder else.
+        return selectedItem == null ? treeView.getRoot() :
+                (selectedItem.getValue().getType() == TreeItemInfo.FileType.File ?
+                        selectedItem.getParent() : selectedItem);
+    }
+
+    private void delete(String filename) throws IOException {
+        MoreFiles.deleteRecursively(Paths.get(filename), RecursiveDeleteOption.ALLOW_INSECURE);
+    }
+
+    private void removeTreeItem(TreeItem item) {
+        item.getParent().getChildren().remove(item);
     }
 
     private TreeItem<TreeItemInfo> getTreeItemByPath(String pathname) {

@@ -1,6 +1,8 @@
 package application.starter;
 
 import application.mainpage.MainAppController;
+import application.utils.Resource;
+import application.utils.UiUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
-import application.utils.Resource;
-import application.utils.UiUtils;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.net.URL;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Component
+@Controller
 public class StarterController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(StarterController.class);

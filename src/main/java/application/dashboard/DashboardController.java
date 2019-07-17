@@ -17,7 +17,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.net.URL;
@@ -26,14 +26,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-@Component
+@Controller
 public class DashboardController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(DashboardController.class);
     private final EventBus eventBus = EventBusFactory.getEventBus();
 
-    @FXML
-    private ComboBox<SampleMode> modeCombo;
+
     @FXML
     private ComboBox<CommunicationDevice> connectionCombo;
 
@@ -50,6 +49,8 @@ public class DashboardController implements Initializable {
     private TextField secondTextField;
     @FXML
     private TextField cellTextField;
+    @FXML
+    private ComboBox<SampleMode> modeCombo;
 
     /**
      * 进度监视
@@ -81,9 +82,19 @@ public class DashboardController implements Initializable {
     @FXML
     private TextField supValveTextField2;
 
+    /**
+     * A service that used for ticking when dashboard on sampling.
+     */
     private Service<Void> tickService;
+
+    /**
+     * A service to monitor event occurring speed.
+     */
     private SpeedService speedService;
 
+    /**
+     * A virtual board corresponding to the real board of flow cytometry.
+     */
     private CircuitBoard circuitBoard = new CircuitBoard();
 
     private List<ChannelMeta> channelMetas = new ArrayList<>();
@@ -114,11 +125,11 @@ public class DashboardController implements Initializable {
             }
         });
 
-        // perform action when data received
+        // post to handlers when data receiving
         circuitBoard.setDataReceivedHandler(samplingPoints ->
                 eventBus.post(new SamplingPointsCapturedEvent(samplingPoints)));
 
-        // choose communication device
+        // define communication device listener
         connectionCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             CommunicationDevice device = observable.getValue();
             if (device != null) {
@@ -138,6 +149,8 @@ public class DashboardController implements Initializable {
         frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
                 new NumberStringConverter());
         modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
+        // NumberStringConverter will convert 100000 to 100,000, this will cause error
+        // when converting 100,000 back to 100000, so another converter is defined here.
         cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
                 new StringConverter<Number>() {
                     @Override
@@ -202,30 +215,12 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private boolean checkCommDeviceSelected() {
-        if (connectionCombo.getSelectionModel().isEmpty()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING,
-                    "设备连接失败", "请先选择端口类型！").showAndWait();
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkCommConnected() {
-        if (!circuitBoard.isConnected()) {
-            UiUtils.getAlert(Alert.AlertType.WARNING, "设备连接失败",
-                    "请先连接设备！").showAndWait();
-            return false;
-        }
-        return true;
-    }
-
     @FXML
     protected void startSampling() {
-        if(!checkCommDeviceSelected() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommDeviceConnected()) {
             return;
         }
-        tickService = getTickService();
+        tickService = newTickService();
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(tickService.progressProperty());
         timeRemainLabel.textProperty().bind(tickService.messageProperty());
@@ -257,39 +252,9 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private void initializeBoard() throws Exception {
-        // set channel
-        for (ChannelMeta model :
-                channelMetas) {
-            circuitBoard.setVoltage(model.getId(), "" + model.getVoltage());
-        }
-        // set sampling frequency
-        circuitBoard.setFrequency(frequencyTextField.getText());
-        // set valve
-        circuitBoard.setValve("V1", valveCheckBox1.isSelected());
-        circuitBoard.setValve("V2", valveCheckBox2.isSelected());
-        circuitBoard.setValve("V3", valveCheckBox3.isSelected());
-        circuitBoard.setValve("V4", valveCheckBox4.isSelected());
-        circuitBoard.setValve("V5", valveCheckBox5.isSelected());
-        circuitBoard.setValve("V6", valveCheckBox6.isSelected());
-        circuitBoard.setVoltage("SV1", supValveTextField1.getText());
-        circuitBoard.setVoltage("SV2", supValveTextField2.getText());
-    }
-
-
-    private Service<Void> getTickService() {
-        if (modeCombo.getSelectionModel().getSelectedItem() == SampleMode.TIME) {
-            return new TimeTickService(new TimeLimit(Integer.valueOf(hourTextField.getText()),
-                    Integer.valueOf(miniteTextField.getText()),
-                    Integer.valueOf(secondTextField.getText())).totalSeconds());
-        } else {
-            return new CounterTickService(Integer.valueOf(cellTextField.getText()));
-        }
-    }
-
     @FXML
     protected void stopSampling() {
-        if(!checkCommDeviceSelected() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommDeviceConnected()) {
             return;
         }
         if (tickService != null) {
@@ -311,7 +276,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     protected void resetSystem() {
-        if(!checkCommDeviceSelected() || !checkCommConnected()) {
+        if(!checkCommDeviceSelected() || !checkCommDeviceConnected()) {
             return;
         }
         log.info("reset system");
@@ -324,6 +289,36 @@ public class DashboardController implements Initializable {
         }
     }
 
+    private void initializeBoard() throws Exception {
+        // set channel
+        for (ChannelMeta meta :
+                channelMetas) {
+            circuitBoard.setVoltage(meta.getId(), "" + meta.getVoltage());
+        }
+        // set sampling frequency
+        circuitBoard.setFrequency(frequencyTextField.getText());
+        // set valve
+        circuitBoard.setValve("V1", valveCheckBox1.isSelected());
+        circuitBoard.setValve("V2", valveCheckBox2.isSelected());
+        circuitBoard.setValve("V3", valveCheckBox3.isSelected());
+        circuitBoard.setValve("V4", valveCheckBox4.isSelected());
+        circuitBoard.setValve("V5", valveCheckBox5.isSelected());
+        circuitBoard.setValve("V6", valveCheckBox6.isSelected());
+        circuitBoard.setVoltage("SV1", supValveTextField1.getText());
+        circuitBoard.setVoltage("SV2", supValveTextField2.getText());
+    }
+
+
+    private Service<Void> newTickService() {
+        if (modeCombo.getSelectionModel().getSelectedItem() == SampleMode.TIME) {
+            return new TimeTickService(new TimeLimit(Integer.valueOf(hourTextField.getText()),
+                    Integer.valueOf(miniteTextField.getText()),
+                    Integer.valueOf(secondTextField.getText())).totalSeconds());
+        } else {
+            return new CounterTickService(Integer.valueOf(cellTextField.getText()));
+        }
+    }
+
     private void setTimeDisable(boolean disable) {
         hourTextField.setDisable(disable);
         miniteTextField.setDisable(disable);
@@ -332,6 +327,24 @@ public class DashboardController implements Initializable {
 
     private void setCellDisable(boolean b) {
         cellTextField.setDisable(b);
+    }
+
+    private boolean checkCommDeviceSelected() {
+        if (connectionCombo.getSelectionModel().isEmpty()) {
+            UiUtils.getAlert(Alert.AlertType.WARNING,
+                    "设备连接失败", "请先选择端口类型！").showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkCommDeviceConnected() {
+        if (!circuitBoard.isConnected()) {
+            UiUtils.getAlert(Alert.AlertType.WARNING, "设备连接失败",
+                    "请先连接设备！").showAndWait();
+            return false;
+        }
+        return true;
     }
 
 }

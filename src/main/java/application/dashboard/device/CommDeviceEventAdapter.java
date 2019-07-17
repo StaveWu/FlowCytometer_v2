@@ -11,16 +11,16 @@ public class CommDeviceEventAdapter implements UsbPipeListener, SimulationListen
 
     @Override
     public void errorEventOccurred(UsbPipeErrorEvent event) {
-
+        // usb event
     }
 
     @Override
     public void dataEventOccurred(UsbPipeDataEvent event) {
-
+        // usb event
     }
 
     @Override
     public void dataReceived() {
-
+        // simulation device event
     }
 }

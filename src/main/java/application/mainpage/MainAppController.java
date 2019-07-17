@@ -8,9 +8,9 @@ import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class MainAppController {
 
     private static final Logger log = LoggerFactory.getLogger(MainAppController.class);

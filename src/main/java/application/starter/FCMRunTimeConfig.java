@@ -1,10 +1,15 @@
 package application.starter;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.File;
 
+/**
+ * A singleton class that used for save runtime information.
+ */
+@ThreadSafe
 public class FCMRunTimeConfig {
 
-    private static FCMRunTimeConfig instance = null;
+    private volatile static FCMRunTimeConfig instance;
 
     public static final String PROJECT_CONFIG_FOLDER_NAME = ".fcm";
 
@@ -13,8 +18,13 @@ public class FCMRunTimeConfig {
     private FCMRunTimeConfig() {}
 
     public static FCMRunTimeConfig getInstance() {
+        // double check locking
         if (instance == null) {
-            instance = new FCMRunTimeConfig();
+            synchronized (FCMRunTimeConfig.class) {
+                if (instance == null) {
+                    instance = new FCMRunTimeConfig();
+                }
+            }
         }
         return instance;
     }

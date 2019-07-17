@@ -19,23 +19,23 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-@Component
+@Controller
 public class WorksheetController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(WorksheetController.class);

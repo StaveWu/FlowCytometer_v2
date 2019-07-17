@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A class serve as a virtual board which aims to forward commands to real board.
+ */
 public class CircuitBoard {
 
     private static final Logger log = LoggerFactory.getLogger(CircuitBoard.class);
@@ -49,6 +52,7 @@ public class CircuitBoard {
         this.channelIds = channelIds;
         commDevice.write(msg.getBytes());
         log.info(msg);
+        // turn on the handler switch
         commDevice.read();
     }
 
@@ -92,10 +96,10 @@ public class CircuitBoard {
             public void dataEventOccurred(UsbPipeDataEvent event) {
                 byte[] data = event.getData();
                 System.out.println(Arrays.toString(data));
-                List<SamplingPoint> decoded = decode(data, channelIds);
-                System.out.println(decoded.size());
-                System.out.println(decoded);
-                handler.onDataReceived(decoded);
+                List<SamplingPoint> points = decode(data, channelIds);
+                System.out.println(points.size());
+                System.out.println(points);
+                handler.onDataReceived(points);
                 if (isOnSampling) {
                     try {
                         commDevice.read();

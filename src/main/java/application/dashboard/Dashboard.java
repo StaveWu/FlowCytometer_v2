@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-
 public class Dashboard extends VBox {
 
     private static final Logger log = LoggerFactory.getLogger(Dashboard.class);
@@ -22,10 +20,9 @@ public class Dashboard extends VBox {
             loader.setController(ControlUtils.getController(DashboardController.class));
             loader.load();
         } catch (Exception e) {
-//            log.error(Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
-            UiUtils.getAlert(Alert.AlertType.ERROR, null,
-                    "Dashboard加载失败：" + e.getMessage()).showAndWait();
+            UiUtils.getAlert(Alert.AlertType.ERROR, "Dashboard加载失败",
+                    e.getMessage()).showAndWait();
         }
     }
 }
