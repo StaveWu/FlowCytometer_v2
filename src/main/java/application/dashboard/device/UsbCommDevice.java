@@ -92,6 +92,7 @@ public class UsbCommDevice implements ICommDevice {
             throw new UsbException("usb is not connected");
         }
 
+        // A magic array size, only 32000 works.
         byte[] data = new byte[32000];
         receivedPipe.asyncSubmit(data);
         return data;
