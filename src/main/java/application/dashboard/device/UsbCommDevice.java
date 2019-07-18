@@ -92,7 +92,7 @@ public class UsbCommDevice implements ICommDevice {
             throw new UsbException("usb is not connected");
         }
 
-        byte[] data = new byte[16000];
+        byte[] data = new byte[32000];
         receivedPipe.asyncSubmit(data);
         return data;
     }
