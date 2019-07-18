@@ -127,7 +127,7 @@ public class CircuitBoard {
             @Override
             public void dataReceived() {
                 List<SamplingPoint> samplingPoints = new ArrayList<>();
-                for (int i = 0; i < 25; i++) {
+                for (int i = 0; i < 100; i++) {
                     List<Float> coords = new ArrayList<>();
                     for (int j = 0; j < channelIds.size(); j++) {
                         coords.add((float) Math.random());

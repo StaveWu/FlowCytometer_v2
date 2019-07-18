@@ -46,7 +46,7 @@ public class StarterApp extends Application {
         Platform.runLater(() -> {
             ImageView imageView = new ImageView();
             imageView.setImage(new Image(Objects.requireNonNull(Resource.class.getClassLoader()
-                    .getResourceAsStream(String.format("icons/%s", "firstshow.gif")))));
+                    .getResourceAsStream(String.format("icons/%s", "welcome.gif")))));
 
             BorderPane pane = new BorderPane();
             pane.setCenter(imageView);
