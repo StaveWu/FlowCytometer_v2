@@ -4,8 +4,6 @@ import application.channel.sampling.SamplingPoint;
 import application.event.CellFeatureCapturedEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
 
     private volatile boolean stop = false;
 
-    private static final int MAX_ALLOWED_BIAS = 3;
+    private int maxBiasForTheSameCell;
     private IntegerProperty currentBias = new SimpleIntegerProperty(0);
 
     /**
@@ -35,7 +33,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
 
-    public CellFeatureCapturer(List<ChannelMeta> metas) {
+    public CellFeatureCapturer(List<ChannelMeta> metas, int maxBiasForTheSameCell) {
         // init wave watchers to watch wave appearing
         waveWatchers = metas.stream()
                 .map(meta -> {
@@ -44,9 +42,10 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                     return waveWatcher;
                 })
                 .collect(Collectors.toList());
+        this.maxBiasForTheSameCell = maxBiasForTheSameCell;
         // hook handler
         currentBias.addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() == MAX_ALLOWED_BIAS) {
+            if (newValue.intValue() == this.maxBiasForTheSameCell + 1) {
                 tryPostingCellFeature();
             }
         });
@@ -56,7 +55,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
             while (!stop) {
                 try {
                     SamplingPoint point = pointQueue.take();
-                    currentBias.set(currentBias.get() + 1);
+                    currentBias.set(currentBias.get() + 1); // may trigger handler
                     for (int i = 0; i < point.size(); i++) {
                         waveWatchers.get(i).add(point.coordOf(i));
                     }
@@ -85,6 +84,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         if (waveEventCache.isEmpty()) {
             return;
         }
+        // merge wave event cache into a cell feature by averaging.
         Map<String, Float> cellFeature = new HashMap<>();
         for (String key :
                 waveEventCache.get(0).keySet()) {
@@ -96,7 +96,8 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
             cellFeature.put(key, sum / (float) waveEventCache.size());
         }
         waveEventCache.clear();
-        handlers.forEach(handler -> handler.cellFeatureCaptured(new CellFeatureCapturedEvent(cellFeature)));
+        handlers.forEach(handler -> handler.cellFeatureCaptured(
+                new CellFeatureCapturedEvent(cellFeature)));
     }
 
     @Override

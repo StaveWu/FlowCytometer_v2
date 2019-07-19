@@ -15,11 +15,11 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -168,20 +168,59 @@ public class ChannelController implements Initializable {
 
     @FXML
     protected void setting() {
-        Dialog<String> dialog = new TextInputDialog("" + channelSetting.getLookback());
-        dialog.setTitle("设置");
-        dialog.setHeaderText("通道全局设置");
-        dialog.setContentText("每次刷新的采样点数(<=800)：");
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(s -> {
+        Optional<Settings> res = getSettingsDialog().showAndWait();
+        res.ifPresent(value -> {
             try {
-                channelSetting.setLookback(Integer.valueOf(s));
+                channelSetting.setLookback(Integer.valueOf(value.lookback));
+                channelSetting.setMaxBias(Integer.valueOf(value.maxBias));
             } catch (Exception e) {
                 e.printStackTrace();
-                UiUtils.getAlert(Alert.AlertType.ERROR, "通道点数设置错误",
+                UiUtils.getAlert(Alert.AlertType.ERROR, "设置无效",
                         e.getMessage()).showAndWait();
             }
         });
+    }
+
+    private Dialog<Settings> getSettingsDialog() {
+        Dialog<Settings> dialog = new Dialog<>();
+        dialog.setTitle("设置");
+        dialog.setHeaderText("通道全局设置");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 10, 10, 10));
+
+        TextField lookBackField = new TextField();
+        lookBackField.setText("" + channelSetting.getLookback());
+        TextField maxBiasField = new TextField();
+        maxBiasField.setText("" + channelSetting.getMaxBias());
+
+        grid.add(new Label("每次刷新的采样点数(<=800)："), 0, 0);
+        grid.add(lookBackField, 1, 0);
+        grid.add(new Label("判为同一细胞峰的最大允许偏置："), 0, 1);
+        grid.add(maxBiasField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK) {
+                return new Settings(lookBackField.getText(), maxBiasField.getText());
+            }
+            return null;
+        });
+        return dialog;
+    }
+
+    private class Settings {
+        public final String lookback;
+        public final String maxBias;
+
+        public Settings(String lookback, String maxBias) {
+            this.lookback = lookback;
+            this.maxBias = maxBias;
+        }
     }
 
     @Subscribe
@@ -196,7 +235,8 @@ public class ChannelController implements Initializable {
         if (cellFeatureCapturer != null) {
             cellFeatureCapturer.stop();
         }
-        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll());
+        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll(),
+                channelSetting.getMaxBias());
         cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
     }
 

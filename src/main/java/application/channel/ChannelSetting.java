@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 public class ChannelSetting {
 
     private IntegerProperty lookback = new SimpleIntegerProperty(50);
+    private IntegerProperty maxBias = new SimpleIntegerProperty(3);
 
     private String location;
     private Gson gson = new Gson();
@@ -24,14 +25,25 @@ public class ChannelSetting {
         lookback.addListener((observable, oldValue, newValue) -> {
             dump();
         });
+        maxBias.addListener((observable, oldValue, newValue) -> {
+            dump();
+        });
     }
 
     public void load() {
         try (Reader reader = new FileReader(location)) {
             ChannelSetting.JsonObject json = gson.fromJson(reader, ChannelSetting.JsonObject.class);
             setLookback(json.lookback);
+            setMaxBias(json.maxBias);
         } catch (IOException e) {
             // do nothing
+        }
+    }
+    public void dump() {
+        try {
+            Files.write(Paths.get(location), gson.toJson(toJsonObject()).getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -47,23 +59,29 @@ public class ChannelSetting {
         this.lookback.set(lookback);
     }
 
-    public void dump() {
-        try {
-            Files.write(Paths.get(location), gson.toJson(toJsonObject()).getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public int getMaxBias() {
+        return maxBias.get();
+    }
+
+    public IntegerProperty maxBiasProperty() {
+        return maxBias;
+    }
+
+    public void setMaxBias(int maxBias) {
+        this.maxBias.set(maxBias);
     }
 
     public JsonObject toJsonObject() {
-        return new JsonObject(lookback.get());
+        return new JsonObject(lookback.get(), maxBias.get());
     }
 
     public class JsonObject {
         public final int lookback;
+        public final int maxBias;
 
-        public JsonObject(int lookback) {
+        public JsonObject(int lookback, int maxBias) {
             this.lookback = lookback;
+            this.maxBias = maxBias;
         }
     }
 }
