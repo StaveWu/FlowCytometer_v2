@@ -11,6 +11,7 @@ import javax.usb.event.UsbPipeErrorEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A class serve as a virtual board which aims to forward commands to real board.
@@ -21,13 +22,13 @@ public class CircuitBoard {
 
     private ICommDevice commDevice;
     private DataReceivedHandler handler;
-    private boolean isOnSampling;
+    private volatile boolean isOnSampling;
     private List<String> channelIds;
 
     /**
      * represent total number of sampling points received during start and stop period.
      */
-    private long totalNumOfPointsReceived = 0;
+    private AtomicInteger totalNumOfPointsReceived = new AtomicInteger(0);
 
     private void checkCommDevice() {
         if (commDevice == null) {
@@ -67,7 +68,7 @@ public class CircuitBoard {
         isOnSampling = false;
         commDevice.write(msg.getBytes());
         log.info(msg);
-        totalNumOfPointsReceived = 0;
+        totalNumOfPointsReceived.set(0);
     }
 
     public void setVoltage(String channelId, String voltage) throws Exception {
@@ -110,12 +111,12 @@ public class CircuitBoard {
                 }
                 // decode byte data to sampling points
                 byte[] data = event.getData();
-                System.out.println(Arrays.toString(data));
+//                System.out.println(Arrays.toString(data));
                 List<SamplingPoint> points = decode(data, channelIds);
-                System.out.println(points.size());
-                System.out.println(points);
-                totalNumOfPointsReceived += points.size();
-                log.info("total sampling points received: " + totalNumOfPointsReceived);
+//                System.out.println(points.size());
+//                System.out.println(points);
+                int tpr = totalNumOfPointsReceived.addAndGet(points.size());
+                log.info("total sampling points received: " + tpr);
                 handler.onDataReceived(points);
             }
 
@@ -134,8 +135,8 @@ public class CircuitBoard {
                     }
                     samplingPoints.add(new SamplingPoint(channelIds, coords));
                 }
-                totalNumOfPointsReceived += samplingPoints.size();
-                log.info("total sampling points received: " + totalNumOfPointsReceived);
+                int tpr = totalNumOfPointsReceived.addAndGet(samplingPoints.size());
+                log.info("total sampling points received: " + tpr);
                 handler.onDataReceived(samplingPoints);
             }
         });
