@@ -17,21 +17,19 @@ import java.util.stream.Collectors;
 
 public class CellFeatureCapturer implements WaveCapturedHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
+
     private List<WaveWatcher> waveWatchers;
     private List<CellFeatureCapturedHandler> handlers = new ArrayList<>();
     private volatile BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
 
     private volatile boolean stop = false;
 
-    private int maxBiasForTheSameCell;
-    private IntegerProperty currentBias = new SimpleIntegerProperty(0);
-
     /**
-     * Cache wave event if a point has not consumed yet.
+     * help to capture cell feature according to max bias. This is not thread safe but
+     * it's never mind for that it is only used on one thread (capture wave thread in below).
      */
-    private List<Map<String, Float>> waveEventCache = new ArrayList<>();
-
-    private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
+    private CellFeatureCaptureHelper helper;
 
     public CellFeatureCapturer(List<ChannelMeta> metas, int maxBiasForTheSameCell) {
         // init wave watchers to watch wave appearing
@@ -42,20 +40,15 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                     return waveWatcher;
                 })
                 .collect(Collectors.toList());
-        this.maxBiasForTheSameCell = maxBiasForTheSameCell;
-        // hook handler
-        currentBias.addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() == this.maxBiasForTheSameCell + 1) {
-                tryPostingCellFeature();
-            }
-        });
+        helper = new CellFeatureCaptureHelper(this, maxBiasForTheSameCell);
 
         // start a thread to handle cell feature calculating
         Thread captureWaveThread = new Thread(() -> {
             while (!stop) {
                 try {
                     SamplingPoint point = pointQueue.take();
-                    currentBias.set(currentBias.get() + 1); // may trigger handler
+                    // tick tick once a new point come.
+                    helper.tick();
                     for (int i = 0; i < point.size(); i++) {
                         waveWatchers.get(i).add(point.coordOf(i));
                     }
@@ -80,22 +73,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         stop = true;
     }
 
-    private void tryPostingCellFeature() {
-        if (waveEventCache.isEmpty()) {
-            return;
-        }
-        // merge wave event cache into a cell feature by averaging.
-        Map<String, Float> cellFeature = new HashMap<>();
-        for (String key :
-                waveEventCache.get(0).keySet()) {
-            float sum = 0;
-            for (Map<String, Float> waveEvent :
-                    waveEventCache) {
-                sum += waveEvent.get(key);
-            }
-            cellFeature.put(key, sum / (float) waveEventCache.size());
-        }
-        waveEventCache.clear();
+    public void postCellFeature(Map<String, Float> cellFeature) {
         handlers.forEach(handler -> handler.cellFeatureCaptured(
                 new CellFeatureCapturedEvent(cellFeature)));
     }
@@ -107,13 +85,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                 waveWatchers) {
             waveEvent.put(watcher.getName(), watcher.getWave());
         }
-        // This means the first wave event has been captured
-        // when wave event occurs but wave event cache is empty,
-        // so reset current bias and begin to count it from here.
-        if (waveEventCache.isEmpty()) {
-            currentBias.set(0);
-        }
-        waveEventCache.add(waveEvent);
+        helper.addWaveEvent(waveEvent);
     }
 
     public void registerCellFeatureCapturedHandler(CellFeatureCapturedHandler handler) {
