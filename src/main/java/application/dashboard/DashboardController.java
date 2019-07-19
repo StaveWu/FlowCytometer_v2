@@ -99,6 +99,11 @@ public class DashboardController implements Initializable {
 
     private List<ChannelMeta> channelMetas = new ArrayList<>();
 
+    /**
+     * Do not replace this field to local variable, or persistence will not work.
+     */
+    private DashboardSetting dashboardSetting;
+
     public DashboardController() {
         eventBus.register(this);
     }
@@ -142,8 +147,7 @@ public class DashboardController implements Initializable {
         });
 
         // bind model
-        log.info("loading dashboard settings");
-        DashboardSetting dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
+        dashboardSetting = new DashboardSetting(FCMRunTimeConfig.getInstance()
                 .getProjectConfigFolder() + File.separator + "dashboard.json");
         connectionCombo.valueProperty().bindBidirectional(dashboardSetting.deviceProperty());
         frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
