@@ -24,6 +24,11 @@
                     <Tooltip text="连接"/>
                 </tooltip>
             </Button>
+            <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#clearData" text="清除" >
+                <tooltip>
+                    <Tooltip text="清除"/>
+                </tooltip>
+            </Button>
         </items>
       </ToolBar>
       <ScrollPane prefHeight="200.0" prefWidth="500.0" VBox.vgrow="ALWAYS">

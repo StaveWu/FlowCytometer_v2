@@ -357,4 +357,8 @@ public class LinkedChartsPane extends AnchorPane {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }
+
+    public void clearAllData() {
+        getCharts().forEach(WrappedChart::clearAllData);
+    }
 }

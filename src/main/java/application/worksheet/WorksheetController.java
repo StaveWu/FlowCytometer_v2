@@ -163,6 +163,11 @@ public class WorksheetController implements Initializable {
         chartsPane.setState(LinkedChartsPane.State.ON_CONNECTING);
     }
 
+    @FXML
+    protected void clearData() {
+        chartsPane.clearAllData();
+    }
+
     private class AxisPair {
         public final Axis<Number> xAxis;
         public final Axis<Number> yAxis;

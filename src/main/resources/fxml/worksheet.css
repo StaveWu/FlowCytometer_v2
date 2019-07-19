@@ -12,3 +12,8 @@
    -fx-graphic: url("../icons/arrowhead.png");
    -fx-content-display: graphic-only;
 }
+
+#clearBtn {
+   -fx-graphic: url("../icons/clear.png");
+   -fx-content-display: graphic-only;
+}
