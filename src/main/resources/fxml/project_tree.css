@@ -17,3 +17,8 @@
    -fx-graphic: url("../icons/remove.png");
    -fx-content-display: graphic-only;
 }
+
+#btnMoveTo {
+   -fx-graphic: url("../icons/moveto.png");
+   -fx-content-display: graphic-only;
+}

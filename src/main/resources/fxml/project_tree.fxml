@@ -11,11 +11,11 @@
     <children>
       <ToolBar>
          <items>
-               <Button fx:id="btnNewFile" mnemonicParsing="false" onAction="#newFile" text="NewFile">
-                   <tooltip>
-                       <Tooltip text="新建文件..." />
-                   </tooltip>
-               </Button>
+<!--               <Button fx:id="btnNewFile" mnemonicParsing="false" onAction="#newFile" text="NewFile">-->
+<!--                   <tooltip>-->
+<!--                       <Tooltip text="新建文件..." />-->
+<!--                   </tooltip>-->
+<!--               </Button>-->
                <Button fx:id="btnNewFolder" mnemonicParsing="false" onAction="#newFolder" text="NewFolder">
                    <tooltip>
                        <Tooltip text="新建文件夹..." />
@@ -31,6 +31,11 @@
                        <Tooltip text="重命名" />
                    </tooltip>
                </Button>
+             <Button fx:id="btnMoveTo" mnemonicParsing="false" onAction="#moveTo" text="MoveTo">
+                 <tooltip>
+                     <Tooltip text="移动至..." />
+                 </tooltip>
+             </Button>
          </items>
       </ToolBar>
         <TreeView fx:id="treeView" VBox.vgrow="ALWAYS" />

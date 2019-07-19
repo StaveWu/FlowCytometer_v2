@@ -13,9 +13,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +65,10 @@ public class ProjectTree extends VBox implements Initializable {
                             || (node instanceof TreeCell
                             && ((TreeCell) node).getText() != null)) {
                         String path = getAbsolutePath(treeView.getSelectionModel().getSelectedItem());
+                        if (new File(path).isDirectory() || !path.endsWith("txt")) {
+                            // only load txt file
+                            return;
+                        }
                         eventBus.post(new ChannelDataLoadAction(path));
                     }
                 }
@@ -122,7 +126,8 @@ public class ProjectTree extends VBox implements Initializable {
             String filename = res.get();
             if (!checkFileName(filename)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败", "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败",
+                        "非法文件名！").showAndWait();
                 return;
             }
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), filename);
@@ -136,19 +141,14 @@ public class ProjectTree extends VBox implements Initializable {
                     try {
                         Files.write(target, "".getBytes(), StandardOpenOption.CREATE,
                                 StandardOpenOption.TRUNCATE_EXISTING);
-                        return;
-                    } catch (IOException e1) {
+                    } catch (Exception e1) {
                         UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
                                 e1.getMessage()).showAndWait();
-                        return;
                     }
-                } else {
-                    return;
                 }
-            } catch (IOException e2) {
+            } catch (Exception e2) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
                         e2.getMessage()).showAndWait();
-                return;
             }
         }
     }
@@ -160,16 +160,16 @@ public class ProjectTree extends VBox implements Initializable {
             String foldername = res.get();
             if (!checkFileName(foldername)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败", "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "创建失败",
+                        "非法文件名！").showAndWait();
                 return;
             }
             Path target = Paths.get(getAbsolutePath(getSelectedNearestFolder()), foldername);
             try {
                 Files.createDirectory(target);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, "创建失败",
                         e.getMessage()).showAndWait();
-                return;
             }
         }
     }
@@ -197,10 +197,9 @@ public class ProjectTree extends VBox implements Initializable {
         if (res.isPresent() && res.get() == ButtonType.OK) {
             try {
                 delete(getAbsolutePath(selectedItem));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, "删除失败",
                         e.getMessage()).showAndWait();
-                return;
             }
         }
     }
@@ -225,20 +224,82 @@ public class ProjectTree extends VBox implements Initializable {
             String newname = res.get();
             if (!checkFileName(newname)) {
                 // pop up an warning dialog
-                UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败", "非法文件名！").showAndWait();
+                UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败",
+                        "非法文件名！").showAndWait();
                 return;
             }
 
             Path source = Paths.get(getAbsolutePath(selectedItem));
+            Path destination = source.resolveSibling(newname);
             try {
-                Files.move(source, source.resolveSibling(newname));
-            } catch (IOException e) {
+                Files.move(source, destination);
+                if (destination.toFile().isDirectory()) {
+                    // refresh root, or source child item would miss.
+                    refreshTreeView();
+                }
+            } catch (Exception e) {
                 UiUtils.getAlert(Alert.AlertType.ERROR, "重命名失败",
                         e.getMessage()).showAndWait();
-                return;
             }
 
         }
+    }
+
+    @FXML
+    protected void moveTo() {
+        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) {
+            UiUtils.getAlert(Alert.AlertType.WARNING, "移动文件失败",
+                    "请先选择要移动的文件！").showAndWait();
+            return;
+        }
+
+        File sourceFile = new File(getAbsolutePath(selectedItem));
+        if (sourceFile.isDirectory()) {
+            UiUtils.getAlert(Alert.AlertType.WARNING, "移动文件失败",
+                    "暂不支持移动文件夹！").showAndWait();
+            return;
+        }
+
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Move to...");
+        chooser.setInitialDirectory(new File(rootDir));
+        File targetDir = chooser.showDialog(treeView.getScene().getWindow());
+
+        // nothing selected
+        if (targetDir == null) {
+            return;
+        }
+
+        File targetFile = new File(targetDir, selectedItem.getValue().getName());
+        if (targetFile.exists()) {
+            Optional<ButtonType> choice = UiUtils.getAlert(Alert.AlertType.WARNING, null,
+                    "目标文件夹中包含同名文件，是否要覆盖？").showAndWait();
+            if (choice.isPresent() && choice.get() == ButtonType.OK) {
+                try {
+                    Files.move(sourceFile.toPath(),
+                            targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    UiUtils.getAlert(Alert.AlertType.ERROR, "移动失败",
+                            e.getMessage()).showAndWait();
+                }
+            }
+        } else {
+            try {
+                Files.move(sourceFile.toPath(),
+                        targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception e) {
+                e.printStackTrace();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "移动失败",
+                        e.getMessage()).showAndWait();
+            }
+        }
+    }
+
+    private void refreshTreeView() throws IOException {
+        treeView.setRoot(traverse(rootDir));
+        treeView.getRoot().setExpanded(true);
     }
 
     private String getAbsolutePath(TreeItem<TreeItemInfo> item) {
