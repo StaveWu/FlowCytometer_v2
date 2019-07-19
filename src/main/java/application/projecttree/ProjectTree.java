@@ -206,9 +206,8 @@ public class ProjectTree extends VBox implements Initializable {
     }
 
     @FXML
-    protected void rename(MouseEvent event) {
-        TreeItem<TreeItemInfo> selectedItem = (TreeItem<TreeItemInfo>) treeView.getSelectionModel()
-                .getSelectedItem();
+    protected void rename() {
+        TreeItem<TreeItemInfo> selectedItem = treeView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             UiUtils.getAlert(Alert.AlertType.WARNING, "重命名失败",
                     "请先选择要重命名的文件！").showAndWait();
