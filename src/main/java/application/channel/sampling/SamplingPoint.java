@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,18 +34,22 @@ public class SamplingPoint {
     public static final int COORD_BYTES_LEN = 4;
 
     public SamplingPoint(@NonNull List<String> channelIds, @NonNull List<Float> coords) {
+        checkValid(channelIds, coords);
         // assign as unmodifiable lists
         this.channelIds = Arrays.asList(channelIds.toArray(new String[0]));
-        this.coords = Arrays.asList(coords.toArray(new Float[0]));
-        checkValid();
+        this.coords = Arrays.asList(
+                coords.stream()
+                        .map(v -> Math.round(v * 1000f) / 1000f)
+                        .toArray(Float[]::new)
+        );
     }
 
-    private void checkValid() {
+    private void checkValid(List<String> keys, List<Float> values) {
         // this class only valid when channelIds size equals to coords size.
-        if (this.channelIds.size() != this.coords.size()) {
+        if (keys.size() != values.size()) {
             throw new IllegalArgumentException(String.format("Expect the same size of " +
                             "channelIds and coords but get %d channelIds and %d coords",
-                    this.channelIds.size(), this.coords.size()));
+                    keys.size(), values.size()));
         }
     }
 
@@ -59,7 +62,6 @@ public class SamplingPoint {
     }
 
     public int size() {
-        checkValid();
         return coords.size();
     }
 
@@ -75,8 +77,6 @@ public class SamplingPoint {
                 coordBytes[j] = bytes[COORD_BYTES_LEN * i + j];
             }
             Float coord = ByteBuffer.wrap(coordBytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-            // keep three decimal place
-            coord = Math.round(coord * 1000f) / 1000f;
             coords.add(coord);
         }
         return new SamplingPoint(channelIds, coords);
