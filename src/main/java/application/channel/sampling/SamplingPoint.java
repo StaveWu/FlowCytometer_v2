@@ -75,6 +75,8 @@ public class SamplingPoint {
                 coordBytes[j] = bytes[COORD_BYTES_LEN * i + j];
             }
             Float coord = ByteBuffer.wrap(coordBytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+            // keep three decimal place
+            coord = Math.round(coord * 1000f) / 1000f;
             coords.add(coord);
         }
         return new SamplingPoint(channelIds, coords);
