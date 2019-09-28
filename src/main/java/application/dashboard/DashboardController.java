@@ -61,6 +61,8 @@ public class DashboardController implements Initializable {
     private ProgressIndicator progressIndicator;
     @FXML
     private Label speedLabel;
+    @FXML
+    private Label totalEventLabel;
 
     /**
      * 液流系统
@@ -91,6 +93,11 @@ public class DashboardController implements Initializable {
      * A service to monitor event occurring speed.
      */
     private SpeedService speedService;
+
+    /**
+     * A service to count total events.
+     */
+    private EventCountService eventCountService;
 
     /**
      * A virtual board corresponding to the real board of flow cytometry.
@@ -153,8 +160,8 @@ public class DashboardController implements Initializable {
         frequencyTextField.textProperty().bindBidirectional(dashboardSetting.frequencyProperty(),
                 new NumberStringConverter());
         modeCombo.valueProperty().bindBidirectional(dashboardSetting.sampleModeProperty());
-        // NumberStringConverter will convert 100000 to 100,000, this will cause error
-        // when converting 100,000 back to 100000, so another converter is defined here.
+        // NumberStringConverter converts 100000 to 100,000, which cause error when converting back,
+        // so we use following custom converter instead.
         cellTextField.textProperty().bindBidirectional(dashboardSetting.cellNumberProperty(),
                 new StringConverter<Number>() {
                     @Override
@@ -199,6 +206,9 @@ public class DashboardController implements Initializable {
         if (speedService != null) {
             speedService.speedUp();
         }
+        if (eventCountService != null) {
+            eventCountService.count();
+        }
     }
 
     @FXML
@@ -237,6 +247,8 @@ public class DashboardController implements Initializable {
         });
         speedService = new SpeedService();
         speedLabel.textProperty().bind(speedService.messageProperty());
+        eventCountService = new EventCountService();
+        totalEventLabel.textProperty().bind(eventCountService.messageProperty());
 
         try {
             log.info("initialize circuit board");
@@ -245,6 +257,7 @@ public class DashboardController implements Initializable {
             log.info("start sampling");
             tickService.start();
             speedService.start();
+            eventCountService.start();
             circuitBoard.startSampling(channelMetas.stream()
                     .map(ChannelMeta::getId)
                     .collect(Collectors.toList()));
@@ -266,6 +279,9 @@ public class DashboardController implements Initializable {
         }
         if (speedService != null) {
             speedService.cancel();
+        }
+        if (eventCountService != null) {
+            eventCountService.cancel();
         }
         eventBus.post(new StopSamplingEvent());
         log.info("stop sampling");

@@ -149,7 +149,7 @@
       </TitledPane>
       <TitledPane text="进度监视">
          <content>
-            <ScrollPane fitToWidth="true" prefHeight="160.0">
+            <ScrollPane fitToWidth="true" prefHeight="230.0">
                <content>
                   <GridPane vgap="5.0">
                     <columnConstraints>
@@ -161,9 +161,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ProgressIndicator fx:id="progressIndicator" progress="0.0" GridPane.rowSpan="4" />
+                        <ProgressIndicator fx:id="progressIndicator" progress="0.0" GridPane.rowSpan="6" />
                         <Label text="速度：" GridPane.columnIndex="1" />
                         <Label fx:id="speedLabel" text="--- events/s" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
@@ -176,6 +178,8 @@
                               <Font size="17.0" />
                            </font>
                         </Label>
+                        <Label text="当前event总数：" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="totalEventLabel" text="------" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                </content>
