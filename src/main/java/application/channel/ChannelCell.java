@@ -1,6 +1,7 @@
 package application.channel;
 
 import application.channel.featurecapturing.ChannelMeta;
+import application.utils.Resource;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -8,14 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.springframework.lang.NonNull;
-import application.utils.Resource;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,6 +46,9 @@ public class ChannelCell extends VBox implements Initializable {
 
     @FXML
     private ToggleGroup peakgroup;
+
+    @FXML
+    private CheckBox eventTriggerCheckBox;
 
     @FXML
     private AreaChart<Number, Number> channelChart;
@@ -97,6 +98,10 @@ public class ChannelCell extends VBox implements Initializable {
         });
         thresholdTextField.textProperty().bindBidirectional(channelMeta.thresholdProperty(), new NumberStringConverter());
         thresholdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
+        eventTriggerCheckBox.selectedProperty().bindBidirectional(channelMeta.eventTriggerProperty());
+        eventTriggerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
         channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {

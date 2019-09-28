@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -42,6 +43,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="电压：" GridPane.rowIndex="1" />
@@ -71,6 +73,8 @@
             <Label text="名称：" GridPane.columnIndex="2" />
             <ComboBox fx:id="channelIdCombo" GridPane.columnIndex="1" />
             <TextField fx:id="nameTextField" prefWidth="60.0" GridPane.columnIndex="3" />
+            <Label text="Event触发：" GridPane.rowIndex="3" />
+            <CheckBox fx:id="eventTriggerCheckBox" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>

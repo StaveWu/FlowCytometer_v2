@@ -1,9 +1,6 @@
 package application.channel.featurecapturing;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class ChannelMeta {
 
@@ -12,6 +9,7 @@ public class ChannelMeta {
     private DoubleProperty voltage;
     private DoubleProperty threshold;
     private StringProperty peakPolicy;
+    private BooleanProperty eventTrigger;
 
     public final StringProperty idProperty() {
         if (id == null) {
@@ -46,6 +44,13 @@ public class ChannelMeta {
             peakPolicy = new SimpleStringProperty("Area");
         }
         return peakPolicy;
+    }
+
+    public final BooleanProperty eventTriggerProperty() {
+        if (eventTrigger == null) {
+            eventTrigger = new SimpleBooleanProperty(true);
+        }
+        return eventTrigger;
     }
 
 
@@ -84,6 +89,13 @@ public class ChannelMeta {
         peakPolicyProperty().set(peakPolicy);
     }
 
+    public boolean getEventTrigger() {
+        return eventTriggerProperty().get();
+    }
+    public void setEventTrigger(boolean trigger) {
+        eventTriggerProperty().set(trigger);
+    }
+
     public String getNameWithPolicy() {
         return getName() + "-" + getPeakPolicy().charAt(0);
     }
@@ -94,13 +106,16 @@ public class ChannelMeta {
         public final double voltage;
         public final double threshold;
         public final String peakPolicy;
+        public final boolean eventTrigger;
 
-        public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy) {
+        public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy,
+                          boolean eventTrigger) {
             this.id = id;
             this.name = name;
             this.voltage = voltage;
             this.threshold = threshold;
             this.peakPolicy = peakPolicy;
+            this.eventTrigger = eventTrigger;
         }
     }
 
@@ -109,7 +124,8 @@ public class ChannelMeta {
                 nameProperty().get(),
                 voltageProperty().get(),
                 thresholdProperty().get(),
-                peakPolicyProperty().get());
+                peakPolicyProperty().get(),
+                eventTriggerProperty().get());
     }
 
     public static ChannelMeta fromJsonObject(JsonObject json) {
@@ -119,12 +135,23 @@ public class ChannelMeta {
         model.setPeakPolicy(json.peakPolicy);
         model.setThreshold(json.threshold);
         model.setVoltage(json.voltage);
+        model.setEventTrigger(json.eventTrigger);
         return model;
     }
 
     @Override
     public String toString() {
-        return String.format("{id: %s, name: %s, voltage: %f, threshold: %f, peakPolicy: %s}",
-                getId(), getName(), getVoltage(), getThreshold(), getPeakPolicy());
+        return String.format("ChannelMeta[id: %s, " +
+                        "name: %s, " +
+                        "voltage: %f, " +
+                        "threshold: %f, " +
+                        "peakPolicy: %s, " +
+                        "eventTrigger: %s]",
+                getId(),
+                getName(),
+                getVoltage(),
+                getThreshold(),
+                getPeakPolicy(),
+                getEventTrigger());
     }
 }

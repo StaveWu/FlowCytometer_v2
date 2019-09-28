@@ -235,7 +235,8 @@ public class ChannelController implements Initializable {
         if (cellFeatureCapturer != null) {
             cellFeatureCapturer.stop();
         }
-        cellFeatureCapturer = new CellFeatureCapturer(channelMetaRepository.findAll(),
+        cellFeatureCapturer = new CellFeatureCapturer(
+                channelMetaRepository.findAll(),
                 channelSetting.getMaxBias());
         cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
     }

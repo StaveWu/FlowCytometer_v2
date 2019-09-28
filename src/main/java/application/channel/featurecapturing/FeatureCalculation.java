@@ -1,6 +1,5 @@
 package application.channel.featurecapturing;
 
-import java.util.Collections;
 import java.util.List;
 
 public class FeatureCalculation {

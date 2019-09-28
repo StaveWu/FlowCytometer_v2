@@ -2,8 +2,6 @@ package application.channel.featurecapturing;
 
 import application.channel.sampling.SamplingPoint;
 import application.event.CellFeatureCapturedEvent;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +34,11 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         waveWatchers = metas.stream()
                 .map(meta -> {
                     WaveWatcher waveWatcher = new WaveWatcher(meta);
-                    waveWatcher.registerWaveCapturedHandler(this);
+                    // capturing wave on those channels selected,
+                    // others will just be ignored whenever its wave event occurs
+                    if (meta.getEventTrigger()) {
+                        waveWatcher.registerWaveCapturedHandler(this);
+                    }
                     return waveWatcher;
                 })
                 .collect(Collectors.toList());
@@ -73,7 +75,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         stop = true;
     }
 
-    public void postCellFeature(Map<String, Float> cellFeature) {
+    void postCellFeature(Map<String, Float> cellFeature) {
         handlers.forEach(handler -> handler.cellFeatureCaptured(
                 new CellFeatureCapturedEvent(cellFeature)));
     }
