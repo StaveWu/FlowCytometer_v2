@@ -1,9 +1,12 @@
 package application.chart;
 
 import application.chart.gate.*;
+import application.worksheet.EventsCountService;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -39,6 +42,8 @@ public class WrappedChart extends VBox implements LinkedNode,
     private XYChart<Number, Number> chart;
     private ContextMenu contextMenu;
 
+    private EventsCountService service;
+
     private List<ChartRemovedListener> listeners = new ArrayList<>();
 
     private static final class DragContext {
@@ -57,7 +62,13 @@ public class WrappedChart extends VBox implements LinkedNode,
         }
         this.chart = chart;
         ((GatableChart) chart).addGateLifeCycleListener(this);
+        ((GatableChart) chart).getKVData().addListener((ListChangeListener) c -> {
+            service.setCurrentCount(c.getList().size());
+        });
         setVgrow(chart, Priority.ALWAYS);
+
+        service = new EventsCountService();
+        service.start();
 
         getChildren().add(createTitledPane());
         getChildren().add(chart);
@@ -134,6 +145,11 @@ public class WrappedChart extends VBox implements LinkedNode,
         resizeMarkRegion.yProperty().bind(bottomPane.heightProperty()
                 .subtract(resizeMarkRegion.heightProperty()));
         bottomPane.getChildren().add(resizeMarkRegion);
+
+        // add label to monitor events
+        Label countLabel = new Label("Events Count: ");
+        countLabel.textProperty().bind(service.messageProperty());
+        bottomPane.getChildren().add(countLabel);
         return bottomPane;
     }
 
@@ -342,7 +358,7 @@ public class WrappedChart extends VBox implements LinkedNode,
     }
 
     @Override
-    public List<KVData> getKVData() {
+    public ObservableList<KVData> getKVData() {
         return gatableChart().getKVData();
     }
 

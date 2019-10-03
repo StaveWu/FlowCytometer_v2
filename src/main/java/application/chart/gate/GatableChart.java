@@ -1,5 +1,6 @@
 package application.chart.gate;
 
+import javafx.collections.ObservableList;
 import javafx.scene.chart.Axis;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface GatableChart<X, Y> {
 
     void addGateLifeCycleListener(GateLifeCycleListener listener);
 
-    List<KVData> getKVData();
+    ObservableList<KVData> getKVData();
 
     Axis<X> getXAxis();
 

@@ -16,7 +16,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
 
     private Gate<Number, Number> gate;
-    private List<KVData> dataList = new ArrayList<>();
+    private ObservableList<KVData> dataList = FXCollections.observableList(new ArrayList<>());
     private List<GateLifeCycleListener> listeners = new ArrayList<>();
 
     public GatedScatterChart(Axis<Number> xAxis, Axis<Number> yAxis) {
@@ -177,7 +177,7 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     }
 
     @Override
-    public List<KVData> getKVData() {
+    public ObservableList<KVData> getKVData() {
         return dataList;
     }
 
