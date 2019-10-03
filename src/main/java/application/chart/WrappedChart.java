@@ -12,6 +12,7 @@ import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -27,10 +28,6 @@ public class WrappedChart extends VBox implements LinkedNode,
         GatableChart<Number, Number>, GateLifeCycleListener {
 
     private String uniqueId;
-
-    private FlowPane titledPane;
-    private Pane bottomPane;
-    private Rectangle resizeMarkRegion;
 
     private boolean canResize = false;
     private boolean canDrag = false;
@@ -55,20 +52,16 @@ public class WrappedChart extends VBox implements LinkedNode,
         super();
         uniqueId = UUID.randomUUID().toString();
 
-        this.chart = chart;
         if (!(chart instanceof GatableChart)) {
             throw new IllegalArgumentException();
         }
+        this.chart = chart;
         ((GatableChart) chart).addGateLifeCycleListener(this);
-        createTitledPane();
-        createBottomPane();
-        createResizeMarkRegion();
-        bottomPane.getChildren().add(resizeMarkRegion);
         setVgrow(chart, Priority.ALWAYS);
 
-        getChildren().add(titledPane);
+        getChildren().add(createTitledPane());
         getChildren().add(chart);
-        getChildren().add(bottomPane);
+        getChildren().add(createBottomPane());
 
         setStyle("-fx-background-color: white;"
                 + "-fx-border-color: dimgray;"
@@ -76,14 +69,12 @@ public class WrappedChart extends VBox implements LinkedNode,
         setPrefWidth(300);
         setPrefHeight(220);
 
-        hookDragHandlers();
-        hookResizeHandlers();
         hookContextMenu();
         hookAxisLabelListeners();
     }
 
-    private void createTitledPane() {
-        titledPane = new FlowPane();
+    private Pane createTitledPane() {
+        FlowPane titledPane = new FlowPane();
         titledPane.setMinHeight(30);
         titledPane.prefWidthProperty().bind(prefWidthProperty());
         titledPane.setStyle("-fx-background-color: dimgray;");
@@ -131,33 +122,40 @@ public class WrappedChart extends VBox implements LinkedNode,
             listeners.forEach(ChartRemovedListener::chartRemoved);
         });
         titledPane.getChildren().add(hyperlink);
+        hookDragHandlers(titledPane);
+        return titledPane;
     }
 
-    private void createBottomPane() {
-        bottomPane = new Pane();
+    private Pane createBottomPane() {
+        Pane bottomPane = new Pane();
+        Rectangle resizeMarkRegion = createResizeMarkRegion();
+        resizeMarkRegion.xProperty().bind(bottomPane.widthProperty()
+                .subtract(resizeMarkRegion.widthProperty()));
+        resizeMarkRegion.yProperty().bind(bottomPane.heightProperty()
+                .subtract(resizeMarkRegion.heightProperty()));
+        bottomPane.getChildren().add(resizeMarkRegion);
+        return bottomPane;
     }
 
-    private void createResizeMarkRegion() {
+    private Rectangle createResizeMarkRegion() {
         final int WIDTH = 10;
         final int HEIGHT = 10;
-        resizeMarkRegion = new Rectangle(WIDTH, HEIGHT);
-        resizeMarkRegion.setStyle("-fx-fill: dimgray;");
-        IntegerProperty xDelta = new SimpleIntegerProperty(WIDTH);
-        IntegerProperty yDelta = new SimpleIntegerProperty(HEIGHT);
-        resizeMarkRegion.xProperty().bind(bottomPane.widthProperty().subtract(xDelta));
-        resizeMarkRegion.yProperty().bind(bottomPane.heightProperty().subtract(yDelta));
-        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+        Rectangle region = new Rectangle(WIDTH, HEIGHT);
+        region.setStyle("-fx-fill: dimgray;");
+        region.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             getScene().setCursor(Cursor.NW_RESIZE);
         });
-        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+        region.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             getScene().setCursor(Cursor.DEFAULT);
         });
+        hookResizeHandlers(region);
+        return region;
     }
 
-    private void hookDragHandlers() {
+    private void hookDragHandlers(Pane pane) {
         dragContext = new DragContext();
         addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (titledPane.contains(event.getX(), event.getY())) {
+            if (pane.contains(event.getX(), event.getY())) {
                 Point2D mouseLoc = localToParent(event.getX(), event.getY());
                 dragContext.mouseAnchorX = mouseLoc.getX();
                 dragContext.mouseAnchorY = mouseLoc.getY();
@@ -182,8 +180,8 @@ public class WrappedChart extends VBox implements LinkedNode,
         });
     }
 
-    private void hookResizeHandlers() {
-        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+    private void hookResizeHandlers(Rectangle region) {
+        region.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             canResize = true;
         });
         addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
@@ -192,7 +190,7 @@ public class WrappedChart extends VBox implements LinkedNode,
                 setPrefHeight(event.getY());
             }
         });
-        resizeMarkRegion.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+        region.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if (canResize) {
                 canResize = false;
             }
