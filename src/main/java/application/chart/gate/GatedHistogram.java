@@ -18,7 +18,7 @@ public class GatedHistogram extends AreaChart<Number, Number>
         implements Gatable, GatableChart<Number, Number>, GateCompletedListener {
 
     private Gate<Number, Number> gate;
-    private ObservableList<KVData> dataList = FXCollections.observableList(new ArrayList<>());
+    private ObservableList<KVData> dataList = FXCollections.observableArrayList();
     private List<GateLifeCycleListener> listeners = new ArrayList<>();
 
     public GatedHistogram(Axis<Number> xAxis, Axis<Number> yAxis) {

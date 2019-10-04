@@ -7,10 +7,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.NumberStringConverter;
 import org.springframework.lang.NonNull;
@@ -151,6 +153,14 @@ public class ChannelCell extends VBox implements Initializable {
     @FXML
     protected void closeChannel() {
         parentController.removeChannelCell(this);
+    }
+
+    @FXML
+    protected void correctThreshold() {
+        Stage stage = new Stage();
+        stage.setTitle(this.nameTextField.getText());
+        stage.setScene(new Scene(new ThresholdCorrection()));
+        stage.show();
     }
 
     public ChannelMeta getChannelMeta() {
