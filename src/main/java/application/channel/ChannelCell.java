@@ -1,17 +1,24 @@
 package application.channel;
 
 import application.channel.featurecapturing.ChannelMeta;
+import application.chart.gate.CursorChart;
+import application.chart.gate.GateCompletedListener;
+import application.chart.gate.RectangleGate;
+import application.utils.MathUtils;
 import application.utils.Resource;
+import application.utils.UiUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.converter.BooleanStringConverter;
 import javafx.util.converter.NumberStringConverter;
@@ -159,7 +166,111 @@ public class ChannelCell extends VBox implements Initializable {
     protected void correctThreshold() {
         Stage stage = new Stage();
         stage.setTitle(this.nameTextField.getText());
-        stage.setScene(new Scene(new ThresholdCorrection()));
+        CursorChart chart = new CursorChart(new NumberAxis(), new NumberAxis());
+
+        Label meanLabel = new Label("平均值：");
+        Label meanValueLabel = new Label("----");
+        Label stdLabel = new Label("标准差：");
+        Label stdValueLabel = new Label("----");
+        Label thresholdLabel = new Label("新阈值：");
+        Label thresholdValueLabel = new Label("----");
+        thresholdLabel.setTooltip(new Tooltip("新阈值 = 平均值 + 3 x 标准差"));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(5));
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setMinWidth(10);
+        col1.setPrefWidth(50);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setMinWidth(10);
+        col2.setPrefWidth(50);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setMinWidth(10);
+        col3.setPrefWidth(50);
+        ColumnConstraints col4 = new ColumnConstraints();
+        col4.setMinWidth(10);
+        col4.setPrefWidth(50);
+        ColumnConstraints col5 = new ColumnConstraints();
+        col4.setMinWidth(10);
+        col4.setPrefWidth(50);
+        ColumnConstraints col6 = new ColumnConstraints();
+        col4.setMinWidth(10);
+        col4.setPrefWidth(50);
+        col1.setHgrow(Priority.SOMETIMES);
+        col2.setHgrow(Priority.SOMETIMES);
+        col3.setHgrow(Priority.SOMETIMES);
+        col4.setHgrow(Priority.SOMETIMES);
+        col5.setHgrow(Priority.SOMETIMES);
+        col6.setHgrow(Priority.SOMETIMES);
+        gridPane.getColumnConstraints().addAll(col1, col2, col3, col4, col5, col6);
+
+        RowConstraints row1 = new RowConstraints();
+        row1.setMinHeight(10);
+        row1.setPrefHeight(30);
+        row1.setVgrow(Priority.SOMETIMES);
+        gridPane.getRowConstraints().add(row1);
+
+        gridPane.add(meanLabel, 0, 0);
+        gridPane.add(meanValueLabel, 1, 0);
+        gridPane.add(stdLabel, 2, 0);
+        gridPane.add(stdValueLabel, 3, 0);
+        gridPane.add(thresholdLabel, 4, 0);
+        gridPane.add(thresholdValueLabel, 5, 0);
+
+        Button cursorBtn = new Button("游标");
+        cursorBtn.setOnAction(event -> {
+            RectangleGate<Number, Number> gate = new RectangleGate<>();
+            gate.addCompletedListener(() -> {
+                // calculate mean, std...
+                List<Float> floatData = chart.getGatedData();
+                double[] data = new double[floatData.size()];
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = floatData.get(i).doubleValue();
+                }
+                double mean = MathUtils.getMean(data);
+                double std = MathUtils.getStdDev(data);
+                double threshold = mean + 3 * std;
+                meanValueLabel.setText(String.format("%.3f", mean));
+                stdValueLabel.setText(String.format("%.3f", std));
+                thresholdValueLabel.setText(String.format("%.3f", threshold));
+            });
+            chart.setGate(gate);
+        });
+
+        Button okBtn = new Button("确认");
+        okBtn.setOnAction(event -> {
+            String text = thresholdValueLabel.getText();
+            if (text.equals("NaN") || text.equals("----")) {
+                UiUtils.getAlert(Alert.AlertType.ERROR, "新阈值校正错误",
+                        String.format("新阈值“%s”是无效值", text)).showAndWait();
+            } else {
+                channelMeta.setThreshold(Double.parseDouble(text));
+                stage.close();
+            }
+        });
+        Button cancelBtn = new Button("取消");
+        cancelBtn.setOnAction(event -> {
+            stage.close();
+        });
+        ButtonBar bar = new ButtonBar();
+        bar.setPadding(new Insets(10));
+        ButtonBar.setButtonData(okBtn, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(cancelBtn, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(cursorBtn, ButtonBar.ButtonData.LEFT);
+        bar.getButtons().addAll(cursorBtn, okBtn, cancelBtn);
+
+        VBox root = new VBox();
+        root.setMinHeight(Double.NEGATIVE_INFINITY);
+        root.setMaxHeight(Double.NEGATIVE_INFINITY);
+        root.setMinWidth(Double.NEGATIVE_INFINITY);
+        root.setMaxWidth(Double.NEGATIVE_INFINITY);
+        root.getChildren().add(chart);
+        root.getChildren().add(gridPane);
+        root.getChildren().add(bar);
+
+        stage.setScene(new Scene(root));
         stage.show();
     }
 

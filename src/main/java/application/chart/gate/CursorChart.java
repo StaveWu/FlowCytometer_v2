@@ -8,9 +8,13 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CursorChart extends AreaChart<Number, Number> implements Gatable {
 
     private Gate<Number, Number> gate;
+    private List<Float> data;
 
     public CursorChart(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -19,8 +23,7 @@ public class CursorChart extends AreaChart<Number, Number> implements Gatable {
     public CursorChart(Axis<Number> xAxis, Axis<Number> yAxis, ObservableList<Series<Number, Number>> data) {
         super(xAxis, yAxis, data);
         // add empty series
-        getData().add(new XYChart.Series<>());
-        // use user data to store axis names
+        getData().add(new Series<>());
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookGateAction();
@@ -62,5 +65,61 @@ public class CursorChart extends AreaChart<Number, Number> implements Gatable {
             return;
         }
         gate.addPoint(getDataForDisplay(x, y));
+    }
+
+    @Override
+    protected void layoutPlotChildren() {
+        super.layoutPlotChildren();
+        if (gate == null) {
+            return;
+        }
+        gate.paint(getXAxis(), getYAxis());
+    }
+
+    public void setGate(Gate<Number, Number> gate) {
+        removeGate();
+        this.gate = gate;
+        if (!getPlotChildren().contains(gate.getNode())) {
+            getPlotChildren().add(gate.getNode());
+        }
+    }
+
+    public Gate<Number, Number> getGate() {
+        return gate;
+    }
+
+    private void removeGate() {
+        if (gate != null) {
+            getPlotChildren().remove(gate.getNode());
+            gate = null;
+        }
+    }
+
+    public void setData(List<Float> data) {
+        if (data == null) {
+            return;
+        }
+        // re-plot data
+        getData().clear();
+        Series<Number, Number> series = new Series<>();
+        for (int i = 0; i < data.size(); i++) {
+            series.getData().add(new Data<>(i, data.get(i)));
+        }
+    }
+
+    public List<Float> getGatedData() {
+        if (gate == null || !gate.isCompleted()) {
+            return new ArrayList<>();
+        }
+        List<Float> res = new ArrayList<>();
+        ObservableList<Data<Number, Number>> data = getData().get(0).getData();
+        for (Data<Number, Number> ele : data) {
+            double x = getXAxis().getDisplayPosition(ele.getXValue());
+            double y = getYAxis().getDisplayPosition(ele.getYValue());
+            if (gate.getNode().contains(x, y)) {
+                res.add((float) y);
+            }
+        }
+        return res;
     }
 }
