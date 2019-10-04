@@ -8,5 +8,7 @@ public class FloatTest {
 
         System.out.println(Math.round(a * 1000f));
         System.out.println(Math.round(a * 1000f) / 1000f);
+
+        System.out.println(Double.valueOf(String.format("%.3f", a)));
     }
 }

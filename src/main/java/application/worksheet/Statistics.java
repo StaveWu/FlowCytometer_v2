@@ -1,6 +1,7 @@
 package application.worksheet;
 
 import application.chart.gate.KVData;
+import application.utils.MathUtils;
 import application.utils.Resource;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,9 @@ public class Statistics extends VBox implements Initializable {
     private TableColumn<Double, StatisticsRowObject> medianColumn;
 
     @FXML
+    private TableColumn<Double, StatisticsRowObject> cvColumn;
+
+    @FXML
     private TableView<StatisticsRowObject> tableView;
 
     public Statistics() {
@@ -49,6 +53,7 @@ public class Statistics extends VBox implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         meanColumn.setCellValueFactory(new PropertyValueFactory<>("mean"));
         medianColumn.setCellValueFactory(new PropertyValueFactory<>("median"));
+        cvColumn.setCellValueFactory(new PropertyValueFactory<>("coefficientOfVariation"));
     }
 
     public void addData(List<KVData> dataList) {
@@ -70,33 +75,17 @@ public class Statistics extends VBox implements Initializable {
         });
         for (String name :
                 reshapedMap.keySet()) {
+            List<Float> floatData = reshapedMap.get(name);
+            double[] data = new double[floatData.size()];
+            for (int i = 0; i < data.length; i++) {
+                data[i] = floatData.get(i).doubleValue();
+            }
             rowObjects.add(new StatisticsRowObject(name,
-                    getMean(reshapedMap.get(name)),
-                    getMedian(reshapedMap.get(name))));
+                    MathUtils.getMean(data),
+                    MathUtils.getMedian(data),
+                    MathUtils.getCoefficientOfVariation(data)));
         }
         return rowObjects;
     }
 
-    private static double getMean(List<Float> data) {
-        int sum = 0;
-        if (data.isEmpty()) {
-            return sum;
-        }
-        for (Float d :
-                data) {
-            sum += d;
-        }
-        return sum / data.size();
-    }
-
-    private static double getMedian(List<Float> data) {
-        Float[] numArray = data.toArray(new Float[data.size()]);
-        Arrays.sort(numArray);
-        double median;
-        if (numArray.length % 2 == 0)
-            median = ((double)numArray[numArray.length/2] + (double)numArray[numArray.length/2 - 1])/2;
-        else
-            median = (double) numArray[numArray.length/2];
-        return median;
-    }
 }

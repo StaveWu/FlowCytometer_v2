@@ -8,10 +8,14 @@ public class StatisticsRowObject {
 
     private double median;
 
-    public StatisticsRowObject(String name, double mean, double median) {
+    private String coefficientOfVariation;
+
+    public StatisticsRowObject(String name, double mean, double median, double cv) {
         this.name = name;
-        this.mean = mean;
-        this.median = median;
+        // keep 3 decimal places
+        this.mean = Double.valueOf(String.format("%.3f", mean));
+        this.median = Double.valueOf(String.format("%.3f", median));
+        this.coefficientOfVariation = String.format("%.3f", cv * 100) + "%";
     }
 
     public String getName() {
@@ -26,4 +30,7 @@ public class StatisticsRowObject {
         return median;
     }
 
+    public String getCoefficientOfVariation() {
+        return coefficientOfVariation;
+    }
 }

@@ -11,6 +11,7 @@
             <TableColumn fx:id="nameColumn" prefWidth="100.0" text="Name" />
           <TableColumn fx:id="meanColumn" prefWidth="150.0" text="Mean" />
           <TableColumn fx:id="medianColumn" prefWidth="150.0" text="Median" />
+          <TableColumn fx:id="cvColumn" prefWidth="150.0" text="Coefficient Of Variation" />
         </columns>
       </TableView>
    </children>
