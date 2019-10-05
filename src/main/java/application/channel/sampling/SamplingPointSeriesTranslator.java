@@ -1,15 +1,13 @@
 package application.channel.sampling;
 
 import javafx.scene.chart.XYChart;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class SamplingPointSeriesTranslator {
 
-    public List<XYChart.Series<Number, Number>> toSeries(List<SamplingPoint> points) {
+    public static List<XYChart.Series<Number, Number>> toSeries(List<SamplingPoint> points) {
         List<XYChart.Series<Number, Number>> res = new ArrayList<>();
         if (points.isEmpty()) {
             return res;
