@@ -54,7 +54,9 @@ public class CellFeatureCaptureHelper {
                     waveEvents) {
                 sum += waveEvent.get(key);
             }
-            res.put(key, sum / (float) waveEvents.size());
+            // keep three decimal places
+            float mean = sum / (float) waveEvents.size();
+            res.put(key, Math.round(mean * 1000f) / 1000f);
         }
         return res;
     }

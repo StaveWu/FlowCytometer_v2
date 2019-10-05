@@ -32,6 +32,7 @@ public class GatedHistogram extends AreaChart<Number, Number>
         getData().add(new XYChart.Series<>());
         // use user data to store axis names
         getYAxis().setLabel("Count");
+        setCreateSymbols(false);
         setAnimated(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookGateAction();
