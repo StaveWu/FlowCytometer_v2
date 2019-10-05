@@ -1,23 +1,19 @@
 package application.channel;
 
-import application.channel.featurecapturing.CellFeatureCapturer;
+import application.channel.featurecapturing.CellFeatureCaptureThread;
 import application.channel.featurecapturing.ChannelMeta;
 import application.channel.featurecapturing.ChannelMetaRepository;
-import application.channel.sampling.SamplingPoint;
 import application.channel.sampling.SamplingPointRepository;
-import application.channel.sampling.SamplingPointSeriesTranslator;
 import application.event.*;
 import application.starter.FCMRunTimeConfig;
 import application.utils.UiUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -31,7 +27,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 public class ChannelController implements Initializable {
@@ -47,7 +42,7 @@ public class ChannelController implements Initializable {
 
     private MonitorSamplingPointThread monitorSamplingPointThread;
 
-    private CellFeatureCapturer cellFeatureCapturer;
+    private CellFeatureCaptureThread cellFeatureCaptureThread;
     private ChannelSetting channelSetting;
 
     @FXML
@@ -205,29 +200,31 @@ public class ChannelController implements Initializable {
         samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);
 
-        startCellFeatureCaptureTask();
+        startCellFeatureCaptureDaemon();
     }
-    private void startCellFeatureCaptureTask() {
-        stopCellFeatureCaptureTask();
-        cellFeatureCapturer = new CellFeatureCapturer(
+    private void startCellFeatureCaptureDaemon() {
+        stopCellFeatureCaptureDaemon();
+        cellFeatureCaptureThread = new CellFeatureCaptureThread(
                 channelMetaRepository.findAll(),
                 channelSetting.getMaxBias());
-        cellFeatureCapturer.registerCellFeatureCapturedHandler(eventBus::post);
+        cellFeatureCaptureThread.registerCellFeatureCapturedHandler(eventBus::post);
+        cellFeatureCaptureThread.setDaemon(true);
+        cellFeatureCaptureThread.start();
     }
-    private void stopCellFeatureCaptureTask() {
-        if (cellFeatureCapturer != null) {
-            cellFeatureCapturer.stop();
+    private void stopCellFeatureCaptureDaemon() {
+        if (cellFeatureCaptureThread != null) {
+            cellFeatureCaptureThread.interrupt();
         }
     }
 
     private void startMonitorPointsDaemon() {
-        stopMonitorPointsTask();
+        stopMonitorPointsDaemon();
         monitorSamplingPointThread = new MonitorSamplingPointThread(channelsHBox,
                 channelSetting, samplingPointRepository);
         monitorSamplingPointThread.setDaemon(true);
         monitorSamplingPointThread.start();
     }
-    private void stopMonitorPointsTask() {
+    private void stopMonitorPointsDaemon() {
         if (monitorSamplingPointThread != null) {
             monitorSamplingPointThread.interrupt();
         }
@@ -236,23 +233,23 @@ public class ChannelController implements Initializable {
     @Subscribe
     protected void listen(StopSamplingEvent event) {
         log.info("stop sampling received");
-        stopCellFeatureCaptureTask();
+        stopCellFeatureCaptureDaemon();
     }
 
     @Subscribe
     protected void listen(SamplingPointsCapturedEvent event) {
         samplingPointRepository.savePoints(event.getSamplingPoints());
-        event.getSamplingPoints().forEach(point -> cellFeatureCapturer.addSamplingPoint(point));
+        event.getSamplingPoints().forEach(point -> cellFeatureCaptureThread.addSamplingPoint(point));
     }
 
     @Subscribe
     protected void listen(ChannelDataLoadAction action) {
         log.info("load channel data: " + action.getChannelDataPath());
         samplingPointRepository.setLocation(action.getChannelDataPath());
-        startCellFeatureCaptureTask();
+        startCellFeatureCaptureDaemon();
 
         try {
-            samplingPointRepository.pointsStream().forEach(cellFeatureCapturer::addSamplingPoint);
+            samplingPointRepository.pointsStream().forEach(cellFeatureCaptureThread::addSamplingPoint);
         } catch (Exception e) {
             e.printStackTrace();
             UiUtils.getAlert(Alert.AlertType.ERROR, "读取文件失败",

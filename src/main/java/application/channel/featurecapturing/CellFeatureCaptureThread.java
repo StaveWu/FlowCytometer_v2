@@ -13,15 +13,13 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
-public class CellFeatureCapturer implements WaveCapturedHandler {
+public class CellFeatureCaptureThread extends Thread implements WaveCapturedHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(CellFeatureCapturer.class);
+    private static final Logger log = LoggerFactory.getLogger(CellFeatureCaptureThread.class);
 
     private List<WaveWatcher> waveWatchers;
     private List<CellFeatureCapturedHandler> handlers = new ArrayList<>();
     private volatile BlockingDeque<SamplingPoint> pointQueue = new LinkedBlockingDeque<>();
-
-    private volatile boolean stop = false;
 
     /**
      * help to capture cell feature according to max bias. This is not thread safe but
@@ -29,7 +27,7 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
      */
     private CellFeatureCaptureHelper helper;
 
-    public CellFeatureCapturer(List<ChannelMeta> metas, int maxBiasForTheSameCell) {
+    public CellFeatureCaptureThread(List<ChannelMeta> metas, int maxBiasForTheSameCell) {
         // init wave watchers to watch wave appearing
         waveWatchers = metas.stream()
                 .map(meta -> {
@@ -43,24 +41,23 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
                 })
                 .collect(Collectors.toList());
         helper = new CellFeatureCaptureHelper(this, maxBiasForTheSameCell);
+    }
 
-        // start a thread to handle cell feature calculating
-        Thread captureWaveThread = new Thread(() -> {
-            while (!stop) {
-                try {
-                    SamplingPoint point = pointQueue.take();
-                    // tick tick once a new point come.
-                    helper.tick();
-                    for (int i = 0; i < point.size(); i++) {
-                        waveWatchers.get(i).add(point.coordOf(i));
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+    @Override
+    public void run() {
+        super.run();
+        while (!isInterrupted()) {
+            try {
+                SamplingPoint point = pointQueue.take();
+                // tick tick once a new point come.
+                helper.tick();
+                for (int i = 0; i < point.size(); i++) {
+                    waveWatchers.get(i).add(point.coordOf(i));
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-        captureWaveThread.setDaemon(true);
-        captureWaveThread.start();
+        }
     }
 
     public void addSamplingPoint(SamplingPoint point) {
@@ -69,10 +66,6 @@ public class CellFeatureCapturer implements WaveCapturedHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void stop() {
-        stop = true;
     }
 
     void postCellFeature(Map<String, Float> cellFeature) {

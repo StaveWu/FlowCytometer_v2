@@ -15,9 +15,9 @@ public class CellFeatureCaptureHelper {
     private int currentBias;
     private List<Map<String, Float>> waveEvents = new ArrayList<>();
 
-    private CellFeatureCapturer capturer;
+    private CellFeatureCaptureThread capturer;
 
-    public CellFeatureCaptureHelper(CellFeatureCapturer capturer, int maxBiasForTheSameCell) {
+    public CellFeatureCaptureHelper(CellFeatureCaptureThread capturer, int maxBiasForTheSameCell) {
         this.maxBiasForTheSameCell = maxBiasForTheSameCell;
         this.capturer = capturer;
     }
