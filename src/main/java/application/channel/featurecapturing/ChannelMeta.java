@@ -10,6 +10,7 @@ public class ChannelMeta {
     private DoubleProperty threshold;
     private StringProperty peakPolicy;
     private BooleanProperty eventTrigger;
+    private DoubleProperty background;
 
     public final StringProperty idProperty() {
         if (id == null) {
@@ -51,6 +52,13 @@ public class ChannelMeta {
             eventTrigger = new SimpleBooleanProperty(true);
         }
         return eventTrigger;
+    }
+
+    public final DoubleProperty backgroundProperty() {
+        if (background == null) {
+            background = new SimpleDoubleProperty(0.0);
+        }
+        return background;
     }
 
 
@@ -96,6 +104,13 @@ public class ChannelMeta {
         eventTriggerProperty().set(trigger);
     }
 
+    public double getBackground() {
+        return backgroundProperty().get();
+    }
+    public void setBackground(double background) {
+        backgroundProperty().set(background);
+    }
+
     public String getNameWithPolicy() {
         return getName() + "-" + getPeakPolicy().charAt(0);
     }
@@ -107,15 +122,17 @@ public class ChannelMeta {
         public final double threshold;
         public final String peakPolicy;
         public final boolean eventTrigger;
+        public final double background;
 
         public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy,
-                          boolean eventTrigger) {
+                          boolean eventTrigger, double background) {
             this.id = id;
             this.name = name;
             this.voltage = voltage;
             this.threshold = threshold;
             this.peakPolicy = peakPolicy;
             this.eventTrigger = eventTrigger;
+            this.background = background;
         }
     }
 
@@ -125,7 +142,8 @@ public class ChannelMeta {
                 voltageProperty().get(),
                 thresholdProperty().get(),
                 peakPolicyProperty().get(),
-                eventTriggerProperty().get());
+                eventTriggerProperty().get(),
+                backgroundProperty().get());
     }
 
     public static ChannelMeta fromJsonObject(JsonObject json) {
@@ -136,6 +154,7 @@ public class ChannelMeta {
         model.setThreshold(json.threshold);
         model.setVoltage(json.voltage);
         model.setEventTrigger(json.eventTrigger);
+        model.setBackground(json.background);
         return model;
     }
 
@@ -146,12 +165,14 @@ public class ChannelMeta {
                         "voltage: %f, " +
                         "threshold: %f, " +
                         "peakPolicy: %s, " +
-                        "eventTrigger: %s]",
+                        "eventTrigger: %s, " +
+                        "backgound: %f]",
                 getId(),
                 getName(),
                 getVoltage(),
                 getThreshold(),
                 getPeakPolicy(),
-                getEventTrigger());
+                getEventTrigger(),
+                getBackground());
     }
 }

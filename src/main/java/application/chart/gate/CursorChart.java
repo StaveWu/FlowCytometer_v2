@@ -6,7 +6,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class CursorChart extends AreaChart<Number, Number> implements Gatable {
 
     private Gate<Number, Number> gate;
-    private List<Float> data;
 
     public CursorChart(Axis<Number> xAxis, Axis<Number> yAxis) {
         this(xAxis, yAxis, FXCollections.observableArrayList());
@@ -25,6 +23,7 @@ public class CursorChart extends AreaChart<Number, Number> implements Gatable {
         // add empty series
         getData().add(new Series<>());
         setAnimated(false);
+        setCreateSymbols(false);
         GatableHooker gatableHooker = new GatableHooker(this);
         gatableHooker.hookGateAction();
     }
@@ -95,16 +94,13 @@ public class CursorChart extends AreaChart<Number, Number> implements Gatable {
         }
     }
 
-    public void setData(List<Float> data) {
-        if (data == null) {
+    public void setData(Series<Number, Number> series) {
+        if (series == null) {
             return;
         }
         // re-plot data
         getData().clear();
-        Series<Number, Number> series = new Series<>();
-        for (int i = 0; i < data.size(); i++) {
-            series.getData().add(new Data<>(i, data.get(i)));
-        }
+        getData().add(series);
     }
 
     public List<Float> getGatedData() {
@@ -117,7 +113,7 @@ public class CursorChart extends AreaChart<Number, Number> implements Gatable {
             double x = getXAxis().getDisplayPosition(ele.getXValue());
             double y = getYAxis().getDisplayPosition(ele.getYValue());
             if (gate.getNode().contains(x, y)) {
-                res.add((float) y);
+                res.add((float) ele.getYValue());
             }
         }
         return res;

@@ -49,7 +49,8 @@ public class WaveWatcher {
              if (!isOnGenerating) {
                  isOnGenerating = true;
              }
-             data.add(maybeWaveValue);
+             // subtract background before considering wave
+             data.add(maybeWaveValue - (float) meta.getBackground());
         }
     }
 

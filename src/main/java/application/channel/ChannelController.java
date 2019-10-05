@@ -107,7 +107,7 @@ public class ChannelController implements Initializable {
     }
 
     private void addChannelCell(ChannelMeta model) {
-        ChannelCell channelCell = new ChannelCell(this, model);
+        ChannelCell channelCell = new ChannelCell(this, model, samplingPointRepository);
         channelCell.addPropertyChangeHandler(() -> {
             List<ChannelMeta> updatedMetas = channelsHBox.getChildren().stream()
                     .map(e -> ((ChannelCell)e).getChannelMeta())

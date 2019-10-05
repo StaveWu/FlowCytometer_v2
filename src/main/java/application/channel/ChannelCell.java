@@ -1,18 +1,21 @@
 package application.channel;
 
 import application.channel.featurecapturing.ChannelMeta;
+import application.channel.sampling.SamplingPointRepository;
 import application.chart.gate.CursorChart;
 import application.chart.gate.GateCompletedListener;
 import application.chart.gate.RectangleGate;
 import application.utils.MathUtils;
 import application.utils.Resource;
 import application.utils.UiUtils;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
@@ -25,10 +28,13 @@ import javafx.util.converter.NumberStringConverter;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class ChannelCell extends VBox implements Initializable {
 
@@ -60,17 +66,24 @@ public class ChannelCell extends VBox implements Initializable {
     private CheckBox eventTriggerCheckBox;
 
     @FXML
+    private TextField meanTextField;
+
+    @FXML
     private AreaChart<Number, Number> channelChart;
 
     private ChannelMeta channelMeta;
     private ChannelController parentController;
+    private SamplingPointRepository samplingPointRepository;
     private List<PropertyChangeHandler> handlers = new ArrayList<>();
 
     private final String[] channelIds = {"PMT1", "PMT2", "PMT3", "PMT4", "APD1", "APD2", "APD3", "APD4"};
 
-    public ChannelCell(@NonNull ChannelController parentController, @NonNull ChannelMeta channelMeta) {
+    public ChannelCell(@NonNull ChannelController parentController,
+                       @NonNull ChannelMeta channelMeta,
+                       @NonNull SamplingPointRepository repository) {
         this.parentController = parentController;
         this.channelMeta = channelMeta;
+        this.samplingPointRepository = repository;
 
         FXMLLoader loader = new FXMLLoader(Resource.getFXML("channel_cell.fxml"));
         loader.setRoot(this);
@@ -111,6 +124,10 @@ public class ChannelCell extends VBox implements Initializable {
         });
         eventTriggerCheckBox.selectedProperty().bindBidirectional(channelMeta.eventTriggerProperty());
         eventTriggerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
+        meanTextField.textProperty().bindBidirectional(channelMeta.backgroundProperty(), new NumberStringConverter());
+        meanTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);
         });
         channelIdCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -164,17 +181,27 @@ public class ChannelCell extends VBox implements Initializable {
 
     @FXML
     protected void correctThreshold() {
+        List<Float> data;
+        try {
+            data = samplingPointRepository.getDataByChannelId(channelMeta.getId());
+        } catch (Exception e) {
+            UiUtils.getAlert(Alert.AlertType.ERROR, "获取校正窗口错误",
+                    e.getMessage()).showAndWait();
+            return;
+        }
+
         Stage stage = new Stage();
-        stage.setTitle(this.nameTextField.getText());
+        stage.setTitle(this.nameTextField.getText() + "通道平均值和阈值校正");
         CursorChart chart = new CursorChart(new NumberAxis(), new NumberAxis());
+        chart.setPrefWidth(800);
 
         Label meanLabel = new Label("平均值：");
         Label meanValueLabel = new Label("----");
         Label stdLabel = new Label("标准差：");
         Label stdValueLabel = new Label("----");
-        Label thresholdLabel = new Label("新阈值：");
+        Label thresholdLabel = new Label("阈值：");
         Label thresholdValueLabel = new Label("----");
-        thresholdLabel.setTooltip(new Tooltip("新阈值 = 平均值 + 3 x 标准差"));
+        thresholdLabel.setTooltip(new Tooltip("阈值 = 平均值 + 3 x 标准差"));
 
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(5));
@@ -225,12 +252,12 @@ public class ChannelCell extends VBox implements Initializable {
             gate.addCompletedListener(() -> {
                 // calculate mean, std...
                 List<Float> floatData = chart.getGatedData();
-                double[] data = new double[floatData.size()];
-                for (int i = 0; i < data.length; i++) {
-                    data[i] = floatData.get(i).doubleValue();
+                double[] doubleData = new double[floatData.size()];
+                for (int i = 0; i < doubleData.length; i++) {
+                    doubleData[i] = floatData.get(i).doubleValue();
                 }
-                double mean = MathUtils.getMean(data);
-                double std = MathUtils.getStdDev(data);
+                double mean = MathUtils.getMean(doubleData);
+                double std = MathUtils.getStdDev(doubleData);
                 double threshold = mean + 3 * std;
                 meanValueLabel.setText(String.format("%.3f", mean));
                 stdValueLabel.setText(String.format("%.3f", std));
@@ -243,10 +270,11 @@ public class ChannelCell extends VBox implements Initializable {
         okBtn.setOnAction(event -> {
             String text = thresholdValueLabel.getText();
             if (text.equals("NaN") || text.equals("----")) {
-                UiUtils.getAlert(Alert.AlertType.ERROR, "新阈值校正错误",
-                        String.format("新阈值“%s”是无效值", text)).showAndWait();
+                UiUtils.getAlert(Alert.AlertType.ERROR, "阈值校正错误",
+                        String.format("阈值“%s”是无效值", text)).showAndWait();
             } else {
                 channelMeta.setThreshold(Double.parseDouble(text));
+                channelMeta.setBackground(Double.parseDouble(meanValueLabel.getText()));
                 stage.close();
             }
         });
@@ -261,17 +289,53 @@ public class ChannelCell extends VBox implements Initializable {
         ButtonBar.setButtonData(cursorBtn, ButtonBar.ButtonData.LEFT);
         bar.getButtons().addAll(cursorBtn, okBtn, cancelBtn);
 
-        VBox root = new VBox();
+        VBox vbox1 = new VBox();
+        vbox1.setMinHeight(Double.NEGATIVE_INFINITY);
+        vbox1.setMaxHeight(Double.NEGATIVE_INFINITY);
+        vbox1.setMinWidth(Double.NEGATIVE_INFINITY);
+        vbox1.setMaxWidth(Double.NEGATIVE_INFINITY);
+        vbox1.setAlignment(Pos.CENTER);
+        vbox1.setDisable(true);
+
+        vbox1.getChildren().add(chart);
+        vbox1.getChildren().add(gridPane);
+        vbox1.getChildren().add(bar);
+
+        ProgressIndicator pb = new ProgressIndicator();
+        VBox vbox2 = new VBox(pb);
+        vbox2.setMinHeight(Double.NEGATIVE_INFINITY);
+        vbox2.setMaxHeight(Double.NEGATIVE_INFINITY);
+        vbox2.setMinWidth(Double.NEGATIVE_INFINITY);
+        vbox2.setMaxWidth(Double.NEGATIVE_INFINITY);
+        vbox2.setAlignment(Pos.CENTER);
+
+        StackPane root = new StackPane();
         root.setMinHeight(Double.NEGATIVE_INFINITY);
         root.setMaxHeight(Double.NEGATIVE_INFINITY);
         root.setMinWidth(Double.NEGATIVE_INFINITY);
         root.setMaxWidth(Double.NEGATIVE_INFINITY);
-        root.getChildren().add(chart);
-        root.getChildren().add(gridPane);
-        root.getChildren().add(bar);
+        root.getChildren().add(vbox1);
+        root.getChildren().add(vbox2);
 
         stage.setScene(new Scene(root));
         stage.show();
+
+        // async display data
+        CompletableFuture.supplyAsync(() -> {
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+            // we only display 5000 points in order to saving time
+            int numToDisplay = data.size() > 5000 ? 5000 : data.size();
+            for (int i = 0; i < numToDisplay; i++) {
+                series.getData().add(new XYChart.Data<>(i, data.get(i)));
+            }
+            return series;
+        }).thenAccept(series -> {
+            Platform.runLater(() -> {
+                chart.setData(series);
+                root.getChildren().remove(vbox2);
+                vbox1.setDisable(false);
+            });
+        });
     }
 
     public ChannelMeta getChannelMeta() {
