@@ -12,22 +12,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Tooltip?>
-<fx:root fx:id="rootVBox" prefWidth="350.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="rootVBox" prefWidth="360.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <FlowPane alignment="CENTER_RIGHT">
          <children>
             <Hyperlink fx:id="closeHyperlink" onAction="#closeChannel" text="Hyperlink" />
          </children>
       </FlowPane>
-      <AreaChart fx:id="channelChart" prefHeight="250.0" prefWidth="250.0">
+      <AreaChart fx:id="channelChart" prefHeight="250.0">
         <xAxis>
           <NumberAxis side="BOTTOM" />
         </xAxis>
@@ -37,9 +36,9 @@
       </AreaChart>
       <GridPane hgap="10.0" vgap="10.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="15.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="60.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="75.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
         </columnConstraints>
         <rowConstraints>
@@ -47,30 +46,21 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="电压：" GridPane.rowIndex="1" />
-            <TextField fx:id="voltageTextField" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="voltageTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></TextField>
-            <Label text="阈值：" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label text="阈值：" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Label>
-            <Label minWidth="50.0" text="峰策略：" GridPane.rowIndex="3" />
-            <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
-               <children>
-                  <TextField fx:id="thresholdTextField" prefWidth="60.0" />
-                   <Button mnemonicParsing="false" onAction="#correctThreshold" text="校正" >
-                       <tooltip>
-                           <Tooltip text="根据游标圈得的数据精确计算平均值和阈值" />
-                       </tooltip>
-                   </Button>
-               </children>
-            </HBox>
-            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3">
+            <Label text="峰策略：" GridPane.rowIndex="4" />
+            <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4">
                <children>
                   <ToggleButton fx:id="areaToggle" mnemonicParsing="false" text="Area">
                      <toggleGroup>
@@ -84,11 +74,17 @@
             <Label text="通道：" />
             <Label text="名称：" GridPane.columnIndex="2" />
             <ComboBox fx:id="channelIdCombo" GridPane.columnIndex="1" />
-            <TextField fx:id="nameTextField" prefWidth="60.0" GridPane.columnIndex="3" />
-            <Label minWidth="70.0" text="Event触发：" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="nameTextField" GridPane.columnIndex="3" />
+            <Label text="触发事件：" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <CheckBox fx:id="eventTriggerCheckBox" mnemonicParsing="false" selected="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Label minWidth="50.0" text="平均值：" GridPane.rowIndex="2" />
-            <TextField fx:id="meanTextField" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="平均值：" GridPane.rowIndex="2" />
+            <TextField fx:id="meanTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="thresholdTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+             <Button mnemonicParsing="false" onAction="#correctThreshold" text="校正" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
+                 <tooltip>
+                     <Tooltip text="根据游标圈得的数据精确计算平均值和阈值" />
+                 </tooltip>
+             </Button>
          </children>
       </GridPane>
    </children>
