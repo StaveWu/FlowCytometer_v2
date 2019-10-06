@@ -216,6 +216,7 @@ public class ChannelController implements Initializable {
     private void stopCellFeatureCaptureDaemon() {
         if (cellFeatureCaptureThread != null) {
             cellFeatureCaptureThread.interrupt();
+            cellFeatureCaptureThread = null;
         }
     }
 
@@ -229,6 +230,7 @@ public class ChannelController implements Initializable {
     private void stopMonitorPointsDaemon() {
         if (monitorSamplingPointThread != null) {
             monitorSamplingPointThread.interrupt();
+            monitorSamplingPointThread = null;
         }
     }
 
