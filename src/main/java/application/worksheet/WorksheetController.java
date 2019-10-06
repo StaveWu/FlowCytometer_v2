@@ -74,19 +74,19 @@ public class WorksheetController implements Initializable {
         chartsPane.addChartLifeCycleListener(new ChartLifeCycleListener() {
             @Override
             public void afterAdd() {
-                log.info("afterAdd");
+                log.debug("chart is added");
                 saveWorksheetSnapshot();
             }
 
             @Override
             public void afterRemove() {
-                log.info("afterRemove");
+                log.debug("chart is removed");
                 saveWorksheetSnapshot();
             }
 
             @Override
             public void propertyChanged() {
-                log.info("propertyChanged");
+                log.debug("chart property is changed");
                 saveWorksheetSnapshot();
             }
         });
@@ -94,19 +94,19 @@ public class WorksheetController implements Initializable {
         chartsPane.addGateLifeCycleListener(new GateLifeCycleListener() {
             @Override
             public void afterComplete() {
-                log.info("Gate:afterComplete");
+                log.debug("gate is completed");
                 saveWorksheetSnapshot();
             }
 
             @Override
             public void afterDestroy() {
-                log.info("Gate:afterDestroy");
+                log.debug("gate is destroyed");
                 saveWorksheetSnapshot();
             }
         });
 
         chartsPane.addChartConnectedListener(() -> {
-            log.info("chart connected");
+            log.debug("chart is connected");
             saveWorksheetSnapshot();
         });
     }
@@ -119,7 +119,7 @@ public class WorksheetController implements Initializable {
 
     @Subscribe
     public void listen(ChannelChangedEvent event) {
-        log.info("channel changed");
+        log.debug("channel is changed");
         channelNames = event.getChannelMetas().stream()
                 .map(ChannelMeta::getNameWithPolicy)
                 .collect(Collectors.toList());

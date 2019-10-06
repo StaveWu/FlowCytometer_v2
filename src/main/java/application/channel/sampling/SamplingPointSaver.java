@@ -49,6 +49,7 @@ public class SamplingPointSaver {
                 }
             }
         });
+        saveThread.setName("SamplingPointSaveThread");
         saveThread.setDaemon(true);
         saveThread.start();
     }

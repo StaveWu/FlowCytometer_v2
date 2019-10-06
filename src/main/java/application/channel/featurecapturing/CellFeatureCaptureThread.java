@@ -28,6 +28,7 @@ public class CellFeatureCaptureThread extends Thread implements WaveCapturedHand
     private CellFeatureCaptureHelper helper;
 
     public CellFeatureCaptureThread(List<ChannelMeta> metas, int maxBiasForTheSameCell) {
+        setName("CellFeatureCaptureThread");
         // init wave watchers to watch wave appearing
         waveWatchers = metas.stream()
                 .map(meta -> {

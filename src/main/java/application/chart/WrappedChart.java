@@ -3,8 +3,6 @@ package application.chart;
 import application.chart.gate.*;
 import application.worksheet.EventsCountService;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -22,6 +20,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,8 @@ import java.util.UUID;
 
 public class WrappedChart extends VBox implements LinkedNode,
         GatableChart<Number, Number>, GateLifeCycleListener {
+
+    private static final Logger log = LoggerFactory.getLogger(WrappedChart.class);
 
     private String uniqueId;
 
@@ -249,13 +251,13 @@ public class WrappedChart extends VBox implements LinkedNode,
 
     @Override
     public void afterComplete() {
-        System.out.println("afterComplete");
+        log.debug("gate is completed");
         propagateToNextChart();
     }
 
     @Override
     public void afterDestroy() {
-        System.out.println("afterDestroy");
+        log.debug("gate is destroyed");
         propagateToNextChart();
     }
 
