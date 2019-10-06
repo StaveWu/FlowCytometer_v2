@@ -41,9 +41,10 @@ public class ChannelController implements Initializable {
     private SamplingPointRepository samplingPointRepository;
 
     private MonitorSamplingPointThread monitorSamplingPointThread;
-
     private CellFeatureCaptureThread cellFeatureCaptureThread;
     private ChannelSetting channelSetting;
+
+    private boolean isOnSampling = false;
 
     @FXML
     private HBox channelsHBox;
@@ -196,6 +197,7 @@ public class ChannelController implements Initializable {
 
     @Subscribe
     public void listen(StartSamplingEvent event) {
+        isOnSampling = true;
         String channelDataFileName = String.format("ChannelData_%s.txt", event.getTimeStamp());
         samplingPointRepository.setLocation(FCMRunTimeConfig.getInstance()
                 .getRootDir() + File.separator + channelDataFileName);
@@ -233,11 +235,15 @@ public class ChannelController implements Initializable {
     @Subscribe
     protected void listen(StopSamplingEvent event) {
         log.info("stop sampling received");
+        isOnSampling = false;
         stopCellFeatureCaptureDaemon();
     }
 
     @Subscribe
     protected void listen(SamplingPointsCapturedEvent event) {
+        if (!isOnSampling) {
+            return;
+        }
         samplingPointRepository.savePoints(event.getSamplingPoints());
         event.getSamplingPoints().forEach(point -> cellFeatureCaptureThread.addSamplingPoint(point));
     }

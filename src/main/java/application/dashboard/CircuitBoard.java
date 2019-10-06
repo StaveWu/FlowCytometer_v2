@@ -64,11 +64,12 @@ public class CircuitBoard {
 
     public void stopSampling() throws Exception {
         checkCommDevice();
-        String msg = getCommandMessage("StopSampling");
         isOnSampling = false;
+        totalNumOfPointsReceived.set(0);
+
+        String msg = getCommandMessage("StopSampling");
         commDevice.write(msg.getBytes());
         log.info(msg);
-        totalNumOfPointsReceived.set(0);
     }
 
     public void setVoltage(String channelId, String voltage) throws Exception {
@@ -108,16 +109,16 @@ public class CircuitBoard {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                // decode byte data to sampling points
-                byte[] data = event.getData();
+                    // decode byte data to sampling points
+                    byte[] data = event.getData();
 //                System.out.println(Arrays.toString(data));
-                List<SamplingPoint> points = decode(data, channelIds);
+                    List<SamplingPoint> points = decode(data, channelIds);
 //                System.out.println(points.size());
 //                System.out.println(points);
-                int tpr = totalNumOfPointsReceived.addAndGet(points.size());
-                log.info("total sampling points received: " + tpr);
-                handler.onDataReceived(points);
+                    int tpr = totalNumOfPointsReceived.addAndGet(points.size());
+                    log.info("total sampling points received: " + tpr);
+                    handler.onDataReceived(points);
+                }
             }
 
             @Override

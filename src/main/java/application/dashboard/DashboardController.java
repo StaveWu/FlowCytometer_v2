@@ -200,7 +200,7 @@ public class DashboardController implements Initializable {
 
     @Subscribe
     public void listen(CellFeatureCapturedEvent event) {
-        if (circuitBoard.isOnSampling() && tickService instanceof CounterTickService) {
+        if (tickService != null && tickService instanceof CounterTickService) {
             ((CounterTickService) tickService).countDown();
         }
         if (speedService != null) {

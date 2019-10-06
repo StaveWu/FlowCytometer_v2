@@ -27,11 +27,12 @@ public class CounterTickService extends Service<Void> {
                         break;
                     }
                     int curcnt = currentCount.get();
-                    updateProgress(countLimit - curcnt, countLimit);
-                    updateMessage("" + curcnt);
-                    if (curcnt <= 0) {
+                    if (curcnt < 0) {
+                        curcnt = 0;
                         stop = true;
                     }
+                    updateProgress(countLimit - curcnt, countLimit);
+                    updateMessage("" + curcnt);
                 }
                 return null;
             }
