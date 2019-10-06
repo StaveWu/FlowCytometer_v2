@@ -123,6 +123,12 @@ public class GatedHistogram extends AreaChart<Number, Number>
             return;
         }
         Float xValue = data.getValueByName(getXAxis().getLabel());
+        if (xValue == null) {
+            throw new IllegalArgumentException("Data for displaying contains null value. " +
+                    "Check axis label " +
+                    getXAxis().getLabel() +
+                    " still existing or not");
+        }
         // traverse existing count from xydata, if not, add new one.
         Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
                 .filter(d -> d.getXValue().floatValue() == xValue)

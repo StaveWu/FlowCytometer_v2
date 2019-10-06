@@ -122,6 +122,12 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         // plot data
         Float xValue = data.getValueByName(getXAxis().getLabel());
         Float yValue = data.getValueByName(getYAxis().getLabel());
+        if (xValue == null || yValue == null) {
+            throw new IllegalArgumentException("Data for displaying contains null value. " +
+                    "Check axis label " +
+                    (xValue == null ? getXAxis().getLabel() : getYAxis().getLabel()) +
+                    " still existing or not");
+        }
         getData().get(0).getData().add(new Data<>(xValue, yValue));
     }
 
@@ -169,6 +175,8 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
     public void setAxisCandidateNames(List<String> names) {
         getXAxis().setUserData(names);
         getYAxis().setUserData(names);
+        // update current axis label
+
     }
 
     @Override
