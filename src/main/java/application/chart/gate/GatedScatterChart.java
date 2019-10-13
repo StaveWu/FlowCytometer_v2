@@ -136,10 +136,6 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
         getData().get(0).getData().add(new Data<>(xValue, yValue));
     }
 
-    private static void truncationFilter(float value) {
-
-    }
-
     @Override
     public void clearAllData() {
         dataList.clear();
