@@ -17,3 +17,8 @@
    -fx-graphic: url("../icons/clear.png");
    -fx-content-display: graphic-only;
 }
+
+.chart-symbol {
+    -fx-background-radius: 2px;
+    -fx-padding: 2px;
+}
