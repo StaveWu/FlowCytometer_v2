@@ -19,8 +19,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.converter.BooleanStringConverter;
@@ -237,7 +239,11 @@ public class ChannelCell extends VBox implements Initializable {
         row1.setMinHeight(10);
         row1.setPrefHeight(30);
         row1.setVgrow(Priority.SOMETIMES);
-        gridPane.getRowConstraints().add(row1);
+        RowConstraints row2 = new RowConstraints();
+        row2.setMinHeight(10);
+        row2.setPrefHeight(30);
+        row2.setVgrow(Priority.SOMETIMES);
+        gridPane.getRowConstraints().addAll(row1, row2);
 
         gridPane.add(meanLabel, 0, 0);
         gridPane.add(meanValueLabel, 1, 0);
@@ -245,6 +251,16 @@ public class ChannelCell extends VBox implements Initializable {
         gridPane.add(stdValueLabel, 3, 0);
         gridPane.add(thresholdLabel, 4, 0);
         gridPane.add(thresholdValueLabel, 5, 0);
+        gridPane.add(new Label("纵坐标高度："), 0, 1);
+        TextField yMaxTextField = new TextField();
+        yMaxTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                ValueAxis<Number> yAxis = (ValueAxis<Number>) chart.getYAxis();
+                yAxis.setAutoRanging(false);
+                yAxis.setUpperBound(Double.parseDouble(yMaxTextField.getText()));
+            }
+        });
+        gridPane.add(yMaxTextField, 1, 1);
 
         Button cursorBtn = new Button("游标");
         cursorBtn.setOnAction(event -> {
