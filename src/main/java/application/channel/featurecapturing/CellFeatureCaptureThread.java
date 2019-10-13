@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
-public class CellFeatureCaptureThread extends Thread implements WaveCapturedHandler {
+public class CellFeatureCaptureThread extends Thread implements WaveCapturedHandler, WaveRaisedHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CellFeatureCaptureThread.class);
 
@@ -38,6 +38,7 @@ public class CellFeatureCaptureThread extends Thread implements WaveCapturedHand
                     if (meta.getEventTrigger()) {
                         waveWatcher.registerWaveCapturedHandler(this);
                     }
+                    waveWatcher.registerWaveRaisedHandler(this);
                     return waveWatcher;
                 })
                 .collect(Collectors.toList());
@@ -75,11 +76,22 @@ public class CellFeatureCaptureThread extends Thread implements WaveCapturedHand
     }
 
     @Override
-    public void waveCaptured() {
+    public void waveRaised(WaveRaiseEvent event) {
+        waveWatchers.stream().filter(waveWatcher -> !waveWatcher.getId().equals(event.getChannelId()))
+                .forEach(waveWatcher -> waveWatcher.startRecording(event.getChannelId()));
+    }
+
+    @Override
+    public void waveCaptured(WaveCapturedEvent event) {
         Map<String, Float> waveEvent = new HashMap<>();
         for (WaveWatcher watcher :
                 waveWatchers) {
-            waveEvent.put(watcher.getName(), watcher.getWave());
+            if (watcher.getId().equals(event.getChannelId())) {
+                waveEvent.put(watcher.getName(), watcher.getWave());
+            } else {
+                watcher.stopRecording(event.getChannelId());
+                waveEvent.put(watcher.getName(), watcher.getRecord(event.getChannelId()));
+            }
         }
         helper.addWaveEvent(waveEvent);
     }
