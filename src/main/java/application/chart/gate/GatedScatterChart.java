@@ -1,5 +1,6 @@
 package application.chart.gate;
 
+import application.chart.DotProcess;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -128,7 +129,15 @@ public class GatedScatterChart extends ScatterChart<Number, Number>
                     (xValue == null ? getXAxis().getLabel() : getYAxis().getLabel()) +
                     " still existing or not");
         }
+
+        // Remove the two precisions so that the data can pile up
+        xValue = DotProcess.truncateError(xValue);
+        yValue = DotProcess.truncateError(yValue);
         getData().get(0).getData().add(new Data<>(xValue, yValue));
+    }
+
+    private static void truncationFilter(float value) {
+
     }
 
     @Override
