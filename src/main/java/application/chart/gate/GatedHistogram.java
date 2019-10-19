@@ -1,6 +1,7 @@
 package application.chart.gate;
 
 import application.chart.DotProcess;
+import application.chart.axis.LogarithmicAxis;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -129,6 +130,10 @@ public class GatedHistogram extends AreaChart<Number, Number>
                     "Check axis label " +
                     getXAxis().getLabel() +
                     " still existing or not");
+        }
+        // filter invalid value in log axis
+        if (getXAxis() instanceof LogarithmicAxis && xValue < 10) {
+            return;
         }
         // Remove the two precisions so that the data can pile up
         final float xValueRounded = DotProcess.truncateError(xValue);
