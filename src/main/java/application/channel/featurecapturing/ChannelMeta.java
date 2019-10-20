@@ -11,6 +11,8 @@ public class ChannelMeta {
     private StringProperty peakPolicy;
     private BooleanProperty eventTrigger;
     private DoubleProperty background;
+    private DoubleProperty upperBound;
+    private BooleanProperty autoTuning;
 
     public final StringProperty idProperty() {
         if (id == null) {
@@ -59,6 +61,20 @@ public class ChannelMeta {
             background = new SimpleDoubleProperty(0.0);
         }
         return background;
+    }
+
+    public final DoubleProperty upperBoundProperty() {
+        if (upperBound == null) {
+            upperBound = new SimpleDoubleProperty(0.0);
+        }
+        return upperBound;
+    }
+
+    public final BooleanProperty autoTuningProperty() {
+        if (autoTuning == null) {
+            autoTuning = new SimpleBooleanProperty(true);
+        }
+        return autoTuning;
     }
 
 
@@ -111,6 +127,20 @@ public class ChannelMeta {
         backgroundProperty().set(background);
     }
 
+    public double getUpperBound() {
+        return upperBoundProperty().get();
+    }
+    public void setUpperBound(double upperBound) {
+        upperBoundProperty().set(upperBound);
+    }
+
+    public boolean getAutoTuning() {
+        return autoTuningProperty().get();
+    }
+    public void setAutoTuning(boolean autoTuning) {
+        autoTuningProperty().set(autoTuning);
+    }
+
     public String getNameWithPolicy() {
         return getName() + "-" + getPeakPolicy().charAt(0);
     }
@@ -123,9 +153,11 @@ public class ChannelMeta {
         public final String peakPolicy;
         public final boolean eventTrigger;
         public final double background;
+        public final double upperBound;
+        public final boolean autoTuning;
 
         public JsonObject(String id, String name, double voltage, double threshold, String peakPolicy,
-                          boolean eventTrigger, double background) {
+                          boolean eventTrigger, double background, double upperBound, boolean autoTuning) {
             this.id = id;
             this.name = name;
             this.voltage = voltage;
@@ -133,6 +165,8 @@ public class ChannelMeta {
             this.peakPolicy = peakPolicy;
             this.eventTrigger = eventTrigger;
             this.background = background;
+            this.upperBound = upperBound;
+            this.autoTuning = autoTuning;
         }
     }
 
@@ -143,7 +177,9 @@ public class ChannelMeta {
                 thresholdProperty().get(),
                 peakPolicyProperty().get(),
                 eventTriggerProperty().get(),
-                backgroundProperty().get());
+                backgroundProperty().get(),
+                upperBoundProperty().get(),
+                autoTuningProperty().get());
     }
 
     public static ChannelMeta fromJsonObject(JsonObject json) {
@@ -155,6 +191,8 @@ public class ChannelMeta {
         model.setVoltage(json.voltage);
         model.setEventTrigger(json.eventTrigger);
         model.setBackground(json.background);
+        model.setUpperBound(json.upperBound);
+        model.setAutoTuning(json.autoTuning);
         return model;
     }
 
@@ -166,13 +204,17 @@ public class ChannelMeta {
                         "threshold: %f, " +
                         "peakPolicy: %s, " +
                         "eventTrigger: %s, " +
-                        "backgound: %f]",
+                        "backgound: %f, " +
+                        "upperBound: %f, " +
+                        "autoTuning: %s]",
                 getId(),
                 getName(),
                 getVoltage(),
                 getThreshold(),
                 getPeakPolicy(),
                 getEventTrigger(),
-                getBackground());
+                getBackground(),
+                getUpperBound(),
+                getAutoTuning());
     }
 }

@@ -71,6 +71,12 @@ public class ChannelCell extends VBox implements Initializable {
     private TextField meanTextField;
 
     @FXML
+    private TextField upperBoundTextField;
+
+    @FXML
+    private CheckBox autoTuningCheckBox;
+
+    @FXML
     private AreaChart<Number, Number> channelChart;
 
     private ChannelMeta channelMeta;
@@ -111,7 +117,27 @@ public class ChannelCell extends VBox implements Initializable {
         channelChart.getData().add(new XYChart.Series<>());
         channelChart.setAnimated(false);
 
-        // bind meta and hook property change handler
+        // define ui constraint
+        autoTuningCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                upperBoundTextField.setDisable(true);
+            } else {
+                upperBoundTextField.setDisable(false);
+            }
+        });
+
+            // bind meta and hook property change handler
+        ((ValueAxis)channelChart.getYAxis()).upperBoundProperty().bindBidirectional(channelMeta.upperBoundProperty());
+        upperBoundTextField.textProperty().bindBidirectional(channelMeta.upperBoundProperty(),
+                new NumberStringConverter());
+        upperBoundTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
+        channelChart.getYAxis().autoRangingProperty().bindBidirectional(channelMeta.autoTuningProperty());
+        autoTuningCheckBox.selectedProperty().bindBidirectional(channelMeta.autoTuningProperty());
+        autoTuningCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            handlers.forEach(PropertyChangeHandler::propertyChanged);
+        });
         nameTextField.textProperty().bindBidirectional(channelMeta.nameProperty());
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             handlers.forEach(PropertyChangeHandler::propertyChanged);

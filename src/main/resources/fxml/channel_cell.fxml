@@ -16,16 +16,21 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <fx:root fx:id="rootVBox" prefWidth="360.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <FlowPane alignment="CENTER_RIGHT">
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
+            <TextField fx:id="upperBoundTextField" prefWidth="85.0" promptText="纵轴上限" />
+            <CheckBox fx:id="autoTuningCheckBox" mnemonicParsing="false" text="自动调节" />
+            <Region HBox.hgrow="ALWAYS" />
             <Hyperlink fx:id="closeHyperlink" onAction="#closeChannel" text="Hyperlink" />
          </children>
-      </FlowPane>
+      </HBox>
       <AreaChart fx:id="channelChart" prefHeight="250.0">
         <xAxis>
           <NumberAxis side="BOTTOM" />

@@ -83,6 +83,7 @@ public class ProjectTree extends VBox implements Initializable {
                              e.getMessage()).showAndWait();
                 }
             });
+            watchDirThread.setName("WatchDirThread");
             watchDirThread.setDaemon(true);
             watchDirThread.start();
         } catch (Exception e) {
