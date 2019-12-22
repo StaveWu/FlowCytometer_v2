@@ -129,11 +129,7 @@ public class GatedHistogram extends AreaChart<Number, Number>
             throw new IllegalArgumentException("Data for displaying contains null value. " +
                     "Check axis label " +
                     getXAxis().getLabel() +
-                    " still existing or not");
-        }
-        // filter invalid value in log axis
-        if (getXAxis() instanceof LogarithmicAxis && xValue < 10) {
-            return;
+                    " still exist or not");
         }
         // Remove the two precisions so that the data can pile up
         final float xValueRounded = DotProcess.truncateError(xValue);
