@@ -1,7 +1,6 @@
 package application.chart.gate;
 
 import application.chart.DotProcess;
-import application.chart.axis.LogarithmicAxis;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -131,8 +130,9 @@ public class GatedHistogram extends AreaChart<Number, Number>
                     getXAxis().getLabel() +
                     " still exist or not");
         }
+
         // Remove the two precisions so that the data can pile up
-        final float xValueRounded = DotProcess.truncateError(xValue);
+        final float xValueRounded = DotProcess.smooth(xValue);
         // traverse existing count from xydata, if not, add new one.
         Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
                 .filter(d -> d.getXValue().floatValue() == xValueRounded)
@@ -178,8 +178,9 @@ public class GatedHistogram extends AreaChart<Number, Number>
             return true;
         }
         Float xValue = data.getValueByName(getXAxis().getLabel());
+        final float xValueRounded = DotProcess.smooth(xValue);
         Optional<Data<Number, Number>> existing = getData().get(0).getData().stream()
-                .filter(d -> d.getXValue().floatValue() == xValue)
+                .filter(d -> d.getXValue().floatValue() == xValueRounded)
                 .findFirst();
 
         if (existing.isPresent()) {
